@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+import static org.hibernate.annotations.CascadeType.DELETE;
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
 
 @Entity
 @Table(name = "chargers")
@@ -72,7 +76,8 @@ public class ChargerEntity {
     @Column(name = "time_to")
     private String timeTo;
 
-    @OneToMany(mappedBy = "charger", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "charger")
+    @Cascade({DELETE, SAVE_UPDATE})
     private List<TypeConnectorsEntity> typeConnectors;
 
     @OneToMany(mappedBy = "charger")

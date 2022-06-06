@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+import static org.hibernate.annotations.CascadeType.DELETE;
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
 
 @Entity
 @Table(name = "stations")
@@ -45,10 +49,12 @@ public class StationEntity {
     @OneToMany(mappedBy = "station")
     private List<ComplaintUserStationEntity> stationComplaints;
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "station")
+    @Cascade({DELETE, SAVE_UPDATE})
     private List<CarNameEntity> carNames;
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "station")
+    @Cascade({DELETE, SAVE_UPDATE})
     private List<CarModelEntity> carModels;
 
     @Column(name = "all_place")

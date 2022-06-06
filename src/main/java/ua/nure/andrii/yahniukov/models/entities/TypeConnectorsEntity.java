@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "typeConnectors")
+@Table(name = "type_connectors")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
