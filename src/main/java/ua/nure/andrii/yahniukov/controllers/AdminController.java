@@ -3,7 +3,8 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.models.entities.UserEntity;
+import ua.nure.andrii.yahniukov.models.dto.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.UserDto;
 import ua.nure.andrii.yahniukov.services.UserService;
 
 import java.util.List;
@@ -14,26 +15,26 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
 
-    @ApiOperation(value = "View a list of users")
     @GetMapping("/get/user/all")
-    public List<UserEntity> getAllUsers() {
+    @ApiOperation(value = "View a list of users")
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @ApiOperation(value = "Update role a user by id")
     @PutMapping("/update/user/role/{id}")
-    public void updateUserRoleById(@PathVariable Long id, String role) {
+    @ApiOperation(value = "Update role a user by id")
+    public void updateUserRoleById(@PathVariable Long id, @RequestBody RoleDto role) {
         userService.updateUserRoleById(id, role);
     }
 
-    @ApiOperation(value = "Block a user by id")
     @PatchMapping("/block/user/{id}")
+    @ApiOperation(value = "Block a user by id")
     public void blockUserById(@PathVariable Long id) {
         userService.blockUserById(id);
     }
 
-    @ApiOperation(value = "Delete a user by id")
     @DeleteMapping("/delete/user/{id}")
+    @ApiOperation(value = "Delete a user by id")
     public void deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
     }

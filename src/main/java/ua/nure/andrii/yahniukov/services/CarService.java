@@ -26,11 +26,10 @@ public class CarService {
     }
 
     public List<CarEntity> getAllUserCars(Long userId) {
-        UserEntity user = userRepository
+        UserEntity owner = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
-        System.out.println(user.getCars());
-        return user.getCars();
+        return carRepository.findAllByOwner(owner);
     }
 
     public void createCar(CarEntity car) {

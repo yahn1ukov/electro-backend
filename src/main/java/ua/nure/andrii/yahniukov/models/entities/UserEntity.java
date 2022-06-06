@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,25 +39,30 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Builder.Default
     @Column(name = "is_block")
-    private Boolean isBlock;
+    private Boolean isBlock = false;
 
     @Column(name = "is_verification")
     private Boolean isVerification;
 
-    @Column(name = "cars")
+    @Builder.Default
     @OneToMany(mappedBy = "owner")
-    private List<CarEntity> cars;
+    private List<CarEntity> cars = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
-    private List<ComplaintUserChargerEntity> chargerComplaints;
+    private List<ComplaintUserChargerEntity> chargerComplaints = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
-    private List<ComplaintUserStationEntity> stationComplaints;
+    private List<ComplaintUserStationEntity> stationComplaints = new ArrayList<>();
 
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Builder.Default
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt = new Date();
 
+    @Builder.Default
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 }

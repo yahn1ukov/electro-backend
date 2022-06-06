@@ -5,14 +5,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.models.dto.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.UserDto;
 import ua.nure.andrii.yahniukov.models.entities.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.UserRepository;
+import ua.nure.andrii.yahniukov.security.dto.RegisterDto;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,17 +22,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserEntity getUserById(Long id) {
+    public UserDto getUserById(Long id) {
+        return UserDto.fromUser(
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new BadRequestException("User with id: " + id + " not found"))
+        );
+    }
+
+    public List<UserDto> getAllUsers() {
         return userRepository
-                .findById(id)
-                .orElseThrow(() -> new BadRequestException("User with id: " + id + " not found"));
+                .findAll()
+                .stream()
+                .map(UserDto::fromUser)
+                .collect(Collectors.toList());
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public void createUser(UserEntity user) {
+    public void createUser(RegisterDto user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("User with email " + user.getEmail() + " already exists");
         }
@@ -42,11 +49,7 @@ public class UserService {
                         .email(user.getEmail())
                         .role(user.getRole())
                         .password(passwordEncoder.encode(user.getPassword()))
-                        .isBlock(false)
-                        .cars(new ArrayList<>(Collections.emptyList()))
                         .isVerification(user.getIsVerification())
-                        .createdAt(new Date())
-                        .updatedAt(new Date())
                         .build()
         );
     }
@@ -69,17 +72,17 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateUserRoleById(Long id, String role) {
+    public void updateUserRoleById(Long id, RoleDto role) {
         UserEntity user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new BadRequestException("User with id: " + id + " not found"));
-        if (user.getRole().equals(UserRole.valueOf(role.toUpperCase()))) {
+        if (user.getRole().equals(role.getRole())) {
             throw new BadRequestException("Can't set the same role");
         }
         if (user.getRole().equals(UserRole.ADMIN)) {
             throw new BadRequestException("Can't change admin role");
         }
-        user.setRole(UserRole.valueOf(role.toUpperCase()));
+        user.setRole(role.getRole());
         userRepository.save(user);
     }
 }

@@ -34,7 +34,7 @@ public class CarController {
 
     @PutMapping("/add/user/{userId}")
     @ApiOperation(value = "Add a car to a user by id and VIN code")
-    public void addCarToUserByVinCode(@PathVariable Long userId, String vinCode) {
+    public void addCarToUserByVinCode(@PathVariable Long userId, @RequestBody String vinCode) {
         carService.addCarToUserByVinCode(userId, vinCode);
     }
 
