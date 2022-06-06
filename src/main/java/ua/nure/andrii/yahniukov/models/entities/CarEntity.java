@@ -20,12 +20,13 @@ public class CarEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "vin_code")
+    @Column(name = "vin_code", updatable = false, unique = true)
     private String vinCode;
 
+    @Builder.Default
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity owner;
+    private UserEntity owner = null;
 
     @Column(name = "name")
     private String name;
@@ -42,9 +43,11 @@ public class CarEntity {
     @Column(name = "percentage_of_charge")
     private Double percentageOfCharge;
 
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Builder.Default
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt = new Date();
 
+    @Builder.Default
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 }
