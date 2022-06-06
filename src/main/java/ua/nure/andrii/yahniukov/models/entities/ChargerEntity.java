@@ -72,7 +72,7 @@ public class ChargerEntity {
     @Column(name = "time_to")
     private String timeTo;
 
-    @OneToMany(mappedBy = "typeConnector")
+    @OneToMany(mappedBy = "charger", cascade = CascadeType.REMOVE)
     private List<TypeConnectorsEntity> typeConnectors;
 
     @OneToMany(mappedBy = "charger")

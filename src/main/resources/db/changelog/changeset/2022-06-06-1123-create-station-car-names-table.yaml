@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-station-car-names-table
+      author: Yahniukov Andrii
+      changes:
+        - createTable:
+            tableName: carNames
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: station_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_station_carName
+                    references: stations(id)
+                    nullable: false
+                    deleteCascade: true

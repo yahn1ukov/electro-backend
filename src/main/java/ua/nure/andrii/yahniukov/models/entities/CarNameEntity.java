@@ -8,21 +8,21 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "typeConnectors")
+@Table(name = "carNames")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TypeConnectorsEntity {
+public class CarNameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "charger_id", referencedColumnName = "id")
-    private ChargerEntity charger;
-
     @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    private StationEntity station;
 }
