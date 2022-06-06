@@ -31,6 +31,7 @@ public class ComplaintUserStationEntity {
     @Column(name = "description")
     private String description;
 
+    @Builder.Default
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 }

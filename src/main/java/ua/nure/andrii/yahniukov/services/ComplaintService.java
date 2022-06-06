@@ -3,12 +3,15 @@ package ua.nure.andrii.yahniukov.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
+import ua.nure.andrii.yahniukov.models.dto.ComplaintUserChargerDto;
+import ua.nure.andrii.yahniukov.models.dto.ComplaintUserStationDto;
 import ua.nure.andrii.yahniukov.models.entities.*;
 import ua.nure.andrii.yahniukov.repositories.*;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +23,7 @@ public class ComplaintService {
     private final ChargerRepository chargerRepository;
     private final StationRepository stationRepository;
 
-    public void createComplaintUserCharger(Long userId, Long chargerId, ComplaintUserChargerEntity complaint) {
+    public void createComplaintUserCharger(Long userId, Long chargerId, ComplaintDto complaint) {
         UserEntity user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
@@ -33,12 +36,11 @@ public class ComplaintService {
                         .user(user)
                         .charger(charger)
                         .description(complaint.getDescription())
-                        .createdAt(new Date())
                         .build()
         );
     }
 
-    public void createComplaintUserStation(Long userId, Long stationId, ComplaintUserStationEntity complaint) {
+    public void createComplaintUserStation(Long userId, Long stationId, ComplaintDto complaint) {
         UserEntity user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
@@ -51,17 +53,24 @@ public class ComplaintService {
                         .user(user)
                         .station(station)
                         .description(complaint.getDescription())
-                        .createdAt(new Date())
                         .build()
         );
     }
 
-    public List<ComplaintUserChargerEntity> getAllComplaintUserCharger() {
-        return complaintUserChargerRepository.findAll();
+    public List<ComplaintUserChargerDto> getAllComplaintUserCharger() {
+        return complaintUserChargerRepository
+                .findAll()
+                .stream()
+                .map(ComplaintUserChargerDto::fromComplaintUserCharger)
+                .collect(Collectors.toList());
     }
 
-    public List<ComplaintUserStationEntity> getAllComplaintUserStation() {
-        return complaintUserStationRepository.findAll();
+    public List<ComplaintUserStationDto> getAllComplaintUserStation() {
+        return complaintUserStationRepository
+                .findAll()
+                .stream()
+                .map(ComplaintUserStationDto::fromComplaintUserStation)
+                .collect(Collectors.toList());
     }
 
     public void deleteComplaintUserCharger(Long complaintId) {

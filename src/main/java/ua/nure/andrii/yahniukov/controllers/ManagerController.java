@@ -3,8 +3,8 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.models.entities.ComplaintUserChargerEntity;
-import ua.nure.andrii.yahniukov.models.entities.ComplaintUserStationEntity;
+import ua.nure.andrii.yahniukov.models.dto.ComplaintUserChargerDto;
+import ua.nure.andrii.yahniukov.models.dto.ComplaintUserStationDto;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
 
 import java.util.List;
@@ -17,13 +17,13 @@ public class ManagerController {
 
     @GetMapping("/get/complaint/charger/all")
     @ApiOperation(value = "View list of charger's complaints")
-    public List<ComplaintUserChargerEntity> getAllComplaintUserCharger() {
+    public List<ComplaintUserChargerDto> getAllComplaintUserCharger() {
         return complaintService.getAllComplaintUserCharger();
     }
 
     @GetMapping("/get/complaint/station/all")
     @ApiOperation(value = "View list of station's complaints")
-    public List<ComplaintUserStationEntity> getAllComplaintUserStation() {
+    public List<ComplaintUserStationDto> getAllComplaintUserStation() {
         return complaintService.getAllComplaintUserStation();
     }
 

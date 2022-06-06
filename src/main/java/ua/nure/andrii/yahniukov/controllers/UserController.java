@@ -3,9 +3,8 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
 import ua.nure.andrii.yahniukov.models.dto.UserDto;
-import ua.nure.andrii.yahniukov.models.entities.ComplaintUserChargerEntity;
-import ua.nure.andrii.yahniukov.models.entities.ComplaintUserStationEntity;
 import ua.nure.andrii.yahniukov.security.dto.RegisterDto;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
 import ua.nure.andrii.yahniukov.services.UserService;
@@ -34,7 +33,7 @@ public class UserController {
     public void createComplaintUserCharger(
             @PathVariable Long userId,
             @PathVariable Long chargerId,
-            @RequestBody ComplaintUserChargerEntity complaint
+            @RequestBody ComplaintDto complaint
     ) {
         complaintService.createComplaintUserCharger(userId, chargerId, complaint);
     }
@@ -44,7 +43,7 @@ public class UserController {
     public void createComplaintUserStation(
             @PathVariable Long userId,
             @PathVariable Long stationId,
-            @RequestBody ComplaintUserStationEntity complaint
+            @RequestBody ComplaintDto complaint
     ) {
         complaintService.createComplaintUserStation(userId, stationId, complaint);
     }
