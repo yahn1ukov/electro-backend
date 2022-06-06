@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Builder
 public class CarModelEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
