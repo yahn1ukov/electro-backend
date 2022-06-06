@@ -32,6 +32,6 @@ public class ComplaintUserChargerEntity {
     private String description;
 
     @Builder.Default
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private Date createdAt = new Date();
 }

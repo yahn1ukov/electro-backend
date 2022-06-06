@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,16 +47,19 @@ public class StationEntity {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Builder.Default
     @OneToMany(mappedBy = "station")
-    private List<ComplaintUserStationEntity> stationComplaints;
+    private List<ComplaintUserStationEntity> stationComplaints = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "station")
     @Cascade({DELETE, SAVE_UPDATE})
-    private List<CarNameEntity> carNames;
+    private List<CarNameEntity> carNames = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "station")
     @Cascade({DELETE, SAVE_UPDATE})
-    private List<CarModelEntity> carModels;
+    private List<CarModelEntity> carModels = new ArrayList<>();
 
     @Column(name = "all_place")
     private Integer allPlace;
@@ -72,15 +76,19 @@ public class StationEntity {
     @Column(name = "time_to")
     private String timeTo;
 
+    @Builder.Default
     @Column(name = "phone_number")
-    private String phoneNumber;
+    private String phoneNumber = null;
 
+    @Builder.Default
     @Column(name = "web_site")
-    private String webSite;
+    private String webSite = null;
 
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Builder.Default
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt = new Date();
 
+    @Builder.Default
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 }
