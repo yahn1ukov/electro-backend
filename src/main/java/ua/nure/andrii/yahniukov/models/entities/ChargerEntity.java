@@ -4,14 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static org.hibernate.annotations.CascadeType.DELETE;
-import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
 
 @Entity
 @Table(name = "chargers")
@@ -25,7 +22,7 @@ public class ChargerEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "country")
@@ -46,11 +43,13 @@ public class ChargerEntity {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Builder.Default
     @Column(name = "is_charging")
-    private Boolean isCharging;
+    private Boolean isCharging = false;
 
+    @Builder.Default
     @Column(name = "is_broken")
-    private Boolean isBroken;
+    private Boolean isBroken = false;
 
     @Column(name = "is_fast")
     private Boolean isFast;
@@ -64,11 +63,13 @@ public class ChargerEntity {
     @Column(name = "company")
     private String company;
 
+    @Builder.Default
     @Column(name = "phone_number")
-    private String phoneNumber;
+    private String phoneNumber = null;
 
+    @Builder.Default
     @Column(name = "web_site")
-    private String webSite;
+    private String webSite = null;
 
     @Column(name = "time_from")
     private String timeFrom;
@@ -76,16 +77,18 @@ public class ChargerEntity {
     @Column(name = "time_to")
     private String timeTo;
 
+    @Column(name = "type_connector")
+    private String typeConnector;
+
+    @Builder.Default
     @OneToMany(mappedBy = "charger")
-    @Cascade({DELETE, SAVE_UPDATE})
-    private List<TypeConnectorsEntity> typeConnectors;
+    private List<ComplaintUserChargerEntity> chargerComplaints = new ArrayList<>();
 
-    @OneToMany(mappedBy = "charger")
-    private List<ComplaintUserChargerEntity> chargerComplaints;
+    @Builder.Default
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt = new Date();
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
+    @Builder.Default
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 }

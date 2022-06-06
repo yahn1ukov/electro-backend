@@ -3,15 +3,13 @@ package ua.nure.andrii.yahniukov.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.models.dto.ChargerDto;
 import ua.nure.andrii.yahniukov.models.entities.ChargerEntity;
-import ua.nure.andrii.yahniukov.models.entities.TypeConnectorsEntity;
 import ua.nure.andrii.yahniukov.repositories.ChargerRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +17,10 @@ import java.util.List;
 public class ChargerService {
     private final ChargerRepository chargerRepository;
 
-    public void createCharger(ChargerEntity charger, TypeConnectorsEntity typeConnectors) {
+    public void createCharger(ChargerDto charger) {
+        if (chargerRepository.existsByName(charger.getName())) {
+            throw new BadRequestException("Charger with name: " + charger.getName() + " already exists");
+        }
         chargerRepository.save(
                 ChargerEntity.builder()
                         .name(charger.getName())
@@ -29,36 +30,37 @@ public class ChargerService {
                         .zipCode(charger.getZipCode())
                         .latitude(charger.getLatitude())
                         .longitude(charger.getLongitude())
-                        .isCharging(false)
-                        .isBroken(false)
                         .isFast(charger.getIsFast())
                         .isPay(charger.getIsPay())
                         .priceOfPerHour(charger.getPriceOfPerHour())
                         .company(charger.getCompany())
+                        .typeConnector(charger.getTypeConnector())
                         .phoneNumber(charger.getPhoneNumber())
                         .webSite(charger.getWebSite())
                         .timeFrom(charger.getTimeFrom())
                         .timeTo(charger.getTimeTo())
-                        .typeConnectors(new ArrayList<>(Collections.singletonList(typeConnectors)))
-                        .chargerComplaints(new ArrayList<>(Collections.emptyList()))
-                        .createdAt(new Date())
-                        .updatedAt(new Date())
                         .build()
         );
     }
 
-    public List<ChargerEntity> getAllCharger() {
-        return chargerRepository.findAll();
+    public List<ChargerDto> getAllCharger() {
+        return chargerRepository
+                .findAll()
+                .stream()
+                .map(ChargerDto::fromCharger)
+                .collect(Collectors.toList());
     }
 
-    public ChargerEntity getChargerById(Long id) {
-        return chargerRepository
-                .findById(id)
-                .orElseThrow(() -> new BadRequestException("Charger with id: " + id + " not found"));
+    public ChargerDto getChargerById(Long id) {
+        return ChargerDto.fromCharger(
+                chargerRepository
+                        .findById(id)
+                        .orElseThrow(() -> new BadRequestException("Charger with id: " + id + " not found"))
+        );
     }
 
     public void deleteChargerById(Long id) {
-        if (!chargerRepository.findById(id).isPresent()) {
+        if (!chargerRepository.existsById(id)) {
             throw new BadRequestException("Charger with id: " + id + " not found");
         }
         chargerRepository.deleteById(id);

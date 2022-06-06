@@ -3,8 +3,7 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.models.entities.ChargerEntity;
-import ua.nure.andrii.yahniukov.models.entities.TypeConnectorsEntity;
+import ua.nure.andrii.yahniukov.models.dto.ChargerDto;
 import ua.nure.andrii.yahniukov.services.ChargerService;
 
 import java.util.List;
@@ -17,22 +16,19 @@ public class ChargerController {
 
     @PostMapping("/create")
     @ApiOperation(value = "Create a charger")
-    public void createCharger(
-            @RequestBody ChargerEntity charger,
-            @RequestBody TypeConnectorsEntity typeConnectors
-    ) {
-        chargerService.createCharger(charger, typeConnectors);
+    public void createCharger(@RequestBody ChargerDto charger) {
+        chargerService.createCharger(charger);
     }
 
     @GetMapping("/get/all")
     @ApiOperation(value = "View a list of chargers")
-    public List<ChargerEntity> getAllCharger() {
+    public List<ChargerDto> getAllCharger() {
         return chargerService.getAllCharger();
     }
 
     @GetMapping("/get/{id}")
     @ApiOperation(value = "View a charger by id")
-    public ChargerEntity getChargerById(@PathVariable Long id) {
+    public ChargerDto getChargerById(@PathVariable Long id) {
         return chargerService.getChargerById(id);
     }
 

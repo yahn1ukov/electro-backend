@@ -6,4 +6,7 @@ import ua.nure.andrii.yahniukov.models.entities.ChargerEntity;
 
 @Repository
 public interface ChargerRepository extends JpaRepository<ChargerEntity, Long> {
+    boolean existsByName(String name);
+
+    boolean existsById(Long id);
 }
