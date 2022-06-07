@@ -5,16 +5,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.NoVerificationPartnerDto;
-import ua.nure.andrii.yahniukov.models.dto.PartnerDto;
-import ua.nure.andrii.yahniukov.models.dto.RoleDto;
-import ua.nure.andrii.yahniukov.models.dto.UserDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.users.PartnerDto;
+import ua.nure.andrii.yahniukov.models.dto.users.UserDto;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
-import ua.nure.andrii.yahniukov.repositories.ChargerUserRepository;
-import ua.nure.andrii.yahniukov.repositories.StationUserRepository;
-import ua.nure.andrii.yahniukov.repositories.UserRepository;
+import ua.nure.andrii.yahniukov.repositories.users.ChargerUserRepository;
+import ua.nure.andrii.yahniukov.repositories.users.StationUserRepository;
+import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 
@@ -30,6 +29,24 @@ public class UserService {
     private final ChargerUserRepository chargerUserRepository;
     private final StationUserRepository stationUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserEntity findUserById(Long userId) {
+        return userRepository
+                .findById(userId)
+                .orElseThrow(() -> new BadRequestException("User with id " + userId + " not found"));
+    }
+
+    public ChargerUserEntity findChargerUserById(Long chargerUserId) {
+        return chargerUserRepository
+                .findById(chargerUserId)
+                .orElseThrow(() -> new BadRequestException("Charger user with id " + chargerUserId + " not found"));
+    }
+
+    public StationUserEntity findStationUserById(Long stationUserId) {
+        return stationUserRepository
+                .findById(stationUserId)
+                .orElseThrow(() -> new BadRequestException("Station user with id " + stationUserId + " not found"));
+    }
 
     /*
      * Для власників електромобілів: реєстрація через електронну пошту
@@ -81,13 +98,34 @@ public class UserService {
     }
 
     /*
+     * Для власників електромобілів: отримання даних про користувача
+     */
+    public UserDto getUserById(Long userId) {
+        return UserDto.fromUserForUser(findUserById(userId));
+    }
+
+    /*
+     * Для виробників зарядних станцій: отримання даних про користувача зарядних станцій
+     */
+    public PartnerDto getChargerUserById(Long chargerUserId) {
+        return PartnerDto.fromPartner(findChargerUserById(chargerUserId));
+    }
+
+    /*
+     * Для власників СТО: отримання даних про користувача СТО
+     */
+    public PartnerDto getStationUserById(Long stationUserId) {
+        return PartnerDto.fromPartner(findStationUserById(stationUserId));
+    }
+
+    /*
      * Для адміністраторів: список усіх користувачів
      */
     public List<UserDto> getAllUsers() {
         return userRepository
                 .findAll()
                 .stream()
-                .map(UserDto::fromUser)
+                .map(UserDto::fromUserForAdmin)
                 .collect(Collectors.toList());
     }
 
@@ -98,8 +136,8 @@ public class UserService {
         return chargerUserRepository
                 .findAll()
                 .stream()
-                .filter(PartnerDto::isVerification)
-                .map(PartnerDto::fromPartner)
+                .filter(PartnerDto::verification)
+                .map(PartnerDto::fromVerification)
                 .collect(Collectors.toList());
     }
 
@@ -110,32 +148,32 @@ public class UserService {
         return stationUserRepository
                 .findAll()
                 .stream()
-                .filter(PartnerDto::isVerification)
-                .map(PartnerDto::fromPartner)
+                .filter(PartnerDto::verification)
+                .map(PartnerDto::fromVerification)
                 .collect(Collectors.toList());
     }
 
     /*
      * Для адміністраторів: список усіх не верифікованих користувачів зарядних станцій
      */
-    public List<NoVerificationPartnerDto> getAllNoVerificationChargerUsers() {
+    public List<PartnerDto> getAllNoVerificationChargerUsers() {
         return chargerUserRepository
                 .findAll()
                 .stream()
-                .filter(NoVerificationPartnerDto::isVerification)
-                .map(NoVerificationPartnerDto::fromPartner)
+                .filter(PartnerDto::noVerification)
+                .map(PartnerDto::fromNoVerification)
                 .collect(Collectors.toList());
     }
 
     /*
      * Для адміністраторів: список усіх не верифікованих користувачів СТО
      */
-    public List<NoVerificationPartnerDto> getAllNoVerificationStationUsers() {
+    public List<PartnerDto> getAllNoVerificationStationUsers() {
         return stationUserRepository
                 .findAll()
                 .stream()
-                .filter(NoVerificationPartnerDto::isVerification)
-                .map(NoVerificationPartnerDto::fromPartner)
+                .filter(PartnerDto::noVerification)
+                .map(PartnerDto::fromNoVerification)
                 .collect(Collectors.toList());
     }
 
@@ -143,10 +181,7 @@ public class UserService {
      * Для адміністраторів: зміна ролі користувача
      */
     public void changeRoleUser(Long userId, RoleDto role) {
-        UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id " + userId + " not found"));
-
+        UserEntity user = findUserById(userId);
         if (user.getRole().equals(UserRole.ADMIN)) {
             throw new BadRequestException("Administrator cannot change role");
         }
@@ -164,9 +199,7 @@ public class UserService {
      * Для адміністраторів: підтвердження верифікації користувача зарядних станцій
      */
     public void acceptVerificationChargerUser(Long chargerUserId) {
-        ChargerUserEntity chargerUser = chargerUserRepository
-                .findById(chargerUserId)
-                .orElseThrow(() -> new BadRequestException("Charger user with id " + chargerUserId + " not found"));
+        ChargerUserEntity chargerUser = findChargerUserById(chargerUserId);
         chargerUser.setIsVerification(true);
         chargerUserRepository.save(chargerUser);
     }
@@ -175,9 +208,7 @@ public class UserService {
      * Для адміністраторів: підтвердження верифікації користувача СТО
      */
     public void acceptVerificationStationUser(Long stationUserId) {
-        StationUserEntity stationUser = stationUserRepository
-                .findById(stationUserId)
-                .orElseThrow(() -> new BadRequestException("Charger user with id " + stationUserId + " not found"));
+        StationUserEntity stationUser = findStationUserById(stationUserId);
         stationUser.setIsVerification(true);
         stationUserRepository.save(stationUser);
     }
@@ -186,10 +217,7 @@ public class UserService {
      * Для адміністраторів: блокування користувача
      */
     public void blockUser(Long userId) {
-        UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
-
+        UserEntity user = findUserById(userId);
         user.setIsBlock(!user.getIsBlock());
         userRepository.save(user);
     }
@@ -198,10 +226,7 @@ public class UserService {
      * Для адміністраторів: блокування користувачів зарядних станцій
      */
     public void blockChargerUser(Long chargerUserId) {
-        ChargerUserEntity chargerUser = chargerUserRepository
-                .findById(chargerUserId)
-                .orElseThrow(() -> new BadRequestException("Charger user with id: " + chargerUserId + " not found"));
-
+        ChargerUserEntity chargerUser = findChargerUserById(chargerUserId);
         chargerUser.setIsBlock(!chargerUser.getIsBlock());
         chargerUserRepository.save(chargerUser);
     }
@@ -210,10 +235,7 @@ public class UserService {
      * Для адміністраторів: блокування користувачів СТО
      */
     public void blockStationUser(Long stationUserId) {
-        StationUserEntity stationUser = stationUserRepository
-                .findById(stationUserId)
-                .orElseThrow(() -> new BadRequestException("Station user with id: " + stationUserId + " not found"));
-
+        StationUserEntity stationUser = findStationUserById(stationUserId);
         stationUser.setIsBlock(!stationUser.getIsBlock());
         stationUserRepository.save(stationUser);
     }
@@ -222,10 +244,7 @@ public class UserService {
      * Для адміністраторів: видалення користувача
      */
     public void deleteUser(Long userId) {
-        UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
-
+        UserEntity user = findUserById(userId);
         userRepository.delete(user);
     }
 
@@ -233,10 +252,7 @@ public class UserService {
      * Для адміністраторів: видалення користувача зарядних станцій
      */
     public void deleteChargerUser(Long chargerUserId) {
-        ChargerUserEntity chargerUser = chargerUserRepository
-                .findById(chargerUserId)
-                .orElseThrow(() -> new BadRequestException("Charger user with id: " + chargerUserId + " not found"));
-
+        ChargerUserEntity chargerUser = findChargerUserById(chargerUserId);
         chargerUserRepository.delete(chargerUser);
     }
 
@@ -244,10 +260,7 @@ public class UserService {
      * Для адміністраторів: видалення користувача СТО
      */
     public void deleteStationUser(Long stationUserId) {
-        StationUserEntity stationUser = stationUserRepository
-                .findById(stationUserId)
-                .orElseThrow(() -> new BadRequestException("Station user with id: " + stationUserId + " not found"));
-
+        StationUserEntity stationUser = findStationUserById(stationUserId);
         stationUserRepository.delete(stationUser);
     }
 }

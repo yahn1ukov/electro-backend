@@ -3,15 +3,18 @@ package ua.nure.andrii.yahniukov.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
-import ua.nure.andrii.yahniukov.models.dto.ComplaintUserChargerDto;
-import ua.nure.andrii.yahniukov.models.dto.ComplaintUserStationDto;
+import ua.nure.andrii.yahniukov.models.dto.complaints.ComplaintDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.DescriptionDto;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserChargerEntity;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserStationEntity;
 import ua.nure.andrii.yahniukov.models.entities.maintenances.ChargerEntity;
 import ua.nure.andrii.yahniukov.models.entities.maintenances.StationEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
-import ua.nure.andrii.yahniukov.repositories.*;
+import ua.nure.andrii.yahniukov.repositories.complaints.ComplaintUserChargerRepository;
+import ua.nure.andrii.yahniukov.repositories.complaints.ComplaintUserStationRepository;
+import ua.nure.andrii.yahniukov.repositories.maintenances.ChargerRepository;
+import ua.nure.andrii.yahniukov.repositories.maintenances.StationRepository;
+import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -26,18 +29,38 @@ public class ComplaintService {
     private final UserRepository userRepository;
     private final ChargerRepository chargerRepository;
     private final StationRepository stationRepository;
+    private final UserService userService;
+
+    public ChargerEntity findChargerById(Long chargerId) {
+        return chargerRepository
+                .findById(chargerId)
+                .orElseThrow(() -> new BadRequestException("Charger with id: " + chargerId + " not found"));
+    }
+
+    public StationEntity findStationById(Long stationId) {
+        return stationRepository
+                .findById(stationId)
+                .orElseThrow(() -> new BadRequestException("Station with id: " + stationId + " not found"));
+    }
+
+    public ComplaintUserChargerEntity findComplaintUserChargerById(Long complaintId) {
+        return complaintUserChargerRepository
+                .findById(complaintId)
+                .orElseThrow(() -> new BadRequestException("Complaint with id: " + complaintId + " not found"));
+    }
+
+    public ComplaintUserStationEntity findComplaintUserStationById(Long complaintId) {
+        return complaintUserStationRepository
+                .findById(complaintId)
+                .orElseThrow(() -> new BadRequestException("Complaint with id: " + complaintId + " not found"));
+    }
 
     /*
      * Для власників електромобілів: подання скарги на зарядну станцію
      */
-    public void createComplaintUserCharger(Long userId, Long chargerId, ComplaintDto complaint) {
-        UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
-        ChargerEntity charger = chargerRepository
-                .findById(chargerId)
-                .orElseThrow(() -> new BadRequestException("Charger with id: " + chargerId + " not found"));
-
+    public void createComplaintUserCharger(Long userId, Long chargerId, DescriptionDto complaint) {
+        UserEntity user = userService.findUserById(userId);
+        ChargerEntity charger = findChargerById(chargerId);
         complaintUserChargerRepository.save(
                 ComplaintUserChargerEntity.builder()
                         .user(user)
@@ -50,14 +73,9 @@ public class ComplaintService {
     /*
      * Для власників електромобілів: подання скарги на СТО
      */
-    public void createComplaintUserStation(Long userId, Long stationId, ComplaintDto complaint) {
-        UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
-        StationEntity station = stationRepository
-                .findById(stationId)
-                .orElseThrow(() -> new BadRequestException("Station with id: " + stationId + " not found"));
-
+    public void createComplaintUserStation(Long userId, Long stationId, DescriptionDto complaint) {
+        UserEntity user = userService.findUserById(userId);
+        StationEntity station = findStationById(stationId);
         complaintUserStationRepository.save(
                 ComplaintUserStationEntity.builder()
                         .user(user)
@@ -70,22 +88,22 @@ public class ComplaintService {
     /*
      * Для модерації: перегляд усіх скарг на зарядну станцію
      */
-    public List<ComplaintUserChargerDto> getAllComplaintUserCharger() {
+    public List<ComplaintDto> getAllComplaintUserCharger() {
         return complaintUserChargerRepository
                 .findAll()
                 .stream()
-                .map(ComplaintUserChargerDto::fromComplaintUserCharger)
+                .map(ComplaintDto::fromComplaint)
                 .collect(Collectors.toList());
     }
 
     /*
      * Для модерації: перегляд усіх скарг на СТО
      */
-    public List<ComplaintUserStationDto> getAllComplaintUserStation() {
+    public List<ComplaintDto> getAllComplaintUserStation() {
         return complaintUserStationRepository
                 .findAll()
                 .stream()
-                .map(ComplaintUserStationDto::fromComplaintUserStation)
+                .map(ComplaintDto::fromComplaint)
                 .collect(Collectors.toList());
     }
 
@@ -93,16 +111,11 @@ public class ComplaintService {
      * Для модерації: видалити скаргу на зарядну станцію
      */
     public void deleteComplaintUserCharger(Long complaintId) {
-        ComplaintUserChargerEntity complaint = complaintUserChargerRepository
-                .findById(complaintId)
-                .orElseThrow(() -> new BadRequestException("Complaint with id: " + complaintId + " not found"));
-
+        ComplaintUserChargerEntity complaint = findComplaintUserChargerById(complaintId);
         UserEntity user = userRepository.getById(complaint.getUser().getId());
         ChargerEntity charger = chargerRepository.getById(complaint.getCharger().getId());
-
         user.getChargerComplaints().remove(complaint);
         charger.getChargerComplaints().remove(complaint);
-
         complaintUserChargerRepository.delete(complaint);
     }
 
@@ -110,16 +123,11 @@ public class ComplaintService {
      * Для модерації: видалити скаргу на СТО
      */
     public void deleteComplaintUserStation(Long complaintId) {
-        ComplaintUserStationEntity complaint = complaintUserStationRepository
-                .findById(complaintId)
-                .orElseThrow(() -> new BadRequestException("Complaint with id: " + complaintId + " not found"));
-
+        ComplaintUserStationEntity complaint = findComplaintUserStationById(complaintId);
         UserEntity user = userRepository.getById(complaint.getUser().getId());
         StationEntity station = stationRepository.getById(complaint.getStation().getId());
-
         user.getStationComplaints().remove(complaint);
         station.getStationComplaints().remove(complaint);
-
         complaintUserStationRepository.delete(complaint);
     }
 }

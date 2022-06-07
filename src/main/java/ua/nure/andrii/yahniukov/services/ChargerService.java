@@ -2,7 +2,7 @@ package ua.nure.andrii.yahniukov.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ua.nure.andrii.yahniukov.repositories.ChargerRepository;
+import ua.nure.andrii.yahniukov.repositories.maintenances.ChargerRepository;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 public class ChargerService {
     private final ChargerRepository chargerRepository;
 
-//    public void createCharger(ChargerDto charger) {
+//    public void createCharger(Long chargerUserId, ChargerDto charger) {
 //        if (chargerRepository.existsByName(charger.getName())) {
 //            throw new BadRequestException("Charger with name: " + charger.getName() + " already exists");
 //        }

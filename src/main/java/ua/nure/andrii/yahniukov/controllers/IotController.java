@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.CarDto;
+import ua.nure.andrii.yahniukov.models.dto.IoT.CarDto;
 import ua.nure.andrii.yahniukov.services.CarService;
 
 @RestController

@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
-import ua.nure.andrii.yahniukov.models.dto.VinCodeDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.DescriptionDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.VinCodeDto;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 import ua.nure.andrii.yahniukov.services.CarService;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<String> createComplaintUserCharger(
             @PathVariable Long userId,
             @PathVariable Long chargerId,
-            @RequestBody ComplaintDto complaint
+            @RequestBody DescriptionDto complaint
     ) {
         try {
             complaintService.createComplaintUserCharger(userId, chargerId, complaint);
@@ -51,11 +51,41 @@ public class UserController {
     public ResponseEntity<String> createComplaintUserStation(
             @PathVariable Long userId,
             @PathVariable Long stationId,
-            @RequestBody ComplaintDto complaint
+            @RequestBody DescriptionDto complaint
     ) {
         try {
             complaintService.createComplaintUserStation(userId, stationId, complaint);
             return ResponseEntity.ok().body("Service station complaint sent successfully");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "View a user by id")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        try {
+            return ResponseEntity.ok().body(userService.getUserById(userId));
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/charger/{chargerUserId}")
+    @ApiOperation(value = "View a charger user by id")
+    public ResponseEntity<?> getChargerUserById(@PathVariable Long chargerUserId) {
+        try {
+            return ResponseEntity.ok().body(userService.getChargerUserById(chargerUserId));
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/station/{stationUserId}")
+    @ApiOperation(value = "View a station user by id")
+    public ResponseEntity<?> getStationUserById(@PathVariable Long stationUserId) {
+        try {
+            return ResponseEntity.ok().body(userService.getStationUserById(stationUserId));
         } catch (BadRequestException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

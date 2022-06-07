@@ -1,4 +1,4 @@
-package ua.nure.andrii.yahniukov.models.dto;
+package ua.nure.andrii.yahniukov.models.dto.maintenances;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;

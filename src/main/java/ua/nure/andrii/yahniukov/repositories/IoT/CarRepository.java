@@ -1,4 +1,4 @@
-package ua.nure.andrii.yahniukov.repositories;
+package ua.nure.andrii.yahniukov.repositories.IoT;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

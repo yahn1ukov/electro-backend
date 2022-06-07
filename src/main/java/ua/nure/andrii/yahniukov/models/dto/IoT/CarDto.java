@@ -1,4 +1,4 @@
-package ua.nure.andrii.yahniukov.models.dto;
+package ua.nure.andrii.yahniukov.models.dto.IoT;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
@@ -8,7 +8,8 @@ import ua.nure.andrii.yahniukov.models.entities.IoT.CarEntity;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class CarDto {
+public class
+CarDto {
     private Long id;
     private String name;
     private String model;

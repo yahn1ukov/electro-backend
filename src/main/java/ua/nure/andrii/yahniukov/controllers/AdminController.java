@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.RoleDto;
 import ua.nure.andrii.yahniukov.services.UserService;
 
 @RestController

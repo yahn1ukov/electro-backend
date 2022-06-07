@@ -2,7 +2,7 @@ package ua.nure.andrii.yahniukov.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ua.nure.andrii.yahniukov.repositories.StationRepository;
+import ua.nure.andrii.yahniukov.repositories.maintenances.StationRepository;
 
 import javax.transaction.Transactional;
 
