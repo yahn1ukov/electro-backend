@@ -2,9 +2,11 @@ package ua.nure.andrii.yahniukov.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.CarDto;
 import ua.nure.andrii.yahniukov.services.CarService;
 
@@ -16,7 +18,12 @@ public class IoTController {
 
     @PostMapping("/create/car")
     @ApiOperation(value = "Get data and create a car")
-    public void createCar(CarDto car) {
-        carService.createCar(car);
+    public ResponseEntity<String> createCar(CarDto car) {
+        try {
+            carService.createCar(car);
+            return ResponseEntity.ok().body("Vehicle successfully created");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }

@@ -2,10 +2,12 @@ package ua.nure.andrii.yahniukov.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.services.StationService;
 import ua.nure.andrii.yahniukov.services.UserService;
@@ -19,7 +21,12 @@ public class StationController {
 
     @PostMapping("/create/partner")
     @ApiOperation(value = "Create a station partner")
-    public void createStationUser(@RequestBody RegisterPartnerDto partner) {
-        userService.createStationUser(partner);
+    public ResponseEntity<String> createStationUser(@RequestBody RegisterPartnerDto partner) {
+        try {
+            userService.createStationUser(partner);
+            return ResponseEntity.ok().body("Application successfully sent");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }

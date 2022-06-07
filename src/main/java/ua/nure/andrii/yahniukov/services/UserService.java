@@ -3,7 +3,10 @@ package ua.nure.andrii.yahniukov.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.models.dto.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.UserDto;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
@@ -14,6 +17,8 @@ import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +62,6 @@ public class UserService {
         );
     }
 
-
     /*
      * Для власників СТО: подання та реєстрація через електронну пошту
      */
@@ -74,5 +78,101 @@ public class UserService {
         );
     }
 
+    /*
+     * Для адміністраторів: список усіх користувачів
+     */
+    public List<UserDto> getAllUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(UserDto::fromUser)
+                .collect(Collectors.toList());
+    }
 
+    /*
+     * Для адміністраторів: зміна ролі користувача
+     */
+    public void changeRoleUser(Long userId, RoleDto role) {
+        UserEntity user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
+
+        if (user.getRole().equals(UserRole.ADMIN)) {
+            throw new BadRequestException("User with id: " + userId + " cannot change the role");
+        }
+        if (user.getRole().equals(UserRole.valueOf(String.valueOf(role).toUpperCase()))) {
+            throw new BadRequestException("User with id: " + userId + " cannot have the same role");
+        }
+        user.setRole(UserRole.valueOf(String.valueOf(role).toUpperCase()));
+        userRepository.save(user);
+    }
+
+    /*
+     * Для адміністраторів: блокування користувача
+     */
+    public void blockUser(Long userId) {
+        UserEntity user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
+
+        user.setIsBlock(!user.getIsBlock());
+        userRepository.save(user);
+    }
+
+    /*
+     * Для адміністраторів: блокування користувачів зарядних станцій
+     */
+    public void blockChargerUser(Long chargerUserId) {
+        ChargerUserEntity chargerUser = chargerUserRepository
+                .findById(chargerUserId)
+                .orElseThrow(() -> new BadRequestException("Charger user with id: " + chargerUserId + " not found"));
+
+        chargerUser.setIsBlock(!chargerUser.getIsBlock());
+        chargerUserRepository.save(chargerUser);
+    }
+
+    /*
+     * Для адміністраторів: блокування користувачів СТО
+     */
+    public void blockStationUser(Long stationUserId) {
+        StationUserEntity stationUser = stationUserRepository
+                .findById(stationUserId)
+                .orElseThrow(() -> new BadRequestException("Station user with id: " + stationUserId + " not found"));
+
+        stationUser.setIsBlock(!stationUser.getIsBlock());
+        stationUserRepository.save(stationUser);
+    }
+
+    /*
+     * Для адміністраторів: видалення користувача
+     */
+    public void deleteUser(Long userId) {
+        UserEntity user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
+
+        userRepository.delete(user);
+    }
+
+    /*
+     * Для адміністраторів: видалення користувача зарядних станцій
+     */
+    public void deleteChargerUser(Long chargerUserId) {
+        ChargerUserEntity chargerUser = chargerUserRepository
+                .findById(chargerUserId)
+                .orElseThrow(() -> new BadRequestException("Charger user with id: " + chargerUserId + " not found"));
+
+        chargerUserRepository.delete(chargerUser);
+    }
+
+    /*
+     * Для адміністраторів: видалення користувача СТО
+     */
+    public void deleteStationUser(Long stationUserId) {
+        StationUserEntity stationUser = stationUserRepository
+                .findById(stationUserId)
+                .orElseThrow(() -> new BadRequestException("Station user with id: " + stationUserId + " not found"));
+
+        stationUserRepository.delete(stationUser);
+    }
 }
