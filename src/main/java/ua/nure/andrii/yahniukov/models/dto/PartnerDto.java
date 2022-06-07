@@ -19,7 +19,15 @@ public class PartnerDto {
     private Boolean isBlock;
     private Date createdAt;
 
-    public static PartnerDto fromChargerUser(ChargerUserEntity chargerUser) {
+    public static boolean isVerification(ChargerUserEntity chargerUser) {
+        return chargerUser.getIsVerification();
+    }
+
+    public static boolean isVerification(StationUserEntity stationUser) {
+        return stationUser.getIsVerification();
+    }
+
+    public static PartnerDto fromPartner(ChargerUserEntity chargerUser) {
         return PartnerDto.builder()
                 .id(chargerUser.getId())
                 .company(chargerUser.getCompany())
@@ -29,7 +37,7 @@ public class PartnerDto {
                 .build();
     }
 
-    public static PartnerDto fromStationUser(StationUserEntity stationUser) {
+    public static PartnerDto fromPartner(StationUserEntity stationUser) {
         return PartnerDto.builder()
                 .id(stationUser.getId())
                 .company(stationUser.getCompany())

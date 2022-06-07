@@ -18,7 +18,15 @@ public class NoVerificationPartnerDto {
     private UserRole role;
     private Date createdAt;
 
-    public static NoVerificationPartnerDto fromChargerUser(ChargerUserEntity chargerUser) {
+    public static boolean isVerification(ChargerUserEntity chargerUser) {
+        return !chargerUser.getIsVerification();
+    }
+
+    public static boolean isVerification(StationUserEntity stationUser) {
+        return !stationUser.getIsVerification();
+    }
+
+    public static NoVerificationPartnerDto fromPartner(ChargerUserEntity chargerUser) {
         return NoVerificationPartnerDto.builder()
                 .id(chargerUser.getId())
                 .company(chargerUser.getCompany())
@@ -27,7 +35,7 @@ public class NoVerificationPartnerDto {
                 .build();
     }
 
-    public static NoVerificationPartnerDto fromStationUser(StationUserEntity stationUser) {
+    public static NoVerificationPartnerDto fromPartner(StationUserEntity stationUser) {
         return NoVerificationPartnerDto.builder()
                 .id(stationUser.getId())
                 .company(stationUser.getCompany())

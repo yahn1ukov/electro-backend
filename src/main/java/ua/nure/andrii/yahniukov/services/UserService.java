@@ -98,7 +98,8 @@ public class UserService {
         return chargerUserRepository
                 .findAll()
                 .stream()
-                .map(chargerUser -> chargerUser.getIsVerification() ? PartnerDto.fromChargerUser(chargerUser) : null)
+                .filter(PartnerDto::isVerification)
+                .map(PartnerDto::fromPartner)
                 .collect(Collectors.toList());
     }
 
@@ -109,7 +110,8 @@ public class UserService {
         return stationUserRepository
                 .findAll()
                 .stream()
-                .map(stationUser -> stationUser.getIsVerification() ? PartnerDto.fromStationUser(stationUser) : null)
+                .filter(PartnerDto::isVerification)
+                .map(PartnerDto::fromPartner)
                 .collect(Collectors.toList());
     }
 
@@ -120,10 +122,8 @@ public class UserService {
         return chargerUserRepository
                 .findAll()
                 .stream()
-                .map(chargerUser -> !chargerUser.getIsVerification()
-                        ? NoVerificationPartnerDto.fromChargerUser(chargerUser)
-                        : null
-                )
+                .filter(NoVerificationPartnerDto::isVerification)
+                .map(NoVerificationPartnerDto::fromPartner)
                 .collect(Collectors.toList());
     }
 
@@ -134,10 +134,8 @@ public class UserService {
         return stationUserRepository
                 .findAll()
                 .stream()
-                .map(stationUser -> !stationUser.getIsVerification()
-                        ? NoVerificationPartnerDto.fromStationUser(stationUser)
-                        : null
-                )
+                .filter(NoVerificationPartnerDto::isVerification)
+                .map(NoVerificationPartnerDto::fromPartner)
                 .collect(Collectors.toList());
     }
 
