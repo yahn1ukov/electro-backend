@@ -40,10 +40,10 @@ public class ChargerDto {
                 .isFast(charger.getIsFast())
                 .isPay(charger.getIsPay())
                 .priceOfPerHour(charger.getPriceOfPerHour())
-                .company(charger.getCompany())
+                .company(charger.getOwner().getCompany())
                 .typeConnector(charger.getTypeConnector())
-                .phoneNumber(charger.getPhoneNumber())
-                .webSite(charger.getWebSite())
+                .phoneNumber(charger.getOwner().getPhoneNumber())
+                .webSite(charger.getOwner().getWebSite())
                 .timeFrom(charger.getTimeFrom())
                 .timeTo(charger.getTimeTo())
                 .build();

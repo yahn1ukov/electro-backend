@@ -23,6 +23,12 @@ public class StationEntity extends BaseMaintenanceEntity {
     @OneToMany(mappedBy = "station")
     private List<ComplaintUserStationEntity> stationComplaints = new ArrayList<>();
 
+    @Column(name = "carName")
+    private String carName;
+
+    @Column(name = "carModel")
+    private String carModel;
+
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private StationUserEntity owner;

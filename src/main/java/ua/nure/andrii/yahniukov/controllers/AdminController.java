@@ -24,6 +24,46 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/get/charger/user/all")
+    @ApiOperation(value = "View a list of charger users")
+    public ResponseEntity<?> getAllChargerUsers() {
+        try {
+            return ResponseEntity.ok().body(userService.getAllChargerUsers());
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/get/station/user/all")
+    @ApiOperation(value = "View a list of station users")
+    public ResponseEntity<?> getAllStationUsers() {
+        try {
+            return ResponseEntity.ok().body(userService.getAllStationUsers());
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/get/charger/no/verification/user/all")
+    @ApiOperation(value = "View a list of no verification station users")
+    public ResponseEntity<?> getAllNoVerificationChargerUsers() {
+        try {
+            return ResponseEntity.ok().body(userService.getAllNoVerificationChargerUsers());
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/get/station/no/verification/user/all")
+    @ApiOperation(value = "View a list of no verification station users")
+    public ResponseEntity<?> getAllNoVerificationStationUsers() {
+        try {
+            return ResponseEntity.ok().body(userService.getAllNoVerificationStationUsers());
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
     @PutMapping("/change/role/user/{userId}")
     @ApiOperation(value = "Change a user's role by id")
     public ResponseEntity<String> changeRoleUser(
@@ -33,6 +73,28 @@ public class AdminController {
         try {
             userService.changeRoleUser(userId, role);
             return ResponseEntity.ok().body("Role changed successfully");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/accept/verification/charger/user/{chargerUserId}")
+    @ApiOperation(value = "Verification charger user by id")
+    public ResponseEntity<String> acceptVerificationChargerUser(@PathVariable Long chargerUserId) {
+        try {
+            userService.acceptVerificationChargerUser(chargerUserId);
+            return ResponseEntity.ok().body("");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/accept/verification/station/user/{stationUserId}")
+    @ApiOperation(value = "Verification charger user by id")
+    public ResponseEntity<String> acceptVerificationStationUser(@PathVariable Long stationUserId) {
+        try {
+            userService.acceptVerificationStationUser(stationUserId);
+            return ResponseEntity.ok().body("");
         } catch (BadRequestException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

@@ -13,12 +13,10 @@ import java.util.Date;
 @Builder
 public class UserDto {
     private Long id;
-    private String email;
     private String fName;
     private String lName;
     private UserRole role;
     private Boolean isBlock;
-    private Boolean isVerification;
     private Date createdAt;
 
     public static UserDto fromUser(UserEntity user) {
@@ -26,10 +24,8 @@ public class UserDto {
                 .id(user.getId())
                 .fName(user.getFName())
                 .lName(user.getLName())
-                .email(user.getEmail())
                 .role(user.getRole())
                 .isBlock(user.getIsBlock())
-                .isVerification(user.getIsVerification())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

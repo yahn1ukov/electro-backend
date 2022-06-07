@@ -20,7 +20,7 @@ public class UserController {
     private final ComplaintService complaintService;
     private final CarService carService;
 
-    @PostMapping("/create/user")
+    @PostMapping("/create")
     @ApiOperation(value = "Create a user")
     public ResponseEntity<String> createUser(@RequestBody RegisterUserDto user) {
         try {

@@ -3,11 +3,7 @@ package ua.nure.andrii.yahniukov.models.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
-import ua.nure.andrii.yahniukov.models.entities.CarModelEntity;
-import ua.nure.andrii.yahniukov.models.entities.CarNameEntity;
 import ua.nure.andrii.yahniukov.models.entities.maintenances.StationEntity;
-
-import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,8 +17,8 @@ public class StationDto {
     private Integer zipCode;
     private Double latitude;
     private Double longitude;
-    private List<CarNameEntity> carNames;
-    private List<CarModelEntity> carModels;
+    private String carName;
+    private String carModel;
     private Integer allPlace;
     private Integer freePlace;
     private Float middlePriceForPerHour;
@@ -34,22 +30,22 @@ public class StationDto {
     public static StationDto fromStation(StationEntity station) {
         return StationDto.builder()
                 .id(station.getId())
-                .company(station.getCompany())
+                .company(station.getOwner().getCompany())
                 .country(station.getCountry())
                 .city(station.getCity())
                 .street(station.getStreet())
                 .zipCode(station.getZipCode())
                 .latitude(station.getLatitude())
                 .longitude(station.getLongitude())
-                .carNames(station.getCarNames())
-                .carModels(station.getCarModels())
+                .carName(station.getCarName())
+                .carModel(station.getCarModel())
                 .allPlace(station.getAllPlace())
                 .freePlace(station.getFreePlace())
                 .middlePriceForPerHour(station.getMiddlePriceForPerHour())
                 .timeFrom(station.getTimeFrom())
                 .timeTo(station.getTimeTo())
-                .phoneNumber(station.getPhoneNumber())
-                .webSite(station.getWebSite())
+                .phoneNumber(station.getOwner().getPhoneNumber())
+                .webSite(station.getOwner().getWebSite())
                 .build();
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.models.dto.NoVerificationPartnerDto;
+import ua.nure.andrii.yahniukov.models.dto.PartnerDto;
 import ua.nure.andrii.yahniukov.models.dto.RoleDto;
 import ua.nure.andrii.yahniukov.models.dto.UserDto;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
@@ -90,21 +92,96 @@ public class UserService {
     }
 
     /*
+     * Для адміністраторів: список усіх користувачів зарядних станцій
+     */
+    public List<PartnerDto> getAllChargerUsers() {
+        return chargerUserRepository
+                .findAll()
+                .stream()
+                .map(chargerUser -> chargerUser.getIsVerification() ? PartnerDto.fromChargerUser(chargerUser) : null)
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Для адміністраторів: список усіх користувачів СТО
+     */
+    public List<PartnerDto> getAllStationUsers() {
+        return stationUserRepository
+                .findAll()
+                .stream()
+                .map(stationUser -> stationUser.getIsVerification() ? PartnerDto.fromStationUser(stationUser) : null)
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Для адміністраторів: список усіх не верифікованих користувачів зарядних станцій
+     */
+    public List<NoVerificationPartnerDto> getAllNoVerificationChargerUsers() {
+        return chargerUserRepository
+                .findAll()
+                .stream()
+                .map(chargerUser -> !chargerUser.getIsVerification()
+                        ? NoVerificationPartnerDto.fromChargerUser(chargerUser)
+                        : null
+                )
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Для адміністраторів: список усіх не верифікованих користувачів СТО
+     */
+    public List<NoVerificationPartnerDto> getAllNoVerificationStationUsers() {
+        return stationUserRepository
+                .findAll()
+                .stream()
+                .map(stationUser -> !stationUser.getIsVerification()
+                        ? NoVerificationPartnerDto.fromStationUser(stationUser)
+                        : null
+                )
+                .collect(Collectors.toList());
+    }
+
+    /*
      * Для адміністраторів: зміна ролі користувача
      */
     public void changeRoleUser(Long userId, RoleDto role) {
         UserEntity user = userRepository
                 .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
+                .orElseThrow(() -> new BadRequestException("User with id " + userId + " not found"));
 
         if (user.getRole().equals(UserRole.ADMIN)) {
-            throw new BadRequestException("User with id: " + userId + " cannot change the role");
+            throw new BadRequestException("Administrator cannot change role");
         }
-        if (user.getRole().equals(UserRole.valueOf(String.valueOf(role).toUpperCase()))) {
+        if (user.getRole().equals(role.getRole())) {
             throw new BadRequestException("User with id: " + userId + " cannot have the same role");
         }
-        user.setRole(UserRole.valueOf(String.valueOf(role).toUpperCase()));
+        if (role.getRole().equals(UserRole.SERVICE) || role.getRole().equals(UserRole.CHARGER)) {
+            throw new BadRequestException("Can't set partner role");
+        }
+        user.setRole(role.getRole());
         userRepository.save(user);
+    }
+
+    /*
+     * Для адміністраторів: підтвердження верифікації користувача зарядних станцій
+     */
+    public void acceptVerificationChargerUser(Long chargerUserId) {
+        ChargerUserEntity chargerUser = chargerUserRepository
+                .findById(chargerUserId)
+                .orElseThrow(() -> new BadRequestException("Charger user with id " + chargerUserId + " not found"));
+        chargerUser.setIsVerification(true);
+        chargerUserRepository.save(chargerUser);
+    }
+
+    /*
+     * Для адміністраторів: підтвердження верифікації користувача СТО
+     */
+    public void acceptVerificationStationUser(Long stationUserId) {
+        StationUserEntity stationUser = stationUserRepository
+                .findById(stationUserId)
+                .orElseThrow(() -> new BadRequestException("Charger user with id " + stationUserId + " not found"));
+        stationUser.setIsVerification(true);
+        stationUserRepository.save(stationUser);
     }
 
     /*
