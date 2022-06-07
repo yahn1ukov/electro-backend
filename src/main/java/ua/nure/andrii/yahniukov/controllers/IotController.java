@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormCarDto;
 import ua.nure.andrii.yahniukov.services.CarService;
+import ua.nure.andrii.yahniukov.services.ChargerService;
 
 @RestController
 @RequestMapping("/api/v1/iot")
 @RequiredArgsConstructor
 public class IotController {
     private final CarService carService;
+    private final ChargerService chargerService;
 
     @PostMapping("/create/car")
     @ApiOperation(value = "Get data and create a car")

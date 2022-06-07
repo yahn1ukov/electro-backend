@@ -9,6 +9,7 @@ import ua.nure.andrii.yahniukov.models.dto.forms.FormDescriptionDto;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormVinCodeDto;
 import ua.nure.andrii.yahniukov.security.dto.RegisterUserDto;
 import ua.nure.andrii.yahniukov.services.CarService;
+import ua.nure.andrii.yahniukov.services.ChargerService;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
 import ua.nure.andrii.yahniukov.services.UserService;
 
@@ -19,6 +20,7 @@ public class UserController {
     private final UserService userService;
     private final ComplaintService complaintService;
     private final CarService carService;
+    private final ChargerService chargerService;
 
     @PostMapping("/create")
     @ApiOperation(value = "Create a user")
@@ -71,22 +73,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/charger/{chargerUserId}")
-    @ApiOperation(value = "View a charger user by id")
-    public ResponseEntity<?> getChargerUserById(@PathVariable Long chargerUserId) {
+    @GetMapping("/get/charger/all")
+    @ApiOperation(value = "View a list of chargers")
+    public ResponseEntity<?> getAllChargers() {
         try {
-            return ResponseEntity.ok().body(userService.getChargerUserById(chargerUserId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-    }
-
-    @GetMapping("/station/{stationUserId}")
-    @ApiOperation(value = "View a station user by id")
-    public ResponseEntity<?> getStationUserById(@PathVariable Long stationUserId) {
-        try {
-            return ResponseEntity.ok().body(userService.getStationUserById(stationUserId));
-        } catch (BadRequestException ex) {
+            return ResponseEntity.ok().body(chargerService.getAllChargers());
+        } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }

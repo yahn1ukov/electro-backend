@@ -3,10 +3,7 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.security.dto.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.services.StationService;
@@ -25,6 +22,16 @@ public class StationController {
         try {
             userService.createStationUser(partner);
             return ResponseEntity.ok().body("Application successfully sent");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{stationUserId}")
+    @ApiOperation(value = "View a station user by id")
+    public ResponseEntity<?> getStationUserById(@PathVariable Long stationUserId) {
+        try {
+            return ResponseEntity.ok().body(userService.getStationUserById(stationUserId));
         } catch (BadRequestException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

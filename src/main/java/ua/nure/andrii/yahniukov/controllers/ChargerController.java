@@ -3,7 +3,6 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormChargerDto;
@@ -34,7 +33,7 @@ public class ChargerController {
     public ResponseEntity<String> createCharger(
             @PathVariable Long chargerUserId,
             @RequestBody FormChargerDto charger
-            ) {
+    ) {
         try {
             chargerService.createCharger(chargerUserId, charger);
             return ResponseEntity.ok().body("");
@@ -43,9 +42,37 @@ public class ChargerController {
         }
     }
 
+    @GetMapping("/user/{chargerUserId}")
+    @ApiOperation(value = "View a charger user by id")
+    public ResponseEntity<?> getChargerUserById(@PathVariable Long chargerUserId) {
+        try {
+            return ResponseEntity.ok().body(userService.getChargerUserById(chargerUserId));
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{chargerUserId}/get/all")
+    @ApiOperation(value = "View a list of charger user's chargers")
     public ResponseEntity<?> getAllChargerUserChargers(@PathVariable Long chargerUserId) {
         try {
-            return ResponseEntity.ok().body(chargerService.)
+            return ResponseEntity.ok().body(chargerService.getAllChargerUserChargers(chargerUserId));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/user/{chargerUserId}/delete/{chargerId}")
+    @ApiOperation(value = "Delete a charger by charger user id")
+    public ResponseEntity<String> deleteChargerById(
+            @PathVariable Long chargerUserId,
+            @PathVariable Long chargerId
+    ) {
+        try {
+            chargerService.deleteChargerById(chargerUserId, chargerId);
+            return ResponseEntity.ok().body("");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }
