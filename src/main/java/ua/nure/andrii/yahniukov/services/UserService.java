@@ -5,7 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.helpers.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormRoleDto;
 import ua.nure.andrii.yahniukov.models.dto.users.PartnerDto;
 import ua.nure.andrii.yahniukov.models.dto.users.UserDto;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
@@ -14,8 +14,8 @@ import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.users.ChargerUserRepository;
 import ua.nure.andrii.yahniukov.repositories.users.StationUserRepository;
 import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
-import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
-import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
+import ua.nure.andrii.yahniukov.security.dto.RegisterPartnerDto;
+import ua.nure.andrii.yahniukov.security.dto.RegisterUserDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -180,7 +180,7 @@ public class UserService {
     /*
      * Для адміністраторів: зміна ролі користувача
      */
-    public void changeRoleUser(Long userId, RoleDto role) {
+    public void changeRoleUser(Long userId, FormRoleDto role) {
         UserEntity user = findUserById(userId);
         if (user.getRole().equals(UserRole.ADMIN)) {
             throw new BadRequestException("Administrator cannot change role");

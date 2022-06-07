@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
+import ua.nure.andrii.yahniukov.security.dto.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.services.StationService;
 import ua.nure.andrii.yahniukov.services.UserService;
 

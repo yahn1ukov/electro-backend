@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.helpers.RoleDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormRoleDto;
 import ua.nure.andrii.yahniukov.services.UserService;
 
 @RestController
@@ -68,7 +68,7 @@ public class AdminController {
     @ApiOperation(value = "Change a user's role by id")
     public ResponseEntity<String> changeRoleUser(
             @PathVariable Long userId,
-            @RequestBody RoleDto role
+            @RequestBody FormRoleDto role
     ) {
         try {
             userService.changeRoleUser(userId, role);

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.helpers.DescriptionDto;
-import ua.nure.andrii.yahniukov.models.dto.helpers.VinCodeDto;
-import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormDescriptionDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormVinCodeDto;
+import ua.nure.andrii.yahniukov.security.dto.RegisterUserDto;
 import ua.nure.andrii.yahniukov.services.CarService;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
 import ua.nure.andrii.yahniukov.services.UserService;
@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<String> createComplaintUserCharger(
             @PathVariable Long userId,
             @PathVariable Long chargerId,
-            @RequestBody DescriptionDto complaint
+            @RequestBody FormDescriptionDto complaint
     ) {
         try {
             complaintService.createComplaintUserCharger(userId, chargerId, complaint);
@@ -51,7 +51,7 @@ public class UserController {
     public ResponseEntity<String> createComplaintUserStation(
             @PathVariable Long userId,
             @PathVariable Long stationId,
-            @RequestBody DescriptionDto complaint
+            @RequestBody FormDescriptionDto complaint
     ) {
         try {
             complaintService.createComplaintUserStation(userId, stationId, complaint);
@@ -115,7 +115,7 @@ public class UserController {
     @ApiOperation(value = "Add a car to user by user's id and car's VIN code")
     public ResponseEntity<String> addCarToUserByVinCode(
             @PathVariable Long userId,
-            @RequestBody VinCodeDto vinCode
+            @RequestBody FormVinCodeDto vinCode
     ) {
         try {
             carService.addCarToUserByVinCode(userId, vinCode);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.IoT.CarDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormCarDto;
 import ua.nure.andrii.yahniukov.services.CarService;
 
 @RestController
@@ -19,7 +19,7 @@ public class IotController {
 
     @PostMapping("/create/car")
     @ApiOperation(value = "Get data and create a car")
-    public ResponseEntity<String> createCar(@RequestBody CarDto car) {
+    public ResponseEntity<String> createCar(@RequestBody FormCarDto car) {
         try {
             carService.createCar(car);
             return ResponseEntity.ok().body("Vehicle successfully created");

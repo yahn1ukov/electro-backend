@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import ua.nure.andrii.yahniukov.models.entities.maintenances.ChargerEntity;
 
+import java.util.Date;
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
@@ -19,13 +21,14 @@ public class ChargerDto {
     private Double longitude;
     private Boolean isFast;
     private Boolean isPay;
-    private Float priceOfPerHour;
     private String company;
-    private String typeConnector;
     private String phoneNumber;
     private String webSite;
+    private Float priceOfPerHour;
+    private String typeConnector;
     private String timeFrom;
     private String timeTo;
+    private Date createAt;
 
     public static ChargerDto fromCharger(ChargerEntity charger) {
         return ChargerDto.builder()
@@ -39,13 +42,14 @@ public class ChargerDto {
                 .longitude(charger.getLongitude())
                 .isFast(charger.getIsFast())
                 .isPay(charger.getIsPay())
-                .priceOfPerHour(charger.getPriceOfPerHour())
                 .company(charger.getOwner().getCompany())
-                .typeConnector(charger.getTypeConnector())
                 .phoneNumber(charger.getOwner().getPhoneNumber())
                 .webSite(charger.getOwner().getWebSite())
+                .priceOfPerHour(charger.getPriceOfPerHour())
+                .typeConnector(charger.getTypeConnector())
                 .timeFrom(charger.getTimeFrom())
                 .timeTo(charger.getTimeTo())
+                .createAt(charger.getCreatedAt())
                 .build();
     }
 }

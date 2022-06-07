@@ -3,12 +3,11 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormChargerDto;
+import ua.nure.andrii.yahniukov.security.dto.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.services.ChargerService;
 import ua.nure.andrii.yahniukov.services.UserService;
 
@@ -27,6 +26,26 @@ public class ChargerController {
             return ResponseEntity.ok().body("Application successfully sent");
         } catch (BadRequestException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/user/{chargerUserId}/create")
+    @ApiOperation(value = "Create a charger by user's id")
+    public ResponseEntity<String> createCharger(
+            @PathVariable Long chargerUserId,
+            @RequestBody FormChargerDto charger
+            ) {
+        try {
+            chargerService.createCharger(chargerUserId, charger);
+            return ResponseEntity.ok().body("");
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> getAllChargerUserChargers(@PathVariable Long chargerUserId) {
+        try {
+            return ResponseEntity.ok().body(chargerService.)
         }
     }
 }

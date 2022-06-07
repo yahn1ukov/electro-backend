@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.complaints.ComplaintDto;
-import ua.nure.andrii.yahniukov.models.dto.helpers.DescriptionDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormDescriptionDto;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserChargerEntity;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserStationEntity;
 import ua.nure.andrii.yahniukov.models.entities.maintenances.ChargerEntity;
@@ -58,7 +58,7 @@ public class ComplaintService {
     /*
      * Для власників електромобілів: подання скарги на зарядну станцію
      */
-    public void createComplaintUserCharger(Long userId, Long chargerId, DescriptionDto complaint) {
+    public void createComplaintUserCharger(Long userId, Long chargerId, FormDescriptionDto complaint) {
         UserEntity user = userService.findUserById(userId);
         ChargerEntity charger = findChargerById(chargerId);
         complaintUserChargerRepository.save(
@@ -73,7 +73,7 @@ public class ComplaintService {
     /*
      * Для власників електромобілів: подання скарги на СТО
      */
-    public void createComplaintUserStation(Long userId, Long stationId, DescriptionDto complaint) {
+    public void createComplaintUserStation(Long userId, Long stationId, FormDescriptionDto complaint) {
         UserEntity user = userService.findUserById(userId);
         StationEntity station = findStationById(stationId);
         complaintUserStationRepository.save(

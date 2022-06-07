@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.IoT.CarDto;
-import ua.nure.andrii.yahniukov.models.dto.helpers.VinCodeDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormCarDto;
+import ua.nure.andrii.yahniukov.models.dto.forms.FormVinCodeDto;
 import ua.nure.andrii.yahniukov.models.entities.IoT.CarEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.IoT.CarRepository;
@@ -22,7 +23,7 @@ public class CarService {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public CarEntity findCarByVinCode(VinCodeDto vinCode) {
+    public CarEntity findCarByVinCode(FormVinCodeDto vinCode) {
         return carRepository
                 .findByVinCode(vinCode.getVinCode())
                 .orElseThrow(() -> new BadRequestException("Car with VIN code " + vinCode + " not found"));
@@ -31,7 +32,7 @@ public class CarService {
     /*
      * Для IoT: зчитування та створення електромобіля
      */
-    public void createCar(CarDto car) {
+    public void createCar(FormCarDto car) {
         if (carRepository.existsByVinCode(car.getVinCode())) {
             throw new BadRequestException("Car with VIN code: " + car.getVinCode() + " already exists");
         }
@@ -73,7 +74,7 @@ public class CarService {
     /*
      * Для власників електромобілів: прив'язати електромобіль
      */
-    public void addCarToUserByVinCode(Long userId, VinCodeDto vinCode) {
+    public void addCarToUserByVinCode(Long userId, FormVinCodeDto vinCode) {
         UserEntity user = userService.findUserById(userId);
         CarEntity car = findCarByVinCode(vinCode);
         car.setOwner(user);
