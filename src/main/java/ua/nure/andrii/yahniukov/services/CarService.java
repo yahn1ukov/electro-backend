@@ -21,25 +21,9 @@ public class CarService {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
 
-    public CarDto getCarByVinCode(String vinCode) {
-        return CarDto.fromCar(
-                carRepository
-                        .findByVinCode(vinCode)
-                        .orElseThrow(() -> new BadRequestException("Car with VIN code: " + vinCode + " not found"))
-        );
-    }
-
-    public List<CarDto> getAllUserCars(Long userId) {
-        UserEntity owner = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
-        return carRepository
-                .findAllByOwner(owner)
-                .stream()
-                .map(CarDto::fromCar)
-                .collect(Collectors.toList());
-    }
-
+    /*
+     * Для IoT: зчитування та створення електрокоміля
+     */
     public void createCar(CarDto car) {
         if (carRepository.existsByVinCode(car.getVinCode())) {
             throw new BadRequestException("Car with VIN code: " + car.getVinCode() + " already exists");
@@ -54,6 +38,35 @@ public class CarService {
                 .build());
     }
 
+    /*
+     * Для власників електромобілів: перегляд інформації про електромобіль
+     */
+    public CarDto getCarByVinCode(String vinCode) {
+        return CarDto.fromCar(
+                carRepository
+                        .findByVinCode(vinCode)
+                        .orElseThrow(() -> new BadRequestException("Car with VIN code: " + vinCode + " not found"))
+        );
+    }
+
+    /*
+     * Для власників електромобілів: перегляд усіх електромобілів
+     */
+    public List<CarDto> getAllUserCars(Long userId) {
+        UserEntity owner = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
+        return carRepository
+                .findAllByOwner(owner)
+                .stream()
+                .map(CarDto::fromCar)
+                .collect(Collectors.toList());
+    }
+
+
+    /*
+     * Для власників електромобілів: прив'язати електромобіль
+     */
     public void addCarToUserByVinCode(Long userId, VinCodeDto vinCode) {
         UserEntity user = userRepository
                 .findById(userId)
@@ -69,12 +82,15 @@ public class CarService {
         carRepository.save(car);
     }
 
-    public void deleteCarFromUserByVinCode(Long userId, VinCodeDto vinCode) {
+    /*
+     * Для власників електромобілів: відв'язати електромобіль
+     */
+    public void deleteCarFromUserByVinCode(Long userId, String vinCode) {
         UserEntity user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new BadRequestException("User with id: " + userId + " not found"));
         CarEntity car = carRepository
-                .findByVinCode(vinCode.getVinCode())
+                .findByVinCode(vinCode)
                 .orElseThrow(() -> new BadRequestException("Car with VIN code: " + vinCode + " not found"));
 
         car.setOwner(null);

@@ -25,7 +25,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     /*
-     * Для власників електромобілів: реєстрація через електронну пошту;
+     * Для власників електромобілів: реєстрація через електронну пошту
      */
     public void createUser(RegisterUserDto user) {
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -42,7 +42,7 @@ public class UserService {
     }
 
     /*
-     * Для виробників зарядних станцій: подання та реєстрація через електронну пошту;
+     * Для виробників зарядних станцій: подання та реєстрація через електронну пошту
      */
     public void createChargerUser(RegisterPartnerDto partner) {
         if (chargerUserRepository.existsByEmail(partner.getEmail())) {
@@ -59,7 +59,7 @@ public class UserService {
 
 
     /*
-     * Для власників СТО: подання та реєстрація через електронну пошту;
+     * Для власників СТО: подання та реєстрація через електронну пошту
      */
     public void createStationUser(RegisterPartnerDto partner) {
         if (stationUserRepository.existsByEmail(partner.getEmail())) {
