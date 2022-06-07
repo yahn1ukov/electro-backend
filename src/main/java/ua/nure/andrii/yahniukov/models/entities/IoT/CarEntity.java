@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class CarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -26,7 +26,7 @@ public class ComplaintUserChargerDto {
         return ComplaintUserChargerDto.builder()
                 .id(complaint.getId())
                 .fullName(complaint.getUser().getFName() + " " + complaint.getUser().getLName())
-                .company(complaint.getCharger().getCompany())
+                .company(complaint.getCharger().getOwner().getCompany())
                 .name(complaint.getCharger().getName())
                 .country(complaint.getCharger().getCountry())
                 .city(complaint.getCharger().getCity())

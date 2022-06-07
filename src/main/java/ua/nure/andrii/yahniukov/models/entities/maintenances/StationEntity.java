@@ -2,7 +2,9 @@ package ua.nure.andrii.yahniukov.models.entities.maintenances;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserStationEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 
@@ -12,9 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "stations")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class StationEntity extends BaseMaintenanceEntity {
     @Builder.Default
     @OneToMany(mappedBy = "station")

@@ -2,7 +2,9 @@ package ua.nure.andrii.yahniukov.models.entities.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.models.entities.maintenances.ChargerEntity;
 
@@ -12,11 +14,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "chargerUsers")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ChargerUserEntity extends BaseUserEntity {
-    @Column(name = "company")
+    @Column(name = "company", unique = true)
     private String company;
 
     @Column(name = "is_verification")

@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
-import ua.nure.andrii.yahniukov.models.dto.UserDto;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
 import ua.nure.andrii.yahniukov.services.UserService;
@@ -16,20 +15,14 @@ public class UserController {
     private final UserService userService;
     private final ComplaintService complaintService;
 
-    @GetMapping("/get/{id}")
-    @ApiOperation(value = "View a user by id")
-    public UserDto getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-
-    @PostMapping("/create")
+    @PostMapping("/create/user")
     @ApiOperation(value = "Create a user")
     public void createUser(@RequestBody RegisterUserDto user) {
         userService.createUser(user);
     }
 
     @PostMapping("/{userId}/create/complaint/charger/{chargerId}")
-    @ApiOperation(value = "Create a complaint of charger by user")
+    @ApiOperation(value = "Create a charger's complaint")
     public void createComplaintUserCharger(
             @PathVariable Long userId,
             @PathVariable Long chargerId,
@@ -39,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/create/complaint/station/{stationId}")
-    @ApiOperation(value = "Create a complaint of station by user")
+    @ApiOperation(value = "Create a station's complaint")
     public void createComplaintUserStation(
             @PathVariable Long userId,
             @PathVariable Long stationId,

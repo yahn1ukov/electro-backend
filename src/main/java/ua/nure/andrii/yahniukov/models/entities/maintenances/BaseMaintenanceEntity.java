@@ -1,13 +1,19 @@
 package ua.nure.andrii.yahniukov.models.entities.maintenances;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @MappedSuperclass
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public class BaseMaintenanceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

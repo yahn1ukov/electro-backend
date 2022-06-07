@@ -2,39 +2,26 @@ package ua.nure.andrii.yahniukov.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.models.dto.ChargerDto;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.services.ChargerService;
-
-import java.util.List;
+import ua.nure.andrii.yahniukov.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/charger")
 @RequiredArgsConstructor
 public class ChargerController {
     private final ChargerService chargerService;
+    private final UserService userService;
 
-    @PostMapping("/create")
-    @ApiOperation(value = "Create a charger")
-    public void createCharger(@RequestBody ChargerDto charger) {
-        chargerService.createCharger(charger);
+    @PostMapping("/create/partner")
+    @ApiOperation(value = "Create a charger partner")
+    public void createChargerUser(@RequestBody RegisterPartnerDto partner) {
+        userService.createChargerUser(partner);
     }
 
-    @GetMapping("/get/all")
-    @ApiOperation(value = "View a list of chargers")
-    public List<ChargerDto> getAllCharger() {
-        return chargerService.getAllCharger();
-    }
 
-    @GetMapping("/get/{id}")
-    @ApiOperation(value = "View a charger by id")
-    public ChargerDto getChargerById(@PathVariable Long id) {
-        return chargerService.getChargerById(id);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Delete a charger by id")
-    public void deleteChargerById(@PathVariable Long id) {
-        chargerService.deleteChargerById(id);
-    }
 }

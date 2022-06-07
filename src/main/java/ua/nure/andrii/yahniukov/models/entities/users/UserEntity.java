@@ -2,7 +2,9 @@ package ua.nure.andrii.yahniukov.models.entities.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.models.entities.IoT.CarEntity;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserChargerEntity;
@@ -14,9 +16,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class UserEntity extends BaseUserEntity {
     @Column(name = "first_name")
     private String fName;

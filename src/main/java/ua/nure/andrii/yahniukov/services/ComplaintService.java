@@ -27,6 +27,7 @@ public class ComplaintService {
     private final ChargerRepository chargerRepository;
     private final StationRepository stationRepository;
 
+    // Для власників електромобілів: подання скарги на зарядну станцію
     public void createComplaintUserCharger(Long userId, Long chargerId, ComplaintDto complaint) {
         UserEntity user = userRepository
                 .findById(userId)
@@ -44,6 +45,7 @@ public class ComplaintService {
         );
     }
 
+    // Для власників електромобілів: подання скарги на СТО
     public void createComplaintUserStation(Long userId, Long stationId, ComplaintDto complaint) {
         UserEntity user = userRepository
                 .findById(userId)
@@ -61,6 +63,7 @@ public class ComplaintService {
         );
     }
 
+    // Для модерації: перегляд усіх скарг на зарядну станцію
     public List<ComplaintUserChargerDto> getAllComplaintUserCharger() {
         return complaintUserChargerRepository
                 .findAll()
@@ -69,6 +72,7 @@ public class ComplaintService {
                 .collect(Collectors.toList());
     }
 
+    // Для модерації: перегляд усіх скарг на СТО
     public List<ComplaintUserStationDto> getAllComplaintUserStation() {
         return complaintUserStationRepository
                 .findAll()
@@ -77,6 +81,7 @@ public class ComplaintService {
                 .collect(Collectors.toList());
     }
 
+    // Для модерації: видалити скаргу на зарядну станцію
     public void deleteComplaintUserCharger(Long complaintId) {
         ComplaintUserChargerEntity complaint = complaintUserChargerRepository
                 .findById(complaintId)
@@ -91,6 +96,7 @@ public class ComplaintService {
         complaintUserChargerRepository.delete(complaint);
     }
 
+    // Для модерації: видалити скаргу на СТО
     public void deleteComplaintUserStation(Long complaintId) {
         ComplaintUserStationEntity complaint = complaintUserStationRepository
                 .findById(complaintId)

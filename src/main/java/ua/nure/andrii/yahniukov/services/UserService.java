@@ -3,86 +3,76 @@ package ua.nure.andrii.yahniukov.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
-import ua.nure.andrii.yahniukov.models.dto.RoleDto;
-import ua.nure.andrii.yahniukov.models.dto.UserDto;
+import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
+import ua.nure.andrii.yahniukov.repositories.ChargerUserRepository;
+import ua.nure.andrii.yahniukov.repositories.StationUserRepository;
 import ua.nure.andrii.yahniukov.repositories.UserRepository;
+import ua.nure.andrii.yahniukov.security.dto.register.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final ChargerUserRepository chargerUserRepository;
+    private final StationUserRepository stationUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserDto getUserById(Long id) {
-        return UserDto.fromUser(
-                userRepository
-                        .findById(id)
-                        .orElseThrow(() -> new BadRequestException("User with id: " + id + " not found"))
-        );
-    }
-
-    public List<UserDto> getAllUsers() {
-        return userRepository
-                .findAll()
-                .stream()
-                .map(UserDto::fromUser)
-                .collect(Collectors.toList());
-    }
-
+    /*
+     * Для власників електромобілів: реєстрація через електронну пошту;
+     */
     public void createUser(RegisterUserDto user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("User with email " + user.getEmail() + " already exists");
         }
         userRepository.save(
                 UserEntity.builder()
+                        .email(user.getEmail())
                         .fName(user.getFName())
                         .lName(user.getLName())
-                        .email(user.getEmail())
-                        .role(user.getRole())
                         .password(passwordEncoder.encode(user.getPassword()))
-                        .isVerification(user.getIsVerification())
                         .build()
         );
     }
 
-    public void deleteUserById(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new BadRequestException("User with id: " + id + " not found");
+    /*
+     * Для виробників зарядних станцій: подання та реєстрація через електронну пошту;
+     */
+    public void createChargerUser(RegisterPartnerDto partner) {
+        if (chargerUserRepository.existsByEmail(partner.getEmail())) {
+            throw new BadRequestException("User with email " + partner.getEmail() + " already exists");
         }
-        userRepository.deleteById(id);
+        chargerUserRepository.save(
+                ChargerUserEntity.builder()
+                        .email(partner.getEmail())
+                        .company(partner.getCompany())
+                        .password(passwordEncoder.encode(partner.getPassword()))
+                        .build()
+        );
     }
 
-    public void blockUserById(Long id) {
-        UserEntity user = userRepository
-                .findById(id)
-                .orElseThrow(() -> new BadRequestException("User with id: " + id + " not found"));
-        if (user.getRole().equals(UserRole.ADMIN)) {
-            throw new BadRequestException("User with role: " + user.getRole() + " cannot be banned");
+
+    /*
+     * Для власників СТО: подання та реєстрація через електронну пошту;
+     */
+    public void createStationUser(RegisterPartnerDto partner) {
+        if (stationUserRepository.existsByEmail(partner.getEmail())) {
+            throw new BadRequestException("User with email " + partner.getEmail() + " already exists");
         }
-        user.setIsBlock(!user.getIsBlock());
-        userRepository.save(user);
+        stationUserRepository.save(
+                StationUserEntity.builder()
+                        .email(partner.getEmail())
+                        .company(partner.getCompany())
+                        .password(passwordEncoder.encode(partner.getPassword()))
+                        .build()
+        );
     }
 
-    public void updateUserRoleById(Long id, RoleDto role) {
-        UserEntity user = userRepository
-                .findById(id)
-                .orElseThrow(() -> new BadRequestException("User with id: " + id + " not found"));
-        if (user.getRole().equals(role.getRole())) {
-            throw new BadRequestException("Can't set the same role");
-        }
-        if (user.getRole().equals(UserRole.ADMIN)) {
-            throw new BadRequestException("Can't change admin role");
-        }
-        user.setRole(role.getRole());
-        userRepository.save(user);
-    }
+
 }

@@ -2,7 +2,9 @@ package ua.nure.andrii.yahniukov.models.entities.maintenances;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserChargerEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
 
@@ -12,9 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "chargers")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ChargerEntity extends BaseMaintenanceEntity {
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")

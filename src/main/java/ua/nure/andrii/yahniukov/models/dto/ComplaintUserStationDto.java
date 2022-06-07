@@ -25,7 +25,7 @@ public class ComplaintUserStationDto {
         return ComplaintUserStationDto.builder()
                 .id(complaint.getId())
                 .fullName(complaint.getUser().getFName() + " " + complaint.getUser().getLName())
-                .company(complaint.getStation().getCompany())
+                .company(complaint.getStation().getOwner().getCompany())
                 .country(complaint.getStation().getCountry())
                 .city(complaint.getStation().getCity())
                 .street(complaint.getStation().getStreet())
