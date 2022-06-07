@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
 import ua.nure.andrii.yahniukov.models.dto.UserDto;
-import ua.nure.andrii.yahniukov.security.dto.RegisterDto;
+import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 import ua.nure.andrii.yahniukov.services.ComplaintService;
 import ua.nure.andrii.yahniukov.services.UserService;
 
@@ -24,7 +24,7 @@ public class UserController {
 
     @PostMapping("/create")
     @ApiOperation(value = "Create a user")
-    public void createUser(@RequestBody RegisterDto user) {
+    public void createUser(@RequestBody RegisterUserDto user) {
         userService.createUser(user);
     }
 

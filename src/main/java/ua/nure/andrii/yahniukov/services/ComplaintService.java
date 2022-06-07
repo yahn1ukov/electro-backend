@@ -6,7 +6,11 @@ import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.ComplaintDto;
 import ua.nure.andrii.yahniukov.models.dto.ComplaintUserChargerDto;
 import ua.nure.andrii.yahniukov.models.dto.ComplaintUserStationDto;
-import ua.nure.andrii.yahniukov.models.entities.*;
+import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserChargerEntity;
+import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserStationEntity;
+import ua.nure.andrii.yahniukov.models.entities.maintenances.ChargerEntity;
+import ua.nure.andrii.yahniukov.models.entities.maintenances.StationEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.*;
 
 import javax.transaction.Transactional;

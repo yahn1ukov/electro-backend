@@ -3,7 +3,7 @@ package ua.nure.andrii.yahniukov.models.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
-import ua.nure.andrii.yahniukov.models.entities.ComplaintUserChargerEntity;
+import ua.nure.andrii.yahniukov.models.entities.complaints.ComplaintUserChargerEntity;
 
 import java.util.Date;
 

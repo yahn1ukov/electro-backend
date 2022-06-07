@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
 import ua.nure.andrii.yahniukov.enums.UserRole;
-import ua.nure.andrii.yahniukov.models.entities.UserEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 
 import java.util.Date;
 

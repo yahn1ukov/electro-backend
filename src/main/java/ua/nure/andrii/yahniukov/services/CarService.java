@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.CarDto;
 import ua.nure.andrii.yahniukov.models.dto.VinCodeDto;
-import ua.nure.andrii.yahniukov.models.entities.CarEntity;
-import ua.nure.andrii.yahniukov.models.entities.UserEntity;
+import ua.nure.andrii.yahniukov.models.entities.IoT.CarEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.CarRepository;
 import ua.nure.andrii.yahniukov.repositories.UserRepository;
 

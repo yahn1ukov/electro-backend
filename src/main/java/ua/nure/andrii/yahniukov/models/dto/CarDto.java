@@ -3,7 +3,7 @@ package ua.nure.andrii.yahniukov.models.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
-import ua.nure.andrii.yahniukov.models.entities.CarEntity;
+import ua.nure.andrii.yahniukov.models.entities.IoT.CarEntity;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

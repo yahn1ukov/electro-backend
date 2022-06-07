@@ -7,9 +7,9 @@ import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.RoleDto;
 import ua.nure.andrii.yahniukov.models.dto.UserDto;
-import ua.nure.andrii.yahniukov.models.entities.UserEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.UserRepository;
-import ua.nure.andrii.yahniukov.security.dto.RegisterDto;
+import ua.nure.andrii.yahniukov.security.dto.register.RegisterUserDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -38,7 +38,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void createUser(RegisterDto user) {
+    public void createUser(RegisterUserDto user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("User with email " + user.getEmail() + " already exists");
         }

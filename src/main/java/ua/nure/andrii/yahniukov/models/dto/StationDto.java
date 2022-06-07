@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import ua.nure.andrii.yahniukov.models.entities.CarModelEntity;
 import ua.nure.andrii.yahniukov.models.entities.CarNameEntity;
-import ua.nure.andrii.yahniukov.models.entities.StationEntity;
+import ua.nure.andrii.yahniukov.models.entities.maintenances.StationEntity;
 
 import java.util.List;
 

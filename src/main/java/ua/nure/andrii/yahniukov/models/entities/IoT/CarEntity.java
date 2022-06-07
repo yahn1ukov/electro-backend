@@ -1,9 +1,10 @@
-package ua.nure.andrii.yahniukov.models.entities;
+package ua.nure.andrii.yahniukov.models.entities.IoT;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,9 +24,9 @@ public class CarEntity {
     @Column(name = "vin_code", updatable = false, unique = true)
     private String vinCode;
 
-    @Builder.Default
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @Builder.Default
     private UserEntity owner = null;
 
     @Column(name = "name")
@@ -43,11 +44,13 @@ public class CarEntity {
     @Column(name = "percentage_of_charge")
     private Double percentageOfCharge;
 
-    @Builder.Default
     @Column(name = "created_at", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Builder.Default
     private Date createdAt = new Date();
 
-    @Builder.Default
     @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Builder.Default
     private Date updatedAt = new Date();
 }

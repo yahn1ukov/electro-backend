@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.ChargerDto;
-import ua.nure.andrii.yahniukov.models.entities.ChargerEntity;
+import ua.nure.andrii.yahniukov.models.entities.maintenances.ChargerEntity;
 import ua.nure.andrii.yahniukov.repositories.ChargerRepository;
 
 import javax.transaction.Transactional;

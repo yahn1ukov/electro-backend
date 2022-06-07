@@ -2,7 +2,7 @@ package ua.nure.andrii.yahniukov.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ua.nure.andrii.yahniukov.models.entities.UserEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {

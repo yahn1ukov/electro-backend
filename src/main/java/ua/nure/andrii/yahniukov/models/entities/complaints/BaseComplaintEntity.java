@@ -1,20 +1,15 @@
-package ua.nure.andrii.yahniukov.models.entities;
+package ua.nure.andrii.yahniukov.models.entities.complaints;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "complaints_user_charger")
+@MappedSuperclass
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ComplaintUserChargerEntity {
+public class BaseComplaintEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -24,14 +19,11 @@ public class ComplaintUserChargerEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "charger_id", referencedColumnName = "id")
-    private ChargerEntity charger;
-
     @Column(name = "description")
     private String description;
 
-    @Builder.Default
     @Column(name = "created_at", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Builder.Default
     private Date createdAt = new Date();
 }
