@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
+import ua.nure.andrii.yahniukov.repositories.users.ChargerUserRepository;
 import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
 import ua.nure.andrii.yahniukov.security.models.SecurityUser;
 import ua.nure.andrii.yahniukov.services.UserService;
@@ -17,13 +18,14 @@ import ua.nure.andrii.yahniukov.services.UserService;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final ChargerUserRepository chargerUserRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (userRepository.existsByEmail(email)) {
             UserEntity user = userService.findUserByEmail(email);
             return SecurityUser.fromUser(user);
-        } else if (userRepository.existsByEmail(email)) {
+        } else if (chargerUserRepository.existsByEmail(email)) {
             ChargerUserEntity chargerUser = userService.findChargerUserByEmail(email);
             return SecurityUser.fromUser(chargerUser);
         } else {

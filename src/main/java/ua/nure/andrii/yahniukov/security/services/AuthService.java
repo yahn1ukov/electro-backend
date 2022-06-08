@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
+import ua.nure.andrii.yahniukov.repositories.users.ChargerUserRepository;
 import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
 import ua.nure.andrii.yahniukov.security.models.dto.LoginDto;
 import ua.nure.andrii.yahniukov.security.providers.JwtTokenProvider;
@@ -27,6 +28,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final ChargerUserRepository chargerUserRepository;
 
     public Map<Object, Object> login(LoginDto loginUser) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
@@ -38,7 +40,7 @@ public class AuthService {
             response.put("email", loginUser.getEmail());
             response.put("token", token);
             return response;
-        } else if (userRepository.existsByEmail(loginUser.getEmail())) {
+        } else if (chargerUserRepository.existsByEmail(loginUser.getEmail())) {
             ChargerUserEntity chargerUser = userService.findChargerUserByEmail(loginUser.getEmail());
             String token = jwtTokenProvider.createToken(loginUser.getEmail(), chargerUser.getRole().name());
             Map<Object, Object> response = new HashMap<>();
@@ -55,6 +57,7 @@ public class AuthService {
             response.put("token", token);
             return response;
         }
+
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) {

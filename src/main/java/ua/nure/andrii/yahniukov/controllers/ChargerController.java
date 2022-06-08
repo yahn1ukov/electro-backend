@@ -43,7 +43,7 @@ public class ChargerController {
         return chargerService.getAllChargerUserChargers(chargerUserId);
     }
 
-    @GetMapping("/get/charger/all")
+    @GetMapping("/get/all")
     @ApiOperation(value = "View a list of chargers")
     public List<ChargerDto> getAllChargers() {
         return chargerService.getAllChargers();

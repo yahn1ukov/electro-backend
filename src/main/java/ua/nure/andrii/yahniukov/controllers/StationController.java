@@ -44,7 +44,7 @@ public class StationController {
         return stationService.getAllStationUserChargers(stationUserId);
     }
 
-    @GetMapping("/get/station/all")
+    @GetMapping("/get/all")
     @ApiOperation(value = "View a list of stations")
     public List<StationDto> getAllStations() {
         return stationService.getAllStations();

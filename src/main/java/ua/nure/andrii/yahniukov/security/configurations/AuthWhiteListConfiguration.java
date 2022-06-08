@@ -28,7 +28,11 @@ public class AuthWhiteListConfiguration {
                 "/api/v1/auth/register/user",
                 "/api/v1/auth/register/charger/partner",
                 "/api/v1/auth/register/station/partner",
-                "/api/v1/iot/create/car"
+                "/api/v1/iot/create/car",
+                "/api/v1/station/get/all",
+                "/api/v1/charger/get/all",
+                "/api/v1/charger/change/isCharging/{chargerName}",
+                "/api/v1/charger/change/isBroken/{chargerName}"
         };
     }
 }
