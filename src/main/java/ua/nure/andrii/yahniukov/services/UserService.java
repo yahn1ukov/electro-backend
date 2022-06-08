@@ -49,10 +49,22 @@ public class UserService {
                 .orElseThrow(() -> new BadRequestException("Charger user with id " + chargerUserId + " not found"));
     }
 
+    public ChargerUserEntity findChargerUserByEmail(String email) {
+        return chargerUserRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Charger user doesn't exists"));
+    }
+
     public StationUserEntity findStationUserById(Long stationUserId) {
         return stationUserRepository
                 .findById(stationUserId)
                 .orElseThrow(() -> new BadRequestException("Station user with id " + stationUserId + " not found"));
+    }
+
+    public StationUserEntity findStationUserByEmail(String email) {
+        return stationUserRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Station user doesn't exists"));
     }
 
     /*

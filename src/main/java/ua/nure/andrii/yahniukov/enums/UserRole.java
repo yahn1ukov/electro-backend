@@ -14,23 +14,28 @@ import static ua.nure.andrii.yahniukov.enums.UserPermission.*;
 public enum UserRole {
     ADMIN(Set.of(
             ADMIN_READ,
-            ADMIN_WRITE
+            ADMIN_WRITE,
+            GET_USER
     )),
     MODERATOR(Set.of(
             MODERATOR_WRITE,
-            MODERATOR_READ
+            MODERATOR_READ,
+            GET_USER
     )),
     USER(Set.of(
             USER_READ,
-            USER_WRITE
+            USER_WRITE,
+            GET_USER
     )),
     CHARGER(Set.of(
             CHARGER_READ,
-            CHARGER_WRITE
+            CHARGER_WRITE,
+            GET_PARTNER
     )),
     SERVICE(Set.of(
             STATION_WRITE,
-            STATION_READ
+            STATION_READ,
+            GET_PARTNER
     ));
 
     private final Set<UserPermission> permissions;

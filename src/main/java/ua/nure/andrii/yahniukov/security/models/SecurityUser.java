@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 
 import java.util.Collection;
@@ -57,6 +59,30 @@ public class SecurityUser implements UserDetails {
     }
 
     public static UserDetails fromUser(UserEntity user) {
+        return new User(
+                user.getEmail(),
+                user.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                user.getRole().getAuthorities()
+        );
+    }
+
+    public static UserDetails fromUser(ChargerUserEntity user) {
+        return new User(
+                user.getEmail(),
+                user.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                user.getRole().getAuthorities()
+        );
+    }
+
+    public static UserDetails fromUser(StationUserEntity user) {
         return new User(
                 user.getEmail(),
                 user.getPassword(),

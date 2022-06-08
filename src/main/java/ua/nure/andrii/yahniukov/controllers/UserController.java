@@ -2,13 +2,17 @@ package ua.nure.andrii.yahniukov.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.models.dto.IoT.CarDto;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormDescriptionDto;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormVinCodeDto;
+import ua.nure.andrii.yahniukov.models.dto.maintenances.ChargerDto;
+import ua.nure.andrii.yahniukov.models.dto.maintenances.StationDto;
+import ua.nure.andrii.yahniukov.models.dto.users.UserDto;
 import ua.nure.andrii.yahniukov.services.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -23,117 +27,77 @@ public class UserController {
     @PostMapping("/{userId}/create/complaint/charger/{chargerId}")
     @PreAuthorize("hasAuthority('user:write')")
     @ApiOperation(value = "Create a charger's complaint")
-    public ResponseEntity<String> createComplaintUserCharger(
+    public void createComplaintUserCharger(
             @PathVariable Long userId,
             @PathVariable Long chargerId,
             @RequestBody FormDescriptionDto complaint
     ) {
-        try {
-            complaintService.createComplaintUserCharger(userId, chargerId, complaint);
-            return ResponseEntity.ok().body("Charging station complaint successfully sent");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        complaintService.createComplaintUserCharger(userId, chargerId, complaint);
     }
 
     @PostMapping("/{userId}/create/complaint/station/{stationId}")
     @PreAuthorize("hasAuthority('user:write')")
     @ApiOperation(value = "Create a station's complaint")
-    public ResponseEntity<String> createComplaintUserStation(
+    public void createComplaintUserStation(
             @PathVariable Long userId,
             @PathVariable Long stationId,
             @RequestBody FormDescriptionDto complaint
     ) {
-        try {
-            complaintService.createComplaintUserStation(userId, stationId, complaint);
-            return ResponseEntity.ok().body("Service station complaint sent successfully");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        complaintService.createComplaintUserStation(userId, stationId, complaint);
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('get:user')")
     @ApiOperation(value = "View a user by id")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
-        try {
-            return ResponseEntity.ok().body(userService.getUserById(userId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public UserDto getUserById(@PathVariable Long userId) {
+        return userService.getUserById(userId);
     }
 
     @GetMapping("/get/car/{vinCode}")
     @PreAuthorize("hasAuthority('user:read')")
     @ApiOperation(value = "View a car by VIN code")
-    public ResponseEntity<?> getCarByVinCode(@PathVariable String vinCode) {
-        try {
-            return ResponseEntity.ok().body(carService.getCarByVinCode(vinCode));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public CarDto getCarByVinCode(@PathVariable String vinCode) {
+        return carService.getCarByVinCode(vinCode);
     }
 
     @GetMapping("/{userId}/get/car/all")
     @PreAuthorize("hasAuthority('user:read')")
     @ApiOperation(value = "View list of user's cars by id")
-    public ResponseEntity<?> getAllUserCars(@PathVariable Long userId) {
-        try {
-            return ResponseEntity.ok().body(carService.getAllUserCars(userId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public List<CarDto> getAllUserCars(@PathVariable Long userId) {
+        return carService.getAllUserCars(userId);
     }
 
     @PutMapping("/{userId}/add/car")
     @PreAuthorize("hasAuthority('user:write')")
     @ApiOperation(value = "Add a car to user by user's id and car's VIN code")
-    public ResponseEntity<String> addCarToUserByVinCode(
+    public void addCarToUserByVinCode(
             @PathVariable Long userId,
             @RequestBody FormVinCodeDto vinCode
     ) {
-        try {
-            carService.addCarToUserByVinCode(userId, vinCode);
-            return ResponseEntity.ok().body("Vehicle added successfully");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        carService.addCarToUserByVinCode(userId, vinCode);
     }
 
     @DeleteMapping("/{userId}/delete/car/{vinCode}")
     @PreAuthorize("hasAuthority('user:write')")
     @ApiOperation(value = "Delete a user's car by user's id and car's VIN code")
-    public ResponseEntity<String> deleteCarFromUserByVinCode(
+    public void deleteCarFromUserByVinCode(
             @PathVariable Long userId,
             @PathVariable String vinCode
     ) {
-        try {
-            carService.deleteCarFromUserByVinCode(userId, vinCode);
-            return ResponseEntity.ok().body("Vehicle successfully deleted");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        carService.deleteCarFromUserByVinCode(userId, vinCode);
     }
 
     @GetMapping("/get/charger/{chargerId}")
     @PreAuthorize("hasAuthority('user:read')")
     @ApiOperation(value = "View a charger by id")
-    public ResponseEntity<?> getChargerById(@PathVariable Long chargerId) {
-        try {
-            return ResponseEntity.ok().body(chargerService.getChargerById(chargerId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public ChargerDto getChargerById(@PathVariable Long chargerId) {
+        return chargerService.getChargerById(chargerId);
     }
 
     @GetMapping("/get/station/{stationId}")
     @PreAuthorize("hasAuthority('user:read')")
     @ApiOperation(value = "View a station by id")
-    public ResponseEntity<?> getStationById(@PathVariable Long stationId) {
-        try {
-            return ResponseEntity.ok().body(stationService.getStationById(stationId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public StationDto getStationById(@PathVariable Long stationId) {
+        return stationService.getStationById(stationId);
     }
 }

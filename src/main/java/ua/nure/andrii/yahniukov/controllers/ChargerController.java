@@ -2,13 +2,15 @@ package ua.nure.andrii.yahniukov.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormChargerDto;
+import ua.nure.andrii.yahniukov.models.dto.maintenances.ChargerDto;
+import ua.nure.andrii.yahniukov.models.dto.users.PartnerDto;
 import ua.nure.andrii.yahniukov.services.ChargerService;
 import ua.nure.andrii.yahniukov.services.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/charger")
@@ -20,63 +22,41 @@ public class ChargerController {
     @PostMapping("/user/{chargerUserId}/create")
     @PreAuthorize("hasAuthority('charger:write')")
     @ApiOperation(value = "Create a charger by user's id")
-    public ResponseEntity<String> createCharger(
+    public void createCharger(
             @PathVariable Long chargerUserId,
             @RequestBody FormChargerDto charger
     ) {
-        try {
-            chargerService.createCharger(chargerUserId, charger);
-            return ResponseEntity.ok().body("Charging station added successfully");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        chargerService.createCharger(chargerUserId, charger);
     }
 
     @GetMapping("/user/{chargerUserId}")
-    @PreAuthorize("hasAuthority('charger:read')")
+    @PreAuthorize("hasAuthority('get:partner')")
     @ApiOperation(value = "View a charger user by id")
-    public ResponseEntity<?> getChargerUserById(@PathVariable Long chargerUserId) {
-        try {
-            return ResponseEntity.ok().body(userService.getChargerUserById(chargerUserId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public PartnerDto getChargerUserById(@PathVariable Long chargerUserId) {
+        return userService.getChargerUserById(chargerUserId);
     }
 
     @GetMapping("/user/{chargerUserId}/get/all")
     @PreAuthorize("hasAuthority('charger:read')")
     @ApiOperation(value = "View a list of charger user's chargers")
-    public ResponseEntity<?> getAllChargerUserChargers(@PathVariable Long chargerUserId) {
-        try {
-            return ResponseEntity.ok().body(chargerService.getAllChargerUserChargers(chargerUserId));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public List<ChargerDto> getAllChargerUserChargers(@PathVariable Long chargerUserId) {
+        return chargerService.getAllChargerUserChargers(chargerUserId);
     }
 
     @GetMapping("/get/charger/all")
     @ApiOperation(value = "View a list of chargers")
-    public ResponseEntity<?> getAllChargers() {
-        try {
-            return ResponseEntity.ok().body(chargerService.getAllChargers());
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public List<ChargerDto> getAllChargers() {
+        return chargerService.getAllChargers();
     }
 
     @DeleteMapping("/user/{chargerUserId}/delete/{chargerId}")
     @PreAuthorize("hasAuthority('charger:write')")
     @ApiOperation(value = "Delete a charger by charger user id")
-    public ResponseEntity<String> deleteChargerById(
+    public void deleteChargerById(
             @PathVariable Long chargerUserId,
             @PathVariable Long chargerId
     ) {
-        try {
-            chargerService.deleteChargerById(chargerUserId, chargerId);
-            return ResponseEntity.ok().body("Charging station deleted successfully");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        chargerService.deleteChargerById(chargerUserId, chargerId);
     }
 
     @PutMapping("/change/isCharging/{chargerName}")

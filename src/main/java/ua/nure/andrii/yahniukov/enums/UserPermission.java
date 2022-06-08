@@ -15,7 +15,9 @@ public enum UserPermission {
     ADMIN_READ("admin:read"),
     ADMIN_WRITE("admin:write"),
     MODERATOR_READ("moderator:read"),
-    MODERATOR_WRITE("moderator:write");
+    MODERATOR_WRITE("moderator:write"),
+    GET_USER("get:user"),
+    GET_PARTNER("get:partner");
 
     private final String permission;
 }

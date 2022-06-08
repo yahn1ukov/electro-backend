@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.security.models.dto.LoginDto;
 import ua.nure.andrii.yahniukov.security.models.dto.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.security.models.dto.RegisterUserDto;
@@ -38,35 +37,20 @@ public class AuthController {
 
     @PostMapping("/register/user")
     @ApiOperation(value = "Register a user")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterUserDto registerUser) {
-        try {
-            userService.createUser(registerUser);
-            return ResponseEntity.ok().body("User successfully created");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public void registerUser(@RequestBody RegisterUserDto registerUser) {
+        userService.createUser(registerUser);
     }
 
     @PostMapping("/register/charger/partner")
     @ApiOperation(value = "Register a charger partner")
-    public ResponseEntity<String> registerChargerPartner(@RequestBody RegisterPartnerDto registerPartner) {
-        try {
-            userService.createChargerUser(registerPartner);
-            return ResponseEntity.ok().body("Application successfully sent");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public void registerChargerPartner(@RequestBody RegisterPartnerDto registerPartner) {
+        userService.createChargerUser(registerPartner);
     }
 
     @PostMapping("/register/station/partner")
     @ApiOperation(value = "Register a station partner")
-    public ResponseEntity<String> registerStationPartner(@RequestBody RegisterPartnerDto registerPartner) {
-        try {
-            userService.createStationUser(registerPartner);
-            return ResponseEntity.ok().body("Application successfully sent");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public void registerStationPartner(@RequestBody RegisterPartnerDto registerPartner) {
+        userService.createStationUser(registerPartner);
     }
 
     @PostMapping("/logout")

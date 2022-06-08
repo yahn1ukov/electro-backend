@@ -2,14 +2,16 @@ package ua.nure.andrii.yahniukov.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormFreePlace;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormStationDto;
+import ua.nure.andrii.yahniukov.models.dto.maintenances.StationDto;
+import ua.nure.andrii.yahniukov.models.dto.users.PartnerDto;
 import ua.nure.andrii.yahniukov.services.StationService;
 import ua.nure.andrii.yahniukov.services.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/station")
@@ -21,63 +23,41 @@ public class StationController {
     @PostMapping("/user/{stationUserId}/create")
     @PreAuthorize("hasAuthority('station:write')")
     @ApiOperation(value = "Create a station by user's id")
-    public ResponseEntity<String> createStation(
+    public void createStation(
             @PathVariable Long stationUserId,
             @RequestBody FormStationDto station
     ) {
-        try {
-            stationService.createStation(stationUserId, station);
-            return ResponseEntity.ok().body("Service station added successfully");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        stationService.createStation(stationUserId, station);
     }
 
     @GetMapping("/user/{stationUserId}")
-    @PreAuthorize("hasAuthority('station:read')")
+    @PreAuthorize("hasAuthority('get:partner')")
     @ApiOperation(value = "View a station user by id")
-    public ResponseEntity<?> getStationUserById(@PathVariable Long stationUserId) {
-        try {
-            return ResponseEntity.ok().body(userService.getStationUserById(stationUserId));
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public PartnerDto getStationUserById(@PathVariable Long stationUserId) {
+        return userService.getStationUserById(stationUserId);
     }
 
     @GetMapping("/user/{stationUserId}/get/all")
     @PreAuthorize("hasAuthority('station:read')")
     @ApiOperation(value = "View a list of station user's chargers")
-    public ResponseEntity<?> getAllStationUserChargers(@PathVariable Long stationUserId) {
-        try {
-            return ResponseEntity.ok().body(stationService.getAllStationUserChargers(stationUserId));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public List<StationDto> getAllStationUserChargers(@PathVariable Long stationUserId) {
+        return stationService.getAllStationUserChargers(stationUserId);
     }
 
     @GetMapping("/get/station/all")
     @ApiOperation(value = "View a list of stations")
-    public ResponseEntity<?> getAllStations() {
-        try {
-            return ResponseEntity.ok().body(stationService.getAllStations());
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public List<StationDto> getAllStations() {
+        return stationService.getAllStations();
     }
 
     @DeleteMapping("/user/{stationUserId}/delete/{stationId}")
     @PreAuthorize("hasAuthority('station:write')")
     @ApiOperation(value = "Delete a station by charger user id")
-    public ResponseEntity<String> deleteStationById(
+    public void deleteStationById(
             @PathVariable Long stationUserId,
             @PathVariable Long stationId
     ) {
-        try {
-            stationService.deleteStationById(stationUserId, stationId);
-            return ResponseEntity.ok().body("Service station deleted successfully");
-        } catch (BadRequestException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        stationService.deleteStationById(stationUserId, stationId);
     }
 
     @PutMapping("/{stationId}/change/freePlace")
