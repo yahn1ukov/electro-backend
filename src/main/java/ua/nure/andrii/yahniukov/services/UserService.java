@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormRoleDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.PartnerNoVerificationDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.PartnerVerificationDto;
 import ua.nure.andrii.yahniukov.models.dto.users.PartnerDto;
 import ua.nure.andrii.yahniukov.models.dto.users.UserDto;
 import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
@@ -163,48 +165,48 @@ public class UserService {
     /*
      * Для адміністраторів: список усіх користувачів зарядних станцій
      */
-    public List<PartnerDto> getAllChargerUsers() {
+    public List<PartnerVerificationDto> getAllChargerUsers() {
         return chargerUserRepository
                 .findAll()
                 .stream()
-                .filter(PartnerDto::verification)
-                .map(PartnerDto::fromVerification)
+                .filter(PartnerVerificationDto::verification)
+                .map(PartnerVerificationDto::fromVerification)
                 .collect(Collectors.toList());
     }
 
     /*
      * Для адміністраторів: список усіх користувачів СТО
      */
-    public List<PartnerDto> getAllStationUsers() {
+    public List<PartnerVerificationDto> getAllStationUsers() {
         return stationUserRepository
                 .findAll()
                 .stream()
-                .filter(PartnerDto::verification)
-                .map(PartnerDto::fromVerification)
+                .filter(PartnerVerificationDto::verification)
+                .map(PartnerVerificationDto::fromVerification)
                 .collect(Collectors.toList());
     }
 
     /*
      * Для адміністраторів: список усіх не верифікованих користувачів зарядних станцій
      */
-    public List<PartnerDto> getAllNoVerificationChargerUsers() {
+    public List<PartnerNoVerificationDto> getAllNoVerificationChargerUsers() {
         return chargerUserRepository
                 .findAll()
                 .stream()
-                .filter(PartnerDto::noVerification)
-                .map(PartnerDto::fromNoVerification)
+                .filter(PartnerNoVerificationDto::noVerification)
+                .map(PartnerNoVerificationDto::fromNoVerification)
                 .collect(Collectors.toList());
     }
 
     /*
      * Для адміністраторів: список усіх не верифікованих користувачів СТО
      */
-    public List<PartnerDto> getAllNoVerificationStationUsers() {
+    public List<PartnerNoVerificationDto> getAllNoVerificationStationUsers() {
         return stationUserRepository
                 .findAll()
                 .stream()
-                .filter(PartnerDto::noVerification)
-                .map(PartnerDto::fromNoVerification)
+                .filter(PartnerNoVerificationDto::noVerification)
+                .map(PartnerNoVerificationDto::fromNoVerification)
                 .collect(Collectors.toList());
     }
 

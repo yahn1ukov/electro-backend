@@ -5,7 +5,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
+import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
+import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
 import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
+import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
 import ua.nure.andrii.yahniukov.security.models.dto.LoginDto;
 import ua.nure.andrii.yahniukov.security.providers.JwtTokenProvider;
 import ua.nure.andrii.yahniukov.services.UserService;
@@ -23,17 +26,35 @@ public class AuthService {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     public Map<Object, Object> login(LoginDto loginUser) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
-        UserEntity user = userService.findUserByEmail(loginUser.getEmail());
-        String token = jwtTokenProvider.createToken(loginUser.getEmail(), user.getRole().name());
-        System.out.println(loginUser.getEmail() + " " + loginUser.getPassword() + " " + user.getRole().name());
-        Map<Object, Object> response = new HashMap<>();
-        response.put("id", user.getId());
-        response.put("email", loginUser.getEmail());
-        response.put("token", token);
-        return response;
+        if (userRepository.existsByEmail(loginUser.getEmail())) {
+            UserEntity user = userService.findUserByEmail(loginUser.getEmail());
+            String token = jwtTokenProvider.createToken(loginUser.getEmail(), user.getRole().name());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("id", user.getId());
+            response.put("email", loginUser.getEmail());
+            response.put("token", token);
+            return response;
+        } else if (userRepository.existsByEmail(loginUser.getEmail())) {
+            ChargerUserEntity chargerUser = userService.findChargerUserByEmail(loginUser.getEmail());
+            String token = jwtTokenProvider.createToken(loginUser.getEmail(), chargerUser.getRole().name());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("id", chargerUser.getId());
+            response.put("email", loginUser.getEmail());
+            response.put("token", token);
+            return response;
+        } else {
+            StationUserEntity stationUser = userService.findStationUserByEmail(loginUser.getEmail());
+            String token = jwtTokenProvider.createToken(loginUser.getEmail(), stationUser.getRole().name());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("id", stationUser.getId());
+            response.put("email", loginUser.getEmail());
+            response.put("token", token);
+            return response;
+        }
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) {

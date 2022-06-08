@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormRoleDto;
-import ua.nure.andrii.yahniukov.models.dto.users.PartnerDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.PartnerNoVerificationDto;
+import ua.nure.andrii.yahniukov.models.dto.helpers.PartnerVerificationDto;
 import ua.nure.andrii.yahniukov.models.dto.users.UserDto;
 import ua.nure.andrii.yahniukov.services.UserService;
 
@@ -27,28 +28,28 @@ public class AdminController {
     @GetMapping("/get/charger/verification/user/all")
     @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of charger users")
-    public List<PartnerDto> getAllChargerUsers() {
+    public List<PartnerVerificationDto> getAllChargerUsers() {
         return userService.getAllChargerUsers();
     }
 
     @GetMapping("/get/station/verification/user/all")
     @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of station users")
-    public List<PartnerDto> getAllStationUsers() {
+    public List<PartnerVerificationDto> getAllStationUsers() {
         return userService.getAllStationUsers();
     }
 
     @GetMapping("/get/charger/no/verification/user/all")
     @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of no verification station users")
-    public List<PartnerDto> getAllNoVerificationChargerUsers() {
+    public List<PartnerNoVerificationDto> getAllNoVerificationChargerUsers() {
         return userService.getAllNoVerificationChargerUsers();
     }
 
     @GetMapping("/get/station/no/verification/user/all")
     @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of no verification station users")
-    public List<PartnerDto> getAllNoVerificationStationUsers() {
+    public List<PartnerNoVerificationDto> getAllNoVerificationStationUsers() {
         return userService.getAllNoVerificationStationUsers();
     }
 

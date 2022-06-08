@@ -19,17 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 public class StationUserEntity extends BaseUserEntity {
-    @Column(name = "company", unique = true)
-    private String company;
-
-    @Column(name = "is_verification")
-    @Builder.Default
-    private Boolean isVerification = false;
-
     @Builder.Default
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     List<StationEntity> stations = new ArrayList<>();
-
+    @Column(name = "company", unique = true)
+    private String company;
+    @Column(name = "is_verification")
+    @Builder.Default
+    private Boolean isVerification = false;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     @Builder.Default

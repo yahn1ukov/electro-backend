@@ -15,10 +15,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    private static final String TOKEN_AUTH_ENTRY_POINT = "/**";
     private final JwtConfiguration jwtConfiguration;
     @Qualifier("authWhiteList")
     private final String[] authWhiteList;
-    private static final String TOKEN_AUTH_ENTRY_POINT = "/**";
 
     @Autowired
     public SecurityConfiguration(
