@@ -27,7 +27,7 @@ public class StationUserEntity extends BaseUserEntity {
     private Boolean isVerification = false;
 
     @Builder.Default
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     List<StationEntity> stations = new ArrayList<>();
 
     @Column(name = "role")

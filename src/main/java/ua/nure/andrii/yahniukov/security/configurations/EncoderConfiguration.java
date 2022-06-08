@@ -1,4 +1,4 @@
-package ua.nure.andrii.yahniukov.configurations;
+package ua.nure.andrii.yahniukov.security.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

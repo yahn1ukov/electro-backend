@@ -9,7 +9,9 @@ import java.util.List;
 
 @Repository
 public interface ChargerRepository extends JpaRepository<ChargerEntity, Long> {
-    boolean existsByName(String name);
+    boolean existsByName(String chargerName);
 
     List<ChargerEntity> findAllByOwner(ChargerUserEntity chargerUser);
+
+    ChargerEntity findByName(String chargerName);
 }

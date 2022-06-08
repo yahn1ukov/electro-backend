@@ -3,6 +3,7 @@ package ua.nure.andrii.yahniukov.controllers;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
 import ua.nure.andrii.yahniukov.models.dto.forms.FormRoleDto;
@@ -15,6 +16,7 @@ public class AdminController {
     private final UserService userService;
 
     @GetMapping("/get/user/all")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of users")
     public ResponseEntity<?> getAllUsers() {
         try {
@@ -24,7 +26,8 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/get/charger/user/all")
+    @GetMapping("/get/charger/verification/user/all")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of charger users")
     public ResponseEntity<?> getAllChargerUsers() {
         try {
@@ -34,7 +37,8 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/get/station/user/all")
+    @GetMapping("/get/station/verification/user/all")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of station users")
     public ResponseEntity<?> getAllStationUsers() {
         try {
@@ -45,6 +49,7 @@ public class AdminController {
     }
 
     @GetMapping("/get/charger/no/verification/user/all")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of no verification station users")
     public ResponseEntity<?> getAllNoVerificationChargerUsers() {
         try {
@@ -55,6 +60,7 @@ public class AdminController {
     }
 
     @GetMapping("/get/station/no/verification/user/all")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value = "View a list of no verification station users")
     public ResponseEntity<?> getAllNoVerificationStationUsers() {
         try {
@@ -65,6 +71,7 @@ public class AdminController {
     }
 
     @PutMapping("/change/role/user/{userId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Change a user's role by id")
     public ResponseEntity<String> changeRoleUser(
             @PathVariable Long userId,
@@ -79,6 +86,7 @@ public class AdminController {
     }
 
     @PutMapping("/accept/verification/charger/user/{chargerUserId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Verification charger user by id")
     public ResponseEntity<String> acceptVerificationChargerUser(@PathVariable Long chargerUserId) {
         try {
@@ -90,6 +98,7 @@ public class AdminController {
     }
 
     @PutMapping("/accept/verification/station/user/{stationUserId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Verification charger user by id")
     public ResponseEntity<String> acceptVerificationStationUser(@PathVariable Long stationUserId) {
         try {
@@ -101,6 +110,7 @@ public class AdminController {
     }
 
     @PutMapping("/block/user/{userId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Block a user by id")
     public ResponseEntity<String> blockUser(@PathVariable Long userId) {
         try {
@@ -112,6 +122,7 @@ public class AdminController {
     }
 
     @PutMapping("/block/charger/user/{chargerUserId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Block a charger user by id")
     public ResponseEntity<String> blockChargerUser(@PathVariable Long chargerUserId) {
         try {
@@ -123,6 +134,7 @@ public class AdminController {
     }
 
     @PutMapping("/block/station/user/{stationUserId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Block a station user by id")
     public ResponseEntity<String> blockStationUser(@PathVariable Long stationUserId) {
         try {
@@ -134,6 +146,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/user/{userId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Delete a user by id")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
@@ -145,6 +158,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/charger/user/{chargerUserId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Delete a charger user by id")
     public ResponseEntity<String> deleteChargerUser(@PathVariable Long chargerUserId) {
         try {
@@ -156,6 +170,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/station/user/{stationUserId}")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Delete a station user by id")
     public ResponseEntity<String> deleteStationUser(@PathVariable Long stationUserId) {
         try {

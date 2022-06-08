@@ -1,6 +1,7 @@
 package ua.nure.andrii.yahniukov.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.enums.UserRole;
@@ -14,8 +15,8 @@ import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
 import ua.nure.andrii.yahniukov.repositories.users.ChargerUserRepository;
 import ua.nure.andrii.yahniukov.repositories.users.StationUserRepository;
 import ua.nure.andrii.yahniukov.repositories.users.UserRepository;
-import ua.nure.andrii.yahniukov.security.dto.RegisterPartnerDto;
-import ua.nure.andrii.yahniukov.security.dto.RegisterUserDto;
+import ua.nure.andrii.yahniukov.security.models.dto.RegisterPartnerDto;
+import ua.nure.andrii.yahniukov.security.models.dto.RegisterUserDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -34,6 +35,12 @@ public class UserService {
         return userRepository
                 .findById(userId)
                 .orElseThrow(() -> new BadRequestException("User with id " + userId + " not found"));
+    }
+
+    public UserEntity findUserByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
     }
 
     public ChargerUserEntity findChargerUserById(Long chargerUserId) {
@@ -55,14 +62,26 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("User with email " + user.getEmail() + " already exists");
         }
-        userRepository.save(
-                UserEntity.builder()
-                        .email(user.getEmail())
-                        .fName(user.getFName())
-                        .lName(user.getLName())
-                        .password(passwordEncoder.encode(user.getPassword()))
-                        .build()
-        );
+        if (userRepository.findAll().isEmpty()) {
+            userRepository.save(
+                    UserEntity.builder()
+                            .email(user.getEmail())
+                            .fName(user.getFName())
+                            .lName(user.getLName())
+                            .role(UserRole.ADMIN)
+                            .password(passwordEncoder.encode(user.getPassword()))
+                            .build()
+            );
+        } else {
+            userRepository.save(
+                    UserEntity.builder()
+                            .email(user.getEmail())
+                            .fName(user.getFName())
+                            .lName(user.getLName())
+                            .password(passwordEncoder.encode(user.getPassword()))
+                            .build()
+            );
+        }
     }
 
     /*

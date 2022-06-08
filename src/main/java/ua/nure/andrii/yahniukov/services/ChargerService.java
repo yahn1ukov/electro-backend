@@ -79,6 +79,24 @@ public class ChargerService {
     }
 
     /*
+     * Для зарядних станцій: заряджається або ні
+     */
+    public void changeIsCharging(String name) {
+        ChargerEntity charger = chargerRepository.findByName(name);
+        charger.setIsCharging(!charger.getIsCharging());
+        chargerRepository.save(charger);
+    }
+
+    /*
+     * Для зарядних станцій: зламона або ні
+     */
+    public void changeIsBroken(String chargerName) {
+        ChargerEntity charger = chargerRepository.findByName(chargerName);
+        charger.setIsBroken(!charger.getIsBroken());
+        chargerRepository.save(charger);
+    }
+
+    /*
      * Для власників електромобілів: отримання однієї зарядної станції
      */
     public ChargerDto getChargerById(Long chargerId) {

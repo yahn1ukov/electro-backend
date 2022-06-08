@@ -27,7 +27,7 @@ public class ChargerUserEntity extends BaseUserEntity {
     private Boolean isVerification = false;
 
     @Builder.Default
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     List<ChargerEntity> chargers = new ArrayList<>();
 
     @Column(name = "role")

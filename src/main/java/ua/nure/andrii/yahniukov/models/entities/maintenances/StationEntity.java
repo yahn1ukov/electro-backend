@@ -23,6 +23,9 @@ public class StationEntity extends BaseMaintenanceEntity {
     @OneToMany(mappedBy = "station")
     private List<ComplaintUserStationEntity> stationComplaints = new ArrayList<>();
 
+    @Column(name = "name", unique = true)
+    private String name;
+
     @Column(name = "carName")
     private String carName;
 
