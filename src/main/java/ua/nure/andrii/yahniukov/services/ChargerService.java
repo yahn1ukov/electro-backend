@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class ChargerService {
     private final ChargerRepository chargerRepository;
     private final UserService userService;
+    public final double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
 
     public ChargerEntity findChargerById(Long chargerId) {
         return chargerRepository
@@ -111,5 +112,39 @@ public class ChargerService {
         ChargerEntity charger = findChargerById(chargerId);
         chargerUser.getChargers().remove(charger);
         chargerRepository.delete(charger);
+    }
+
+    public int calculateDistanceInKilometer(double carLat, double carLng,
+                                            double chargerLat, double chargerLng) {
+
+        double latDistance = Math.toRadians(carLat - chargerLat);
+        double lngDistance = Math.toRadians(carLng - chargerLng);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(carLat)) * Math.cos(Math.toRadians(chargerLat))
+                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c));
+    }
+
+    public List<ChargerDto> getAllChargersForCar(Long latitude, Long longitude, Long percentOfBattery, String typeConnector) {
+        if (
+                latitude < -90.0 || latitude > 90.0 ||
+                        longitude < -180.0 || longitude > 180.0 ||
+                        percentOfBattery < 0 || percentOfBattery > 100
+        ) {
+            throw new BadRequestException("Something was wrong");
+        }
+        return chargerRepository
+                .findAll()
+                .stream()
+                .filter(charger -> ChargerDto.isTypeConnector(charger, typeConnector))
+                .filter(ChargerDto::isNoCharging)
+                .filter(ChargerDto::isNoBroken)
+                .filter(charger -> ChargerDto.isFast(charger, percentOfBattery))
+                .map(ChargerDto::fromCharger)
+                .collect(Collectors.toList());
     }
 }

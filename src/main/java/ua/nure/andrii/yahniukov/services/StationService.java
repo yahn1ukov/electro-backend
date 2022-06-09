@@ -48,6 +48,7 @@ public class StationService {
                         .freePlace(station.getFreePlace())
                         .carModel(station.getCarModel())
                         .carName(station.getCarName())
+                        .owner(stationUser)
                         .middlePriceForPerHour(station.getMiddlePriceForPerHour())
                         .timeFrom(station.getTimeFrom())
                         .timeTo(station.getTimeTo())

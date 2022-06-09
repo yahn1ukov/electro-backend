@@ -30,6 +30,22 @@ public class ChargerDto {
     private String timeTo;
     private Date createAt;
 
+    public static boolean isNoCharging(ChargerEntity charger) {
+        return !charger.getIsCharging();
+    }
+
+    public static boolean isNoBroken(ChargerEntity charger) {
+        return !charger.getIsBroken();
+    }
+
+    public static boolean isFast(ChargerEntity charger, Long percentOfBattery) {
+        return (percentOfBattery < 20) == charger.getIsFast();
+    }
+
+    public static boolean isTypeConnector(ChargerEntity charger, String typeConnector) {
+        return typeConnector.equals(charger.getTypeConnector());
+    }
+
     public static ChargerDto fromCharger(ChargerEntity charger) {
         return ChargerDto.builder()
                 .id(charger.getId())
