@@ -1,6 +1,7 @@
 package ua.nure.andrii.yahniukov.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import ua.nure.andrii.yahniukov.security.models.dto.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.security.models.dto.RegisterUserDto;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +35,15 @@ public class UserService {
     private final ChargerUserRepository chargerUserRepository;
     private final StationUserRepository stationUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    @Value("${db.name}")
+    private String dbName;
+    @Value("${spring.datasource.username}")
+    private String dbUsername;
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
+    @Value("${db.file}")
+    private String dbFile;
 
     public UserEntity findUserById(Long userId) {
         return userRepository
@@ -295,5 +307,36 @@ public class UserService {
     public void deleteStationUser(Long stationUserId) {
         StationUserEntity stationUser = findStationUserById(stationUserId);
         stationUserRepository.delete(stationUser);
+    }
+
+    /*
+     * Для адміністраторів: створення backup бази даних
+     */
+    public boolean backupDB()
+            throws IOException, InterruptedException {
+        String projectPath = System.getProperty("user.dir");
+        String fileSeparator = System.getProperty("file.separator");
+        String newBackupFile = projectPath + fileSeparator + "src" + fileSeparator + "main" + fileSeparator + "resources" + fileSeparator + "db" + fileSeparator + "backups" + fileSeparator + "backup.sql";
+        File outputFile = new File(newBackupFile);
+        String sqlCommand = String.format("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump -u%s -p%s --add-drop-table --databases %s -r %s",
+                dbUsername, dbPassword, dbName, outputFile);
+        Process process = Runtime.getRuntime().exec(sqlCommand);
+        int result = process.waitFor();
+        return result == 0;
+    }
+
+    /*
+     * Для адміністраторів: відновлення бази даних
+     */
+    public boolean restoreDB()
+            throws IOException, InterruptedException {
+        String projectPath = System.getProperty("user.dir");
+        String fileSeparator = System.getProperty("file.separator");
+        String sourceFile = projectPath + fileSeparator + "src" + fileSeparator + "main" + fileSeparator + "resources" + fileSeparator + "db" + fileSeparator + "backups" + fileSeparator + "backup.sql";
+        String sqlCommandRestore = String.format("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql -u%s -p%s -e source %s",
+                dbUsername, dbPassword, sourceFile);
+        Process process = Runtime.getRuntime().exec(sqlCommandRestore);
+        int result = process.waitFor();
+        return result == 0;
     }
 }

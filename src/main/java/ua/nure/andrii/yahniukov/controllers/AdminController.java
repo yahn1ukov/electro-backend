@@ -10,6 +10,7 @@ import ua.nure.andrii.yahniukov.models.dto.helpers.PartnerVerificationDto;
 import ua.nure.andrii.yahniukov.models.dto.users.UserDto;
 import ua.nure.andrii.yahniukov.services.UserService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -117,5 +118,19 @@ public class AdminController {
     @ApiOperation(value = "Delete a station user by id")
     public void deleteStationUser(@PathVariable Long stationUserId) {
         userService.deleteStationUser(stationUserId);
+    }
+
+    @PostMapping("/create/backup/db")
+    @PreAuthorize("hasAuthority('admin:write')")
+    @ApiOperation(value = "Create a backup of DB")
+    public boolean backupDB() throws IOException, InterruptedException {
+        return userService.backupDB();
+    }
+
+    @PostMapping("/restore/backup/db")
+    @PreAuthorize("hasAuthority('admin:write')")
+    @ApiOperation(value = "Restore a backup of DB")
+    public boolean restoreDB() throws IOException, InterruptedException {
+        return userService.restoreDB();
     }
 }
