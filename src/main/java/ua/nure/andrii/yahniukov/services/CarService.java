@@ -29,6 +29,12 @@ public class CarService {
                 .orElseThrow(() -> new BadRequestException("Car with VIN code " + vinCode + " not found"));
     }
 
+    public CarEntity findCarByVinCode(String vinCode) {
+        return carRepository
+                .findByVinCode(vinCode)
+                .orElseThrow(() -> new BadRequestException("Car with VIN code " + vinCode + " not found"));
+    }
+
     /*
      * Для IoT: зчитування та створення електромобіля
      */
@@ -44,12 +50,6 @@ public class CarService {
                 .typeConnector(car.getTypeConnector())
                 .percentageOfCharge(car.getPercentageOfCharge())
                 .build());
-    }
-
-    public CarEntity findCarByVinCode(String vinCode) {
-        return carRepository
-                .findByVinCode(vinCode)
-                .orElseThrow(() -> new BadRequestException("Car with VIN code " + vinCode + " not found"));
     }
 
     /*

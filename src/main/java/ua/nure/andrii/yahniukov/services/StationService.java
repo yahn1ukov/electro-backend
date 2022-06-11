@@ -105,4 +105,25 @@ public class StationService {
         stationUser.getStations().remove(station);
         stationRepository.delete(station);
     }
+
+    /*
+     * Для IoT: список доступних СТО в радіусі 10 км
+     */
+    public List<StationDto> getAllStationsForCar(Long latitude, Long longitude, String carName, String carModel) {
+        if (
+                latitude < -90.0 || latitude > 90.0 ||
+                        longitude < -180.0 || longitude > 180.0
+        ) {
+            throw new BadRequestException("Something was wrong");
+        }
+        return stationRepository
+                .findAll()
+                .stream()
+                .filter(station -> StationDto.isRadius(station, latitude, longitude))
+                .filter(StationDto::isFreePlace)
+                .filter(station -> StationDto.isName(station, carName))
+                .filter(station -> StationDto.isModel(station, carModel))
+                .map(StationDto::fromStation)
+                .collect(Collectors.toList());
+    }
 }

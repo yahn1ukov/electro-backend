@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class ChargerService {
     private final ChargerRepository chargerRepository;
     private final UserService userService;
-    public final double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
 
     public ChargerEntity findChargerById(Long chargerId) {
         return chargerRepository
@@ -114,21 +113,9 @@ public class ChargerService {
         chargerRepository.delete(charger);
     }
 
-    public int calculateDistanceInKilometer(double carLat, double carLng,
-                                            double chargerLat, double chargerLng) {
-
-        double latDistance = Math.toRadians(carLat - chargerLat);
-        double lngDistance = Math.toRadians(carLng - chargerLng);
-
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(carLat)) * Math.cos(Math.toRadians(chargerLat))
-                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c));
-    }
-
+    /*
+     * Для IoT: список доступних зарядних станцій в радіусі 10 км
+     */
     public List<ChargerDto> getAllChargersForCar(Long latitude, Long longitude, Long percentOfBattery, String typeConnector) {
         if (
                 latitude < -90.0 || latitude > 90.0 ||
@@ -140,6 +127,7 @@ public class ChargerService {
         return chargerRepository
                 .findAll()
                 .stream()
+                .filter(charger -> ChargerDto.isRadius(charger, latitude, longitude))
                 .filter(charger -> ChargerDto.isTypeConnector(charger, typeConnector))
                 .filter(ChargerDto::isNoCharging)
                 .filter(ChargerDto::isNoBroken)

@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class ChargerDto {
+public class ChargerDto extends BaseMaintenancesDto {
     private Long id;
     private String name;
     private String country;
@@ -30,6 +30,11 @@ public class ChargerDto {
     private String timeTo;
     private Date createAt;
 
+    public static boolean isRadius(ChargerEntity charger, Long carLatitude, Long carLongitude) {
+        int radius = calculateDistanceInKilometer(carLatitude, carLongitude, charger.getLatitude(), charger.getLongitude());
+        return radius <= 10;
+    }
+
     public static boolean isNoCharging(ChargerEntity charger) {
         return !charger.getIsCharging();
     }
@@ -43,7 +48,7 @@ public class ChargerDto {
     }
 
     public static boolean isTypeConnector(ChargerEntity charger, String typeConnector) {
-        return typeConnector.equals(charger.getTypeConnector());
+        return charger.getTypeConnector().equals(typeConnector);
     }
 
     public static ChargerDto fromCharger(ChargerEntity charger) {

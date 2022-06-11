@@ -8,7 +8,7 @@ import ua.nure.andrii.yahniukov.models.entities.maintenances.StationEntity;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class StationDto {
+public class StationDto extends BaseMaintenancesDto {
     private Long id;
     private String company;
     private String country;
@@ -26,6 +26,23 @@ public class StationDto {
     private String timeTo;
     private String phoneNumber;
     private String webSite;
+
+    public static boolean isRadius(StationEntity station, Long carLatitude, Long carLongitude) {
+        int radius = calculateDistanceInKilometer(carLatitude, carLongitude, station.getLatitude(), station.getLongitude());
+        return radius <= 10;
+    }
+
+    public static boolean isFreePlace(StationEntity station) {
+        return station.getFreePlace() < station.getAllPlace();
+    }
+
+    public static boolean isModel(StationEntity station, String carModel) {
+        return station.getCarModel().equals(carModel);
+    }
+
+    public static boolean isName(StationEntity station, String carName) {
+        return station.getCarName().equals(carName);
+    }
 
     public static StationDto fromStation(StationEntity station) {
         return StationDto.builder()
