@@ -6,9 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import ua.nure.andrii.yahniukov.models.entities.users.ChargerUserEntity;
-import ua.nure.andrii.yahniukov.models.entities.users.StationUserEntity;
-import ua.nure.andrii.yahniukov.models.entities.users.UserEntity;
+import ua.nure.andrii.yahniukov.ChargerUser.ChargerUserEntity;
+import ua.nure.andrii.yahniukov.StationUser.StationUserEntity;
+import ua.nure.andrii.yahniukov.User.UserEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,35 +27,35 @@ public class SecurityUser implements UserDetails {
         return new User(
                 user.getEmail(),
                 user.getPassword(),
+                user.getIsVerification(),
                 true,
                 true,
-                true,
-                true,
+                user.getIsNotBlock(),
                 user.getRole().getAuthorities()
         );
     }
 
-    public static UserDetails fromUser(ChargerUserEntity user) {
+    public static UserDetails fromUser(ChargerUserEntity chargerUser) {
         return new User(
-                user.getEmail(),
-                user.getPassword(),
+                chargerUser.getEmail(),
+                chargerUser.getPassword(),
+                chargerUser.getIsVerification(),
                 true,
                 true,
-                true,
-                true,
-                user.getRole().getAuthorities()
+                chargerUser.getIsNotBlock(),
+                chargerUser.getRole().getAuthorities()
         );
     }
 
-    public static UserDetails fromUser(StationUserEntity user) {
+    public static UserDetails fromUser(StationUserEntity stationUser) {
         return new User(
-                user.getEmail(),
-                user.getPassword(),
+                stationUser.getEmail(),
+                stationUser.getPassword(),
+                stationUser.getIsVerification(),
                 true,
                 true,
-                true,
-                true,
-                user.getRole().getAuthorities()
+                stationUser.getIsNotBlock(),
+                stationUser.getRole().getAuthorities()
         );
     }
 

@@ -9,20 +9,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.nure.andrii.yahniukov.ChargerUser.ChargerUserService;
+import ua.nure.andrii.yahniukov.StationUser.StationUserService;
+import ua.nure.andrii.yahniukov.User.UserService;
 import ua.nure.andrii.yahniukov.security.models.dto.LoginDto;
 import ua.nure.andrii.yahniukov.security.models.dto.RegisterPartnerDto;
 import ua.nure.andrii.yahniukov.security.models.dto.RegisterUserDto;
 import ua.nure.andrii.yahniukov.security.services.AuthService;
-import ua.nure.andrii.yahniukov.services.UserService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
+    private final ChargerUserService chargerUserService;
+    private final StationUserService stationUserService;
     private final AuthService authService;
 
     @PostMapping("/login")
@@ -38,24 +39,18 @@ public class AuthController {
     @PostMapping("/register/user")
     @ApiOperation(value = "Register a user")
     public void registerUser(@RequestBody RegisterUserDto registerUser) {
-        userService.createUser(registerUser);
+        userService.create(registerUser);
     }
 
     @PostMapping("/register/charger/partner")
     @ApiOperation(value = "Register a charger partner")
     public void registerChargerPartner(@RequestBody RegisterPartnerDto registerPartner) {
-        userService.createChargerUser(registerPartner);
+        chargerUserService.create(registerPartner);
     }
 
     @PostMapping("/register/station/partner")
     @ApiOperation(value = "Register a station partner")
     public void registerStationPartner(@RequestBody RegisterPartnerDto registerPartner) {
-        userService.createStationUser(registerPartner);
-    }
-
-    @PostMapping("/logout")
-    @ApiOperation(value = "Logout a partner")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        authService.logout(request, response);
+        stationUserService.create(registerPartner);
     }
 }

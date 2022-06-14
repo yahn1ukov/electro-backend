@@ -32,7 +32,10 @@ public class AuthWhiteListConfiguration {
                 "/api/v1/station/get/all",
                 "/api/v1/charger/get/all",
                 "/api/v1/charger/change/isCharging/{chargerName}",
-                "/api/v1/charger/change/isBroken/{chargerName}"
+                "/api/v1/charger/change/isBroken/{chargerName}",
+                "/api/v1/iot/station/{latitude}/{longitude}/{name}/{model}/{radius}",
+                "/api/v1/iot/charger/{latitude}/{longitude}/{percentOfBattery}/{typeConnector}/{radius}"
+
         };
     }
 }
