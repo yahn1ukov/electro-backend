@@ -27,9 +27,9 @@ public class ComplaintUserStationService {
                 .orElseThrow(() -> new BadRequestException("Complaint with id " + complaintId + " not found"));
     }
 
-    public void create(String email, String name, FormDescriptionDto complaint) {
-        UserEntity user = userService.findByEmail(email);
-        StationEntity station = stationService.findByName(name);
+    public void create(String userEmail, String stationName, FormDescriptionDto complaint) {
+        UserEntity user = userService.findByEmail(userEmail);
+        StationEntity station = stationService.findByName(stationName);
         complaintUserStationRepository.save(
                 ComplaintUserStationEntity.builder()
                         .user(user)

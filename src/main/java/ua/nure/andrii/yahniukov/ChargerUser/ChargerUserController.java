@@ -16,7 +16,7 @@ public class ChargerUserController {
     private final ChargerUserService chargerUserService;
 
     @GetMapping("/{email}")
-    @PreAuthorize("hasAuthority('get:user')")
+    @PreAuthorize("hasAuthority('get:partner')")
     @ApiOperation(value = "View a charger user by email")
     public ChargerUserDto getUser(@PathVariable String email) {
         return chargerUserService.getByEmail(email);

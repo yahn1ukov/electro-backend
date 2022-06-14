@@ -28,14 +28,15 @@ public class AuthWhiteListConfiguration {
                 "/api/v1/auth/register/user",
                 "/api/v1/auth/register/charger/partner",
                 "/api/v1/auth/register/station/partner",
-                "/api/v1/iot/create/car",
-                "/api/v1/station/get/all",
-                "/api/v1/charger/get/all",
-                "/api/v1/charger/change/isCharging/{chargerName}",
-                "/api/v1/charger/change/isBroken/{chargerName}",
-                "/api/v1/iot/station/{latitude}/{longitude}/{name}/{model}/{radius}",
-                "/api/v1/iot/charger/{latitude}/{longitude}/{percentOfBattery}/{typeConnector}/{radius}"
-
+                "/api/v1/cars/create",
+                "/api/v1/stations/get/all",
+                "/api/v1/stations/{name}/get",
+                "/api/v1/chargers/get/all",
+                "/api/v1/chargers/{code}/get",
+                "/api/v1/chargers/{code}/change/is-charging",
+                "/api/v1/chargers/{code}/change/is-broken",
+                "/api/v1/stations/{latitude}/{longitude}/{name}/{model}/{radius}",
+                "/api/v1/chargers/{latitude}/{longitude}/{percentOfBattery}/{typeConnector}/{radius}"
         };
     }
 }

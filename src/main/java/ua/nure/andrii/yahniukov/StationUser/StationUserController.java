@@ -16,7 +16,7 @@ public class StationUserController {
     private final StationUserService stationUserService;
 
     @GetMapping("/{email}")
-    @PreAuthorize("hasAuthority('get:user')")
+    @PreAuthorize("hasAuthority('get:partner')")
     @ApiOperation(value = "View a user by id")
     public StationUserDto getUser(@PathVariable String email) {
         return stationUserService.getByEmail(email);

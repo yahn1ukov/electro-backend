@@ -6,6 +6,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.ComplaintsUserCharger.ComplaintUserChargerService;
 import ua.nure.andrii.yahniukov.ComplaintsUserCharger.dto.ComplaintUserChargerDto;
+import ua.nure.andrii.yahniukov.ComplaintsUserStation.ComplaintUserStationService;
+import ua.nure.andrii.yahniukov.ComplaintsUserStation.dto.ComplaintUserStationDto;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ModeratorController {
     private final ComplaintUserChargerService complaintUserChargerService;
+    private final ComplaintUserStationService complaintUserStationService;
 
     @GetMapping("/get/complaints/chargers/all")
     @PreAuthorize("hasAuthority('moderator:read')")
@@ -25,8 +28,8 @@ public class ModeratorController {
     @GetMapping("/get/complaints/stations/all")
     @PreAuthorize("hasAuthority('moderator:read')")
     @ApiOperation(value = "View a list of station's complaints by user")
-    public List<ComplaintUserChargerDto> getAllComplaintUserStation() {
-        return complaintUserChargerService.getAll();
+    public List<ComplaintUserStationDto> getAllComplaintUserStation() {
+        return complaintUserStationService.getAll();
     }
 
     @DeleteMapping("/delete/complaints/chargers/{complaintId}")
@@ -40,6 +43,6 @@ public class ModeratorController {
     @PreAuthorize("hasAuthority('moderator:write')")
     @ApiOperation(value = "Delete a station's complaint by id")
     public void deleteComplaintUserStation(@PathVariable Long complaintId) {
-        complaintUserChargerService.deleteById(complaintId);
+        complaintUserStationService.deleteById(complaintId);
     }
 }

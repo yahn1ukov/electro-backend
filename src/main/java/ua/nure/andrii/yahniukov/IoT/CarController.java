@@ -4,11 +4,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ua.nure.andrii.yahniukov.Charger.ChargerService;
 import ua.nure.andrii.yahniukov.IoT.dto.CarDto;
 import ua.nure.andrii.yahniukov.IoT.dto.FormCarDto;
 import ua.nure.andrii.yahniukov.IoT.dto.FormVinCodeDto;
-import ua.nure.andrii.yahniukov.Station.StationService;
 
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
-    private final ChargerService chargerService;
-    private final StationService stationService;
 
     @PostMapping("/create")
     @ApiOperation(value = "Get data and create a car")
