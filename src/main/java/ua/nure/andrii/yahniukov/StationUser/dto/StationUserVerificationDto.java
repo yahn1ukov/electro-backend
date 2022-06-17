@@ -14,8 +14,9 @@ import java.util.Date;
 public class StationUserVerificationDto {
     private Long id;
     private String company;
+    private String email;
     private UserRole role;
-    private Boolean isBlock;
+    private Boolean isNotBlock;
     private Date createdAt;
 
     public static boolean verification(StationUserEntity stationUser) {
@@ -26,8 +27,9 @@ public class StationUserVerificationDto {
         return StationUserVerificationDto.builder()
                 .id(stationUser.getId())
                 .company(stationUser.getCompany())
+                .email(stationUser.getEmail())
                 .role(stationUser.getRole())
-                .isBlock(stationUser.getIsNotBlock())
+                .isNotBlock(stationUser.getIsNotBlock())
                 .createdAt(stationUser.getCreatedAt())
                 .build();
     }

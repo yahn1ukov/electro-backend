@@ -12,34 +12,34 @@ import ua.nure.andrii.yahniukov.ComplaintsUserStation.dto.ComplaintUserStationDt
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/moderator")
+@RequestMapping("/api/v1/moderators")
 @RequiredArgsConstructor
 public class ModeratorController {
     private final ComplaintUserChargerService complaintUserChargerService;
     private final ComplaintUserStationService complaintUserStationService;
 
-    @GetMapping("/get/complaints/chargers/all")
+    @GetMapping("/get/complaints/of/chargers/all")
     @PreAuthorize("hasAuthority('moderator:read')")
     @ApiOperation(value = "View a list of charger's complaints by  user")
     public List<ComplaintUserChargerDto> getAllComplaintUserCharger() {
         return complaintUserChargerService.getAll();
     }
 
-    @GetMapping("/get/complaints/stations/all")
+    @GetMapping("/get/complaints/of/stations/all")
     @PreAuthorize("hasAuthority('moderator:read')")
     @ApiOperation(value = "View a list of station's complaints by user")
     public List<ComplaintUserStationDto> getAllComplaintUserStation() {
         return complaintUserStationService.getAll();
     }
 
-    @DeleteMapping("/delete/complaints/chargers/{complaintId}")
+    @DeleteMapping("/delete/complaints/of/chargers/{complaintId}")
     @PreAuthorize("hasAuthority('moderator:write')")
     @ApiOperation(value = "Delete a charger's complaint by id")
     public void deleteComplaintUserCharger(@PathVariable Long complaintId) {
         complaintUserChargerService.deleteById(complaintId);
     }
 
-    @DeleteMapping("/delete/complaints/stations/{complaintId}")
+    @DeleteMapping("/delete/complaints/of/stations/{complaintId}")
     @PreAuthorize("hasAuthority('moderator:write')")
     @ApiOperation(value = "Delete a station's complaint by id")
     public void deleteComplaintUserStation(@PathVariable Long complaintId) {

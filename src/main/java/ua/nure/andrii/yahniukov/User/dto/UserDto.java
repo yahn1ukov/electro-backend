@@ -17,7 +17,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private UserRole role;
-    private Boolean isBlock;
+    private Boolean isNotBlock;
     private Boolean isVerification;
     private Date createdAt;
 
@@ -28,7 +28,7 @@ public class UserDto {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .role(user.getRole())
-                .isBlock(user.getIsNotBlock())
+                .isNotBlock(user.getIsNotBlock())
                 .isVerification(user.getIsVerification())
                 .createdAt(user.getCreatedAt())
                 .build();

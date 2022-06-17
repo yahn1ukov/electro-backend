@@ -14,8 +14,9 @@ import java.util.Date;
 public class ChargerUserVerificationDto {
     private Long id;
     private String company;
+    private String email;
     private UserRole role;
-    private Boolean isBlock;
+    private Boolean isNotBlock;
     private Date createdAt;
 
     public static boolean verification(ChargerUserEntity chargerUser) {
@@ -26,8 +27,9 @@ public class ChargerUserVerificationDto {
         return ChargerUserVerificationDto.builder()
                 .id(chargerUser.getId())
                 .company(chargerUser.getCompany())
+                .email(chargerUser.getEmail())
                 .role(chargerUser.getRole())
-                .isBlock(chargerUser.getIsNotBlock())
+                .isNotBlock(chargerUser.getIsNotBlock())
                 .createdAt(chargerUser.getCreatedAt())
                 .build();
     }

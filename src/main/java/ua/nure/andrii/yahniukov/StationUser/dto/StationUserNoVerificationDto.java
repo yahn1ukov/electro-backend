@@ -14,6 +14,7 @@ import java.util.Date;
 public class StationUserNoVerificationDto {
     private Long id;
     private String company;
+    private String email;
     private UserRole role;
     private Date createdAt;
 
@@ -25,6 +26,7 @@ public class StationUserNoVerificationDto {
         return StationUserNoVerificationDto.builder()
                 .id(stationUser.getId())
                 .company(stationUser.getCompany())
+                .email(stationUser.getEmail())
                 .role(stationUser.getRole())
                 .createdAt(stationUser.getCreatedAt())
                 .build();
