@@ -14,7 +14,7 @@ public class ComplaintUserStationDto {
     private Long id;
     private String fullName;
     private String company;
-    private String code;
+    private String name;
     private String country;
     private String city;
     private String street;
@@ -27,6 +27,7 @@ public class ComplaintUserStationDto {
                 .id(complaint.getId())
                 .fullName(complaint.getUser().getFirstName() + " " + complaint.getUser().getLastName())
                 .company(complaint.getStation().getOwner().getCompany())
+                .name(complaint.getStation().getName())
                 .country(complaint.getStation().getCountry())
                 .city(complaint.getStation().getCity())
                 .street(complaint.getStation().getStreet())

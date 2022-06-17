@@ -15,7 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private static final String TOKEN_AUTH_ENTRY_POINT = "/**";
+    private static final String TOKEN_AUTH_ENTRY_POINT = "/api/v1/**";
     private final JwtConfiguration jwtConfiguration;
     @Qualifier("authWhiteList")
     private final String[] authWhiteList;
@@ -32,9 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
                 .cors()
-                .disable()
+                .and()
                 .csrf()
                 .disable()
                 .sessionManagement()

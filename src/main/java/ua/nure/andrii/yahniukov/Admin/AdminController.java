@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admins")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AdminController {
     private final UserService userService;
     private final ChargerUserService chargerUserService;
@@ -71,35 +72,35 @@ public class AdminController {
         adminService.changeRole(email, role);
     }
 
-    @PutMapping("/accept/verification/charger/users/{email}")
+    @PatchMapping("/accept/verification/charger/users/{email}")
     @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Verification charger user by id")
     public void acceptVerificationChargerUser(@PathVariable String email) {
         adminService.acceptVerificationChargerUser(email);
     }
 
-    @PutMapping("/accept/verification/station/users/{email}")
+    @PatchMapping("/accept/verification/station/users/{email}")
     @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Verification charger user by email")
     public void acceptVerificationStationUser(@PathVariable String email) {
         adminService.acceptVerificationStationUser(email);
     }
 
-    @PutMapping("/block/users/{email}")
+    @PatchMapping("/block/users/{email}")
     @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Block a user by email")
     public void blockUser(@PathVariable String email) {
         userService.blockByEmail(email);
     }
 
-    @PutMapping("/block/charger/users/{email}")
+    @PatchMapping("/block/charger/users/{email}")
     @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Block a charger user by email")
     public void blockChargerUser(@PathVariable String email) {
         chargerUserService.blockByEmail(email);
     }
 
-    @PutMapping("/block/station/users/{email}")
+    @PatchMapping("/block/station/users/{email}")
     @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value = "Block a station user by email")
     public void blockStationUser(@PathVariable String email) {
