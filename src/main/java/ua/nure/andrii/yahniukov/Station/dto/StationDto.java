@@ -18,6 +18,7 @@ public class StationDto {
     private Integer zipCode;
     private Double latitude;
     private Double longitude;
+    private String name;
     private String carName;
     private String carModel;
     private Integer allPlace;
@@ -70,6 +71,7 @@ public class StationDto {
                 .zipCode(station.getZipCode())
                 .latitude(station.getLatitude())
                 .longitude(station.getLongitude())
+                .name(station.getName())
                 .carName(station.getCarName())
                 .carModel(station.getCarModel())
                 .allPlace(station.getAllPlace())
