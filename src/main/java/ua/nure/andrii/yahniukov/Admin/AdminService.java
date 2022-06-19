@@ -68,26 +68,27 @@ public class AdminService {
 
     public boolean backupDB()
             throws IOException, InterruptedException {
-        String projectPath = System.getProperty("user.dir");
-        String fileSeparator = System.getProperty("file.separator");
-        String newBackupFile = projectPath + fileSeparator + "src" + fileSeparator + "main" + fileSeparator + "resources" + fileSeparator + "db" + fileSeparator + "backups" + fileSeparator + "backup.sql";
-        File outputFile = new File(newBackupFile);
-        String sqlCommand = String.format("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump -u%s -p%s --add-drop-table --databases %s -r %s",
+        File outputFile = new File("C:\\Users\\andri\\OneDrive\\Desktop\\Andrii\\University\\3_course\\2_semester\\APZ\\electro\\electrobackend\\src\\main\\resources\\db\\backups", "backup.sql");
+        String sqlCommandBackup = String.format("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump -u%s -p%s --add-drop-table --databases %s -r %s",
                 dbUsername, dbPassword, dbName, outputFile);
-        Process process = Runtime.getRuntime().exec(sqlCommand);
-        int result = process.waitFor();
-        return result == 0;
+        Process process = Runtime.getRuntime().exec(sqlCommandBackup);
+        int processComplete = process.waitFor();
+        return processComplete == 0;
     }
 
     public boolean restoreDB()
             throws IOException, InterruptedException {
-        String projectPath = System.getProperty("user.dir");
-        String fileSeparator = System.getProperty("file.separator");
-        String sourceFile = projectPath + fileSeparator + "src" + fileSeparator + "main" + fileSeparator + "resources" + fileSeparator + "db" + fileSeparator + "backups" + fileSeparator + "backup.sql";
-        String sqlCommandRestore = String.format("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql -u%s -p%s -e source %s",
-                dbUsername, dbPassword, sourceFile);
-        Process process = Runtime.getRuntime().exec(sqlCommandRestore);
-        int result = process.waitFor();
-        return result == 0;
+        String sourceFile = "C:\\Users\\andri\\OneDrive\\Desktop\\Andrii\\University\\3_course\\2_semester\\APZ\\electro\\electrobackend\\src\\main\\resources\\db\\backups\\backup.sql";
+        String[] sqlCommandRestore = new String[]{
+                "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql",
+                "-u" + dbUsername,
+                "-p" + dbPassword,
+                "-e",
+                " source " + sourceFile,
+                dbName
+        };
+        Process runtimeProcess = Runtime.getRuntime().exec(sqlCommandRestore);
+        int processComplete = runtimeProcess.waitFor();
+        return processComplete == 0;
     }
 }
