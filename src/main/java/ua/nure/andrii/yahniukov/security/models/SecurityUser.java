@@ -6,22 +6,22 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import ua.nure.andrii.yahniukov.ChargerUser.ChargerUserEntity;
-import ua.nure.andrii.yahniukov.StationUser.StationUserEntity;
-import ua.nure.andrii.yahniukov.User.UserEntity;
+import ua.nure.andrii.yahniukov.chargerUser.ChargerUserEntity;
+import ua.nure.andrii.yahniukov.stationUser.StationUserEntity;
+import ua.nure.andrii.yahniukov.user.UserEntity;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 public class SecurityUser implements UserDetails {
 
-    private final String username;
+    private final String email;
     private final String password;
-    private final List<SimpleGrantedAuthority> authorities;
-    private final Boolean isBlock;
+    private final Boolean isNotBlock;
     private final Boolean isVerification;
+    private final Set<SimpleGrantedAuthority> authorities;
 
     public static UserDetails fromUser(UserEntity user) {
         return new User(
@@ -71,7 +71,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isNotBlock;
     }
 
     @Override
@@ -91,6 +91,6 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isVerification;
     }
 }
