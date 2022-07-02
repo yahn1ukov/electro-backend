@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.charger.ChargerEntity;
 import ua.nure.andrii.yahniukov.charger.ChargerService;
 import ua.nure.andrii.yahniukov.dto.complaint.ComplaintDto;
-import ua.nure.andrii.yahniukov.dto.complaint.DescriptionDto;
+import ua.nure.andrii.yahniukov.dto.complaint.FormDescriptionDto;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.exception.complaint.ComplaintNotFoundException;
 import ua.nure.andrii.yahniukov.station.StationEntity;
 import ua.nure.andrii.yahniukov.station.StationService;
@@ -37,7 +38,7 @@ public class ComplaintService {
                 .orElseThrow(ComplaintNotFoundException::new);
     }
 
-    public void createComplaintUserCharger(Long userId, Long chargerId, DescriptionDto description) {
+    public SuccessMessageDto createComplaintUserCharger(Long userId, Long chargerId, FormDescriptionDto description) {
         UserEntity user = userService.findById(userId);
         ChargerEntity charger = chargerService.findById(chargerId);
         complaintUserChargerRepository.save(
@@ -47,9 +48,10 @@ public class ComplaintService {
                         .description(description.getDescription())
                         .build()
         );
+        return SuccessMessageDto.builder().message("Complaint successfully created").build();
     }
 
-    public void createComplaintUserStation(Long userId, Long stationId, DescriptionDto description) {
+    public SuccessMessageDto createComplaintUserStation(Long userId, Long stationId, FormDescriptionDto description) {
         UserEntity user = userService.findById(userId);
         StationEntity station = stationService.findById(stationId);
         complaintUserStationRepository.save(
@@ -59,6 +61,7 @@ public class ComplaintService {
                         .description(description.getDescription())
                         .build()
         );
+        return SuccessMessageDto.builder().message("Complaint successfully created").build();
     }
 
     public List<ComplaintDto> getAllComplaintsUserCharger() {

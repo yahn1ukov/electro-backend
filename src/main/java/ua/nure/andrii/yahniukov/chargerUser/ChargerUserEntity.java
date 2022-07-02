@@ -23,14 +23,14 @@ public class ChargerUserEntity {
     @Builder.Default
     List<ChargerEntity> chargers = new ArrayList<>();
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "company", unique = true)
+    @Column(name = "company")
     private String company;
     @Column(name = "is_not_block")
     @Builder.Default

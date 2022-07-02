@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/2022-07-02-2245-create-user-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-02-2304-create-charger-user-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-02-2312-create-station-user-table.yaml

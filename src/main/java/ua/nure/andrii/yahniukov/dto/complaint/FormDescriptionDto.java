@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DescriptionDto {
+public class FormDescriptionDto {
     private String description;
 }

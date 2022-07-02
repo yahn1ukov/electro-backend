@@ -18,7 +18,7 @@ import java.util.Date;
 @Builder
 public class ComplaintUserChargerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
