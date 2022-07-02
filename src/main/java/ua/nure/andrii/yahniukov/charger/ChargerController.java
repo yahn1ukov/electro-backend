@@ -12,69 +12,51 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/chargers")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('charger:read', 'charger:write')")
 public class ChargerController {
     private final ChargerService chargerService;
 
-    @PostMapping("/create/by/charger/users/{email}")
-    @PreAuthorize("hasAuthority('charger:write')")
-    @ApiOperation(value = "Create a charger by user's email")
-    public void createCharger(
-            @PathVariable String email,
-            @RequestBody FormChargerDto charger
-    ) {
-        chargerService.create(email, charger);
+    @PostMapping("/users/{userId}/create")
+    @ApiOperation(value = "Create a charger by charger user's id")
+    public void create(@PathVariable Long userId, @RequestBody FormChargerDto charger) {
+        chargerService.create(userId, charger);
     }
 
-    @GetMapping("/get/all/for/charger/users/{email}")
-    @PreAuthorize("hasAuthority('charger:read')")
-    @ApiOperation(value = "View a list of charger user's chargers")
-    public List<ChargerDto> getAllForChargerUser(@PathVariable String email) {
-        return chargerService.getAllForChargerUser(email);
+    @GetMapping("/users/{userId}")
+    @ApiOperation(value = "View a list of charger user's chargers by id")
+    public List<ChargerDto> getAllForChargerUser(@PathVariable Long userId) {
+        return chargerService.getAllForChargerUser(userId);
     }
 
     @GetMapping("/get/all")
+    @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a list of chargers")
     public List<ChargerDto> getAll() {
         return chargerService.getAll();
     }
 
-    @GetMapping("/{code}/get")
-    @ApiOperation(value = "View a charger")
-    public ChargerDto getByCode(@PathVariable String code) {
-        return chargerService.getByCode(code);
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('charger:read', 'charger:write', 'user:read', 'user:write')")
+    @ApiOperation(value = "View a charger by id")
+    public ChargerDto get(@PathVariable Long id) {
+        return chargerService.get(id);
     }
 
-    @DeleteMapping("/{code}/delete/by/charger/users/{email}")
-    @PreAuthorize("hasAuthority('charger:write')")
-    @ApiOperation(value = "Delete a charger by charger user id")
-    public void deleteByCode(
-            @PathVariable String email,
-            @PathVariable String code
-    ) {
-        chargerService.deleteByCode(email, code);
+    @DeleteMapping("/{chargerId}/users/{userId}/delete")
+    @ApiOperation(value = "Delete a charger by charger user's id")
+    public void delete(@PathVariable Long userId, @PathVariable Long chargerId) {
+        chargerService.delete(userId, chargerId);
     }
 
-    @PatchMapping("/{code}/change/is-charging")
-    @ApiOperation(value = "Change state charging a charger")
-    public void changeIsCharging(@PathVariable String code) {
-        chargerService.changeIsCharging(code);
+    @PatchMapping("/{id}/charge")
+    @ApiOperation(value = "Change state charging a charger by id")
+    public void changeIsCharging(@PathVariable Long id) {
+        chargerService.changeIsCharging(id);
     }
 
-    @PatchMapping("/{code}/change/is-broken")
-    @ApiOperation(value = "Change state broken a charger")
-    public void changeIsBroken(@PathVariable String code) {
-        chargerService.changeIsBroken(code);
-    }
-
-    @GetMapping("/{latitude}/{longitude}/{percentOfBattery}/{typeConnector}/{radius}")
-    @ApiOperation(value = "Get a list of chargers by geolocation of car and some data")
-    public List<ChargerDto> getAllChargersForCar(
-            @PathVariable Long latitude,
-            @PathVariable Long longitude,
-            @PathVariable Long percentOfBattery,
-            @PathVariable String typeConnector,
-            @PathVariable Integer radius
-    ) {
-        return chargerService.getAllForCar(latitude, longitude, percentOfBattery, typeConnector, radius);
+    @PatchMapping("/{id}/broke")
+    @ApiOperation(value = "Change state broken a charger by id")
+    public void changeIsBroken(@PathVariable Long id) {
+        chargerService.changeIsBroken(id);
     }
 }

@@ -41,7 +41,7 @@ public class ChargerUserEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private UserRole role = UserRole.ROLE_CHARGER;
+    private UserRole role = UserRole.CHARGER;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default

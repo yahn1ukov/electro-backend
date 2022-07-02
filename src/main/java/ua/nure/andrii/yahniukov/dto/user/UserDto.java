@@ -1,11 +1,13 @@
 package ua.nure.andrii.yahniukov.dto.user;
 
 import lombok.Builder;
+import lombok.Data;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.user.UserEntity;
 
 import java.util.Date;
 
+@Data
 @Builder
 public class UserDto {
     private Long id;

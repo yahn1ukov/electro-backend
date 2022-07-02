@@ -1,12 +1,10 @@
 package ua.nure.andrii.yahniukov.dto.charger;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Builder
 public class FormChargerDto {
     private String code;
     private String country;

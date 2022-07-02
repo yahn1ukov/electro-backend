@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
-import ua.nure.andrii.yahniukov.dto.user.RoleDto;
+import ua.nure.andrii.yahniukov.dto.user.FormRoleDto;
 import ua.nure.andrii.yahniukov.dto.user.UserDto;
 import ua.nure.andrii.yahniukov.enums.UserRole;
-import ua.nure.andrii.yahniukov.exceptions.user.UserAlreadyExistsException;
-import ua.nure.andrii.yahniukov.exceptions.user.UserNotFoundException;
+import ua.nure.andrii.yahniukov.exception.user.UserAlreadyExistsException;
+import ua.nure.andrii.yahniukov.exception.user.UserNotFoundException;
 import ua.nure.andrii.yahniukov.security.dto.registration.RegistrationRequestUserDto;
 
 import javax.transaction.Transactional;
@@ -43,7 +43,7 @@ public class UserService {
                             .email(user.getEmail())
                             .firstName(user.getFirstName())
                             .lastName(user.getLastName())
-                            .role(UserRole.ROLE_ADMIN)
+                            .role(UserRole.ADMIN)
                             .password(passwordEncoder.encode(user.getPassword()))
                             .build()
             );
@@ -82,7 +82,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void changeRole(Long id, RoleDto role) {
+    public void changeRole(Long id, FormRoleDto role) {
         UserEntity user = findById(id);
         user.setRole(role.getRole());
         userRepository.save(user);

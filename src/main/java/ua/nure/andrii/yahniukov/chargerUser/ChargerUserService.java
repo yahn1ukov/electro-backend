@@ -5,8 +5,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.dto.chargerUser.ChargerUserDto;
 import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
-import ua.nure.andrii.yahniukov.exceptions.user.UserAlreadyExistsException;
-import ua.nure.andrii.yahniukov.exceptions.user.UserNotFoundException;
+import ua.nure.andrii.yahniukov.exception.user.UserAlreadyExistsException;
+import ua.nure.andrii.yahniukov.exception.user.UserNotFoundException;
 import ua.nure.andrii.yahniukov.security.dto.registration.RegistrationRequestPartnerDto;
 
 import javax.transaction.Transactional;
@@ -42,7 +42,7 @@ public class ChargerUserService {
                         .password(passwordEncoder.encode(partner.getPassword()))
                         .build()
         );
-        return SuccessMessageDto.builder().message("User successfully created").build();
+        return SuccessMessageDto.builder().message("Application for cooperation successfully submitted").build();
     }
 
     public ChargerUserDto get(Long id) {

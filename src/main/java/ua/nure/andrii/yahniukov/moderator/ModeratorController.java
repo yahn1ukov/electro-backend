@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/moderators")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_MODERATOR')")
+@PreAuthorize("hasAnyAuthority('moderator:read', 'moderator:write')")
 public class ModeratorController {
     private final ComplaintService complaintService;
 

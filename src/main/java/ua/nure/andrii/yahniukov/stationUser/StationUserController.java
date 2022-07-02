@@ -12,7 +12,7 @@ import ua.nure.andrii.yahniukov.dto.stationUser.StationUserDto;
 @RestController
 @RequestMapping("/api/v1/users/stations")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_STATION')")
+@PreAuthorize("hasAnyAuthority('station:read', 'station:write')")
 public class StationUserController {
     private final StationUserService stationUserService;
 

@@ -55,7 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MODERATOR', 'ROLE_CHARGER', 'ROLE_STATION')")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'admin:write', 'user:read', 'user:write', 'moderator:read', 'moderator:write', 'station:read', 'station:write', 'charger:read', 'charger:write')")
     @ApiOperation(value = "Logout user")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();

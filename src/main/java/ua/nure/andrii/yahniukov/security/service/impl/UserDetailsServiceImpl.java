@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import ua.nure.andrii.yahniukov.chargerUser.ChargerUserEntity;
 import ua.nure.andrii.yahniukov.chargerUser.ChargerUserRepository;
 import ua.nure.andrii.yahniukov.chargerUser.ChargerUserService;
-import ua.nure.andrii.yahniukov.security.models.SecurityUser;
+import ua.nure.andrii.yahniukov.security.model.SecurityUser;
 import ua.nure.andrii.yahniukov.stationUser.StationUserEntity;
 import ua.nure.andrii.yahniukov.stationUser.StationUserService;
 import ua.nure.andrii.yahniukov.user.UserEntity;

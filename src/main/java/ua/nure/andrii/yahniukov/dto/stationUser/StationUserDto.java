@@ -1,11 +1,13 @@
 package ua.nure.andrii.yahniukov.dto.stationUser;
 
 import lombok.Builder;
+import lombok.Data;
 import ua.nure.andrii.yahniukov.enums.UserRole;
 import ua.nure.andrii.yahniukov.stationUser.StationUserEntity;
 
 import java.util.Date;
 
+@Data
 @Builder
 public class StationUserDto {
     private Long id;

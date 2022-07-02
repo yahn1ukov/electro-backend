@@ -6,11 +6,14 @@ import ua.nure.andrii.yahniukov.chargerUser.ChargerUserEntity;
 import ua.nure.andrii.yahniukov.chargerUser.ChargerUserService;
 import ua.nure.andrii.yahniukov.dto.charger.ChargerDto;
 import ua.nure.andrii.yahniukov.dto.charger.FormChargerDto;
-import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
+import ua.nure.andrii.yahniukov.exception.charger.ChargerAlreadyExistsException;
+import ua.nure.andrii.yahniukov.exception.charger.ChargerNotFoundException;
+import ua.nure.andrii.yahniukov.iot.CarEntity;
+import ua.nure.andrii.yahniukov.iot.CarService;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,24 +21,19 @@ import java.util.stream.Collectors;
 public class ChargerService {
     private final ChargerRepository chargerRepository;
     private final ChargerUserService chargerUserService;
-
-    public ChargerEntity findByCode(String code) {
-        return chargerRepository
-                .findByCode(code)
-                .orElseThrow(() -> new BadRequestException("Charger with code " + code + " not found"));
-    }
+    private final CarService carService;
 
     public ChargerEntity findById(Long id) {
         return chargerRepository
                 .findById(id)
-                .orElseThrow(() -> new BadRequestException("Charger with id " + id + " not found"));
+                .orElseThrow(ChargerNotFoundException::new);
     }
 
-    public void create(String email, FormChargerDto charger) {
+    public SuccessMessageDto create(Long userId, FormChargerDto charger) {
         if (chargerRepository.existsByCode(charger.getCode())) {
-            throw new BadRequestException("Charger with code " + charger.getCode() + " already exists");
+            throw new ChargerAlreadyExistsException();
         }
-        ChargerUserEntity chargerUser = chargerUserService.findByEmail(email);
+        ChargerUserEntity chargerUser = chargerUserService.findById(userId);
         ChargerEntity createdCharger = chargerRepository.save(
                 ChargerEntity.builder()
                         .code(charger.getCode())
@@ -55,10 +53,11 @@ public class ChargerService {
                         .build()
         );
         chargerUser.getChargers().add(createdCharger);
+        return SuccessMessageDto.builder().message("Charger station successfully created").build();
     }
 
-    public List<ChargerDto> getAllForChargerUser(String email) {
-        ChargerUserEntity chargerUser = chargerUserService.findByEmail(email);
+    public List<ChargerDto> getAllForChargerUser(Long userId) {
+        ChargerUserEntity chargerUser = chargerUserService.findById(userId);
         return chargerRepository
                 .findAllByOwner(chargerUser)
                 .stream()
@@ -74,46 +73,59 @@ public class ChargerService {
                 .toList();
     }
 
-    public void changeIsCharging(String code) {
-        ChargerEntity charger = findByCode(code);
+    public void changeIsCharging(Long id) {
+        ChargerEntity charger = findById(id);
         charger.setIsCharging(!charger.getIsCharging());
         chargerRepository.save(charger);
     }
 
-    public void changeIsBroken(String code) {
-        ChargerEntity charger = findByCode(code);
+    public void changeIsBroken(Long id) {
+        ChargerEntity charger = findById(id);
         charger.setIsBroken(!charger.getIsBroken());
         chargerRepository.save(charger);
     }
 
-    public ChargerDto getByCode(String code) {
-        return ChargerDto.fromCharger(findByCode(code));
+    public ChargerDto get(Long id) {
+        return ChargerDto.fromCharger(findById(id));
     }
 
-    public void deleteByCode(String email, String code) {
-        ChargerUserEntity chargerUser = chargerUserService.findByEmail(email);
-        ChargerEntity charger = findByCode(code);
+    public void delete(Long userId, Long chargerId) {
+        ChargerUserEntity chargerUser = chargerUserService.findById(userId);
+        ChargerEntity charger = findById(chargerId);
         chargerUser.getChargers().remove(charger);
-        chargerRepository.delete(charger);
+        chargerRepository.deleteById(chargerId);
     }
 
-    public List<ChargerDto> getAllForCar(Long latitude, Long longitude, Long percentOfBattery, String typeConnector, Integer radius) {
-        if (
-                latitude < -90.0 || latitude > 90.0 ||
-                        longitude < -180.0 || longitude > 180.0 ||
-                        percentOfBattery < 0 || percentOfBattery > 100
-        ) {
-            throw new BadRequestException("Something was wrong");
-        }
+    public List<ChargerDto> getAllForCar(String carVinCode) {
+        CarEntity car = carService.findByVinCode(carVinCode);
         return chargerRepository
                 .findAll()
                 .stream()
-                .filter(charger -> ChargerDto.isRadius(charger, latitude, longitude, radius))
-                .filter(charger -> ChargerDto.isTypeConnector(charger, typeConnector))
-                .filter(ChargerDto::isNoCharging)
-                .filter(ChargerDto::isNoBroken)
-                .filter(charger -> ChargerDto.isFast(charger, percentOfBattery))
+                .filter(charger -> charger.getTypeConnector().equals(car.getTypeConnector()))
+                .filter(charger -> !charger.getIsCharging())
+                .filter(charger -> !charger.getIsBroken())
+                .filter(charger -> car.getPercentageOfCharge() >= 0.0 &&
+                        car.getPercentageOfCharge() <= 20.0 &&
+                        carService.calculateRadius(
+                                car.getLatitude(),
+                                car.getLongitude(),
+                                charger.getLatitude(),
+                                charger.getLongitude()
+                        ) <= 35 ?
+                        charger.getIsFast() :
+                        car.getPercentageOfCharge() > 20.0 &&
+                                car.getPercentageOfCharge() <= 50.0 &&
+                                carService.calculateRadius(
+                                        car.getLatitude(),
+                                        car.getLongitude(),
+                                        charger.getLatitude(),
+                                        charger.getLongitude()
+                                ) <= 60 ?
+                                !charger.getIsFast() :
+                                null
+
+                )
                 .map(ChargerDto::fromCharger)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -6,7 +6,7 @@ import ua.nure.andrii.yahniukov.charger.ChargerEntity;
 import ua.nure.andrii.yahniukov.charger.ChargerService;
 import ua.nure.andrii.yahniukov.dto.complaint.ComplaintDto;
 import ua.nure.andrii.yahniukov.dto.complaint.DescriptionDto;
-import ua.nure.andrii.yahniukov.exceptions.complaint.ComplaintNotFoundException;
+import ua.nure.andrii.yahniukov.exception.complaint.ComplaintNotFoundException;
 import ua.nure.andrii.yahniukov.station.StationEntity;
 import ua.nure.andrii.yahniukov.station.StationService;
 import ua.nure.andrii.yahniukov.user.UserEntity;

@@ -9,7 +9,7 @@ import ua.nure.andrii.yahniukov.dto.complaint.DescriptionDto;
 @RestController
 @RequestMapping("/api/v1/complaints")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
 public class ComplaintController {
     private final ComplaintService complaintService;
 

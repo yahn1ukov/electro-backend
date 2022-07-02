@@ -13,67 +13,45 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/stations")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('station:read', 'station:write')")
 public class StationController {
     private final StationService stationService;
 
-    @PostMapping("/create/by/station/users/{email}")
-    @PreAuthorize("hasAuthority('station:write')")
-    @ApiOperation(value = "Create a station by user's email")
-    public void createStation(
-            @PathVariable String email,
-            @RequestBody FormStationDto station
-    ) {
-        stationService.create(email, station);
+    @PostMapping("/users/{userId}/create")
+    @ApiOperation(value = "Create a station by station user's id")
+    public void create(@PathVariable Long userId, @RequestBody FormStationDto station) {
+        stationService.create(userId, station);
     }
 
-    @GetMapping("/get/all/for/station/users/{email}")
-    @PreAuthorize("hasAuthority('station:read')")
+    @GetMapping("/users/{userId}")
     @ApiOperation(value = "View a list of station user's chargers")
-    public List<StationDto> getAllForStationUser(@PathVariable String email) {
-        return stationService.getAllForStationUser(email);
+    public List<StationDto> getAllForStationUser(@PathVariable Long userId) {
+        return stationService.getAllForStationUser(userId);
     }
 
     @GetMapping("/get/all")
+    @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a list of stations")
     public List<StationDto> getAllStations() {
         return stationService.getAll();
     }
 
-    @GetMapping("/{name}/get")
-    @ApiOperation(value = "View a charger")
-    public StationDto getByName(@PathVariable String name) {
-        return stationService.getByName(name);
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('station:read', 'station:write', 'user:read', 'user:write')")
+    @ApiOperation(value = "View a station by id")
+    public StationDto getByName(@PathVariable Long id) {
+        return stationService.get(id);
     }
 
-    @DeleteMapping("/{name}/delete/by/station/users/{email}")
-    @PreAuthorize("hasAuthority('station:write')")
-    @ApiOperation(value = "Delete a station by charger user email")
-    public void deleteByName(
-            @PathVariable String email,
-            @PathVariable String name
-    ) {
-        stationService.deleteByName(email, name);
+    @DeleteMapping("/{stationId}/users/{userId}/delete")
+    @ApiOperation(value = "Delete a station by station user's id")
+    public void delete(@PathVariable Long userId, @PathVariable Long stationId) {
+        stationService.delete(userId, stationId);
     }
 
-    @PatchMapping("/{name}/change/free-place")
-    @PreAuthorize("hasAuthority('station:write')")
-    @ApiOperation(value = "Change a free places for station by name")
-    public void changeFreePlace(
-            @PathVariable String name,
-            @RequestBody FormFreePlaceDto freePlace
-    ) {
-        stationService.changeFreePlace(name, freePlace);
-    }
-
-    @GetMapping("/{latitude}/{longitude}/{name}/{model}/{radius}")
-    @ApiOperation(value = "Get a list of stations by geolocation of car and some data")
-    public List<StationDto> getAllStationsForCar(
-            @PathVariable Long latitude,
-            @PathVariable Long longitude,
-            @PathVariable String name,
-            @PathVariable String model,
-            @PathVariable Integer radius
-    ) {
-        return stationService.getAllForCar(latitude, longitude, name, model, radius);
+    @PatchMapping("/{id}/free-place")
+    @ApiOperation(value = "Change a free places for station by id")
+    public void changeFreePlace(@PathVariable Long id, @RequestBody FormFreePlaceDto freePlace) {
+        stationService.changeFreePlace(id, freePlace);
     }
 }

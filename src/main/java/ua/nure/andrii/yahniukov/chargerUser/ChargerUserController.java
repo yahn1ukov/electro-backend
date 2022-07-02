@@ -12,7 +12,7 @@ import ua.nure.andrii.yahniukov.dto.chargerUser.ChargerUserDto;
 @RestController
 @RequestMapping("/api/v1/users/chargers")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_CHARGER')")
+@PreAuthorize("hasAnyAuthority('charger:read', 'charger:write')")
 public class ChargerUserController {
     private final ChargerUserService chargerUserService;
 

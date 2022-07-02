@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
-import ua.nure.andrii.yahniukov.exceptions.user.UnauthorizedException;
+import ua.nure.andrii.yahniukov.exception.user.UnauthorizedException;
 import ua.nure.andrii.yahniukov.security.provider.JwtTokenProvider;
 
 import javax.servlet.FilterChain;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
-    @Value("jwt.token.prefix")
+    @Value("${jwt.token.prefix}")
     private String tokenPrefix;
 
     @Override

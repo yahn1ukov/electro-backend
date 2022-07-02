@@ -46,16 +46,15 @@ public class ChargerEntity {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private ChargerUserEntity owner;
 
-
     @Column(name = "code", unique = true)
     private String code;
 
-    @Builder.Default
     @Column(name = "is_charging")
+    @Builder.Default
     private Boolean isCharging = false;
 
-    @Builder.Default
     @Column(name = "is_broken")
+    @Builder.Default
     private Boolean isBroken = false;
 
     @Column(name = "is_fast")
@@ -70,8 +69,8 @@ public class ChargerEntity {
     @Column(name = "type_connector")
     private String typeConnector;
 
-    @Builder.Default
     @OneToMany(mappedBy = "charger")
+    @Builder.Default
     private List<ComplaintUserChargerEntity> chargerComplaints = new ArrayList<>();
 
     @Column(name = "time_from")
@@ -80,13 +79,8 @@ public class ChargerEntity {
     @Column(name = "time_to")
     private String timeTo;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private Date createdAt = new Date();
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Builder.Default
-    private Date updatedAt = new Date();
 }

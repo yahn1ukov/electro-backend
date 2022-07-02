@@ -2,16 +2,19 @@ package ua.nure.andrii.yahniukov.station;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.dto.station.FormFreePlaceDto;
 import ua.nure.andrii.yahniukov.dto.station.FormStationDto;
 import ua.nure.andrii.yahniukov.dto.station.StationDto;
-import ua.nure.andrii.yahniukov.exceptions.BadRequestException;
+import ua.nure.andrii.yahniukov.exception.station.StationAlreadyExistsException;
+import ua.nure.andrii.yahniukov.exception.station.StationNotFoundException;
+import ua.nure.andrii.yahniukov.iot.CarEntity;
+import ua.nure.andrii.yahniukov.iot.CarService;
 import ua.nure.andrii.yahniukov.stationUser.StationUserEntity;
 import ua.nure.andrii.yahniukov.stationUser.StationUserService;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,24 +22,19 @@ import java.util.stream.Collectors;
 public class StationService {
     private final StationRepository stationRepository;
     private final StationUserService stationUserService;
-
-    public StationEntity findByName(String name) {
-        return stationRepository
-                .findByName(name)
-                .orElseThrow(() -> new BadRequestException("Station with name " + name + " not found"));
-    }
+    private final CarService carService;
 
     public StationEntity findById(Long id) {
         return stationRepository
                 .findById(id)
-                .orElseThrow(() -> new BadRequestException("Station with id " + id + " not found"));
+                .orElseThrow(StationNotFoundException::new);
     }
 
-    public void create(String email, FormStationDto station) {
+    public SuccessMessageDto create(Long userId, FormStationDto station) {
         if (stationRepository.existsByName(station.getName())) {
-            throw new BadRequestException("Station with name " + station.getName() + " already exists");
+            throw new StationAlreadyExistsException();
         }
-        StationUserEntity stationUser = stationUserService.findByEmail(email);
+        StationUserEntity stationUser = stationUserService.findById(userId);
         StationEntity createdStation = stationRepository.save(
                 StationEntity.builder()
                         .name(station.getName())
@@ -57,10 +55,11 @@ public class StationService {
                         .build()
         );
         stationUser.getStations().add(createdStation);
+        return SuccessMessageDto.builder().message("Service station successfully created").build();
     }
 
-    public List<StationDto> getAllForStationUser(String email) {
-        StationUserEntity stationUser = stationUserService.findByEmail(email);
+    public List<StationDto> getAllForStationUser(Long userId) {
+        StationUserEntity stationUser = stationUserService.findById(userId);
         return stationRepository
                 .findAllByOwner(stationUser)
                 .stream()
@@ -76,38 +75,39 @@ public class StationService {
                 .toList();
     }
 
-    public void changeFreePlace(String name, FormFreePlaceDto freePlace) {
-        StationEntity station = findByName(name);
+    public void changeFreePlace(Long id, FormFreePlaceDto freePlace) {
+        StationEntity station = findById(id);
         station.setFreePlace(freePlace.getFreePlace());
         stationRepository.save(station);
     }
 
-    public StationDto getByName(String name) {
-        return StationDto.fromStation(findByName(name));
+    public StationDto get(Long id) {
+        return StationDto.fromStation(findById(id));
     }
 
-    public void deleteByName(String email, String name) {
-        StationUserEntity stationUser = stationUserService.findByEmail(email);
-        StationEntity station = findByName(name);
+    public void delete(Long userId, Long stationId) {
+        StationUserEntity stationUser = stationUserService.findById(userId);
+        StationEntity station = findById(stationId);
         stationUser.getStations().remove(station);
-        stationRepository.delete(station);
+        stationRepository.deleteById(stationId);
     }
 
-    public List<StationDto> getAllForCar(Long latitude, Long longitude, String carName, String carModel, Integer radius) {
-        if (
-                latitude < -90.0 || latitude > 90.0 ||
-                        longitude < -180.0 || longitude > 180.0
-        ) {
-            throw new BadRequestException("Something was wrong");
-        }
+    public List<StationDto> getAllForCar(String vinCode) {
+        CarEntity car = carService.findByVinCode(vinCode);
         return stationRepository
                 .findAll()
                 .stream()
-                .filter(station -> StationDto.isRadius(station, latitude, longitude, radius))
-                .filter(StationDto::isFreePlace)
-                .filter(station -> StationDto.isName(station, carName))
-                .filter(station -> StationDto.isModel(station, carModel))
+                .filter(station -> !station.getAllPlace().equals(station.getFreePlace()))
+                .filter(station -> station.getCarName().equals(car.getName()))
+                .filter(station -> station.getCarModel().equals(car.getModel()))
+                .filter(station -> carService.calculateRadius(
+                                car.getLatitude(),
+                                car.getLongitude(),
+                                station.getLatitude(),
+                                station.getLongitude()
+                        ) <= 50
+                )
                 .map(StationDto::fromStation)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

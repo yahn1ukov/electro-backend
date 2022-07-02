@@ -38,6 +38,12 @@ public class CarEntity {
     @Column(name = "mileage")
     private Integer mileage;
 
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+
     @Column(name = "type_connector")
     private String typeConnector;
 

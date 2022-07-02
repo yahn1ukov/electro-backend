@@ -1,10 +1,10 @@
 package ua.nure.andrii.yahniukov.dto.iot;
 
 import lombok.Builder;
+import lombok.Data;
 import ua.nure.andrii.yahniukov.iot.CarEntity;
 
-import java.util.Date;
-
+@Data
 @Builder
 public class CarDto {
     private Long id;
@@ -14,7 +14,6 @@ public class CarDto {
     private Integer mileage;
     private String typeConnector;
     private Double percentageOfCharge;
-    private Date createAt;
 
     public static CarDto fromCar(CarEntity car) {
         return CarDto.builder()
@@ -25,7 +24,6 @@ public class CarDto {
                 .mileage(car.getMileage())
                 .typeConnector(car.getTypeConnector())
                 .percentageOfCharge(car.getPercentageOfCharge())
-                .createAt(car.getCreatedAt())
                 .build();
     }
 }

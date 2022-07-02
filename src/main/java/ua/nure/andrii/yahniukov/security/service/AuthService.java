@@ -34,7 +34,7 @@ public class AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
         if (userRepository.existsByEmail(loginUser.getEmail())) {
             UserEntity user = userService.findByEmail(loginUser.getEmail());
-            String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getRole());
+            String token = jwtTokenProvider.createToken(user.getId(), user.getEmail());
             return LoginResponseDto.builder()
                     .id(user.getId())
                     .token(token)
@@ -42,7 +42,7 @@ public class AuthService {
                     .build();
         } else if (chargerUserRepository.existsByEmail(loginUser.getEmail())) {
             ChargerUserEntity chargerUser = chargerUserService.findByEmail(loginUser.getEmail());
-            String token = jwtTokenProvider.createToken(chargerUser.getId(), chargerUser.getEmail(), chargerUser.getRole());
+            String token = jwtTokenProvider.createToken(chargerUser.getId(), chargerUser.getEmail());
             return LoginResponseDto.builder()
                     .id(chargerUser.getId())
                     .token(token)
@@ -50,7 +50,7 @@ public class AuthService {
                     .build();
         } else {
             StationUserEntity stationUser = stationUserService.findByEmail(loginUser.getEmail());
-            String token = jwtTokenProvider.createToken(stationUser.getId(), stationUser.getEmail(), stationUser.getRole());
+            String token = jwtTokenProvider.createToken(stationUser.getId(), stationUser.getEmail());
             return LoginResponseDto.builder()
                     .id(stationUser.getId())
                     .token(token)

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.chargerUser.ChargerUserService;
 import ua.nure.andrii.yahniukov.dto.chargerUser.ChargerUserDto;
 import ua.nure.andrii.yahniukov.dto.stationUser.StationUserDto;
-import ua.nure.andrii.yahniukov.dto.user.RoleDto;
+import ua.nure.andrii.yahniukov.dto.user.FormRoleDto;
 import ua.nure.andrii.yahniukov.dto.user.UserDto;
 import ua.nure.andrii.yahniukov.stationUser.StationUserService;
 import ua.nure.andrii.yahniukov.user.UserService;
@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admins")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasAnyAuthority('admin:read', 'admin:write')")
 public class AdminController {
     private final UserService userService;
     private final ChargerUserService chargerUserService;
@@ -57,7 +57,7 @@ public class AdminController {
 
     @PatchMapping("/users/{id}/role")
     @ApiOperation(value = "Change a user's role by id")
-    public void changeRole(@PathVariable Long id, @RequestBody RoleDto role) {
+    public void changeRole(@PathVariable Long id, @RequestBody FormRoleDto role) {
         userService.changeRole(id, role);
     }
 

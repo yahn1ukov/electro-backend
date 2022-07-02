@@ -41,7 +41,7 @@ public class StationUserEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private UserRole role = UserRole.ROLE_STATION;
+    private UserRole role = UserRole.STATION;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default

@@ -1,11 +1,13 @@
 package ua.nure.andrii.yahniukov.dto.complaint;
 
 import lombok.Builder;
+import lombok.Data;
 import ua.nure.andrii.yahniukov.complaint.ComplaintUserChargerEntity;
 import ua.nure.andrii.yahniukov.complaint.ComplaintUserStationEntity;
 
 import java.util.Date;
 
+@Data
 @Builder
 public class ComplaintDto {
     private Long id;

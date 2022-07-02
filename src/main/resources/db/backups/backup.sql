@@ -36,12 +36,13 @@ CREATE TABLE `cars`
 (
     `id`                   bigint NOT NULL,
     `created_at`           datetime(6) DEFAULT NULL,
+    `latitude`             double       DEFAULT NULL,
+    `longitude`            double       DEFAULT NULL,
     `mileage`              int          DEFAULT NULL,
     `model`                varchar(255) DEFAULT NULL,
     `name`                 varchar(255) DEFAULT NULL,
     `percentage_of_charge` double       DEFAULT NULL,
     `type_connector`       varchar(255) DEFAULT NULL,
-    `updated_at`           datetime(6) DEFAULT NULL,
     `vin_code`             varchar(255) DEFAULT NULL,
     `owner_id`             bigint       DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -78,10 +79,7 @@ CREATE TABLE `charger_users`
     `is_not_block`    bit(1)       DEFAULT NULL,
     `is_verification` bit(1)       DEFAULT NULL,
     `password`        varchar(255) DEFAULT NULL,
-    `phone_number`    varchar(255) DEFAULT NULL,
     `role`            varchar(255) DEFAULT NULL,
-    `updated_at`      datetime(6) DEFAULT NULL,
-    `web_site`        varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `UK_ojg5ndc97h2if7vcl38e048fx` (`company`),
     UNIQUE KEY `UK_h5eqe6ld9n8tu4akqacn9hvl2` (`email`)
@@ -95,10 +93,6 @@ CREATE TABLE `charger_users`
 LOCK
 TABLES `charger_users` WRITE;
 /*!40000 ALTER TABLE `charger_users` DISABLE KEYS */;
-INSERT INTO `charger_users`
-VALUES (3, 'Electro', '2022-06-21 08:36:46.966000', 'charger.electro@nure.ua', _binary '', _binary '',
-        '$2a$10$rsMwJnEXQw5RZ7/A/CXvhe.evxdQZvkrwPURwelOMKUT2YfEdGP.S', NULL, 'CHARGER', '2022-06-21 08:36:46.966000',
-        NULL);
 /*!40000 ALTER TABLE `charger_users` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -128,7 +122,6 @@ CREATE TABLE `chargers`
     `time_from`         varchar(255) DEFAULT NULL,
     `time_to`           varchar(255) DEFAULT NULL,
     `type_connector`    varchar(255) DEFAULT NULL,
-    `updated_at`        datetime(6) DEFAULT NULL,
     `zip_code`          int          DEFAULT NULL,
     `owner_id`          bigint       DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -145,10 +138,6 @@ CREATE TABLE `chargers`
 LOCK
 TABLES `chargers` WRITE;
 /*!40000 ALTER TABLE `chargers` DISABLE KEYS */;
-INSERT INTO `chargers`
-VALUES (5, 'Харьков', 'JH4KA7561MC010714', 'Ukraine', '2022-06-21 16:51:29.116000', _binary '\0', _binary '\0',
-        _binary '\0', _binary '\0', 50.12345, 120.12345, 0, 'ул. В. Зубенка 35-а', '10', '20', 'J-178',
-        '2022-06-21 16:51:29.116000', 61121, 3);
 /*!40000 ALTER TABLE `chargers` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -240,7 +229,7 @@ LOCK
 TABLES `hibernate_sequence` WRITE;
 /*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
 INSERT INTO `hibernate_sequence`
-VALUES (6);
+VALUES (2);
 /*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -261,10 +250,7 @@ CREATE TABLE `station_users`
     `is_not_block`    bit(1)       DEFAULT NULL,
     `is_verification` bit(1)       DEFAULT NULL,
     `password`        varchar(255) DEFAULT NULL,
-    `phone_number`    varchar(255) DEFAULT NULL,
     `role`            varchar(255) DEFAULT NULL,
-    `updated_at`      datetime(6) DEFAULT NULL,
-    `web_site`        varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `UK_kjt1m52pm2a1aacmyapydci81` (`company`),
     UNIQUE KEY `UK_9n71bpptqbh1tlw5splp0gl5b` (`email`)
@@ -278,10 +264,6 @@ CREATE TABLE `station_users`
 LOCK
 TABLES `station_users` WRITE;
 /*!40000 ALTER TABLE `station_users` DISABLE KEYS */;
-INSERT INTO `station_users`
-VALUES (4, 'Electro', '2022-06-21 08:36:55.164000', 'station.electro@nure.ua', _binary '', _binary '',
-        '$2a$10$P.r5MRAiOUciT/u39PPm/ejFfAvN6603XeJpmds0SrDXVlBeioUpC', NULL, 'SERVICE', '2022-06-21 08:36:55.164000',
-        NULL);
 /*!40000 ALTER TABLE `station_users` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -310,7 +292,6 @@ CREATE TABLE `stations`
     `street`                    varchar(255) DEFAULT NULL,
     `time_from`                 varchar(255) DEFAULT NULL,
     `time_to`                   varchar(255) DEFAULT NULL,
-    `updated_at`                datetime(6) DEFAULT NULL,
     `zip_code`                  int          DEFAULT NULL,
     `owner_id`                  bigint       DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -349,7 +330,6 @@ CREATE TABLE `users`
     `last_name`       varchar(255) DEFAULT NULL,
     `password`        varchar(255) DEFAULT NULL,
     `role`            varchar(255) DEFAULT NULL,
-    `updated_at`      datetime(6) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `UK_6dotkott2kjsp8vw4d0m25fb7` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -363,10 +343,8 @@ LOCK
 TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users`
-VALUES (1, '2022-06-21 08:32:59.566000', 'admin@nure.ua', 'Андрей', _binary '', _binary '', 'Yahniukov',
-        '$2a$10$EtXDbQND/JkH2fLWXeqkeuDQwvruRYJGfscXxQY7/yosLihdX5g2q', 'ADMIN', '2022-06-21 08:32:59.566000'),
-       (2, '2022-06-21 08:34:40.586000', 'moderator@nure.ua', 'Andrii', _binary '', _binary '', 'Yahniukov',
-        '$2a$10$MaDSs6Rp0o3z2I.8e2HYceWRTLaGvtWS0LH4S7iSLZlmMynSWoop6', 'MODERATOR', '2022-06-21 08:34:40.586000');
+VALUES (1, '2022-07-02 21:44:38.490000', 'admin@nure.ua', 'Admin', _binary '', _binary '', 'Admin',
+        '$2a$10$HjjhnFidoBZfPoMPblVWJO9Ay4cEuD1neBgb7Y43g72uEwuxMg.tq', 'ADMIN');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -380,4 +358,4 @@ TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-21 16:52:04
+-- Dump completed on 2022-07-02 21:45:14

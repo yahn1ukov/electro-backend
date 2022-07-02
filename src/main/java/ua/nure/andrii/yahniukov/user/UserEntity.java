@@ -49,7 +49,7 @@ public class UserEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private UserRole role = UserRole.ROLE_USER;
+    private UserRole role = UserRole.USER;
 
     @OneToMany(mappedBy = "owner")
     @Builder.Default

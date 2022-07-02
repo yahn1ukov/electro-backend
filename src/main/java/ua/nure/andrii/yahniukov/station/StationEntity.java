@@ -78,9 +78,4 @@ public class StationEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private Date createdAt = new Date();
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Builder.Default
-    private Date updatedAt = new Date();
 }
