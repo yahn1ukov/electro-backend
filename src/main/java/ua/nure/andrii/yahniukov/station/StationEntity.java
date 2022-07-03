@@ -42,17 +42,17 @@ public class StationEntity {
     @Column(name = "longitude")
     private Double longitude;
 
-    @Builder.Default
     @OneToMany(mappedBy = "station")
+    @Builder.Default
     private List<ComplaintUserStationEntity> stationComplaints = new ArrayList<>();
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "carName")
+    @Column(name = "car_name")
     private String carName;
 
-    @Column(name = "carModel")
+    @Column(name = "car_model")
     private String carModel;
 
     @ManyToOne
@@ -74,7 +74,7 @@ public class StationEntity {
     @Column(name = "time_to")
     private String timeTo;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private Date createdAt = new Date();

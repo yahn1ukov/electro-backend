@@ -26,7 +26,7 @@ public class UserController {
         return userService.get(id);
     }
 
-    @PutMapping("/{id}/car/add")
+    @PatchMapping("/{id}/car/add")
     @ApiOperation(value = "Add a car to user by user's id and car's VIN code")
     public void addCarToUserByVinCode(@PathVariable Long id, @RequestBody FormVinCodeDto vinCode) {
         carService.addByVinCode(id, vinCode);

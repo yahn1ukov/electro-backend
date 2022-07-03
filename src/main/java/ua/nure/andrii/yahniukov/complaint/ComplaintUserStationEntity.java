@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "complaints_user_station")
+@Table(name = "complaints_users_stations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

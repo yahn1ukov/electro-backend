@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-complaint-user-station-table
+      author: Andrii Yahniukov
+      changes:
+        - createTable:
+            tableName: complaints_users_stations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_complaints_users_stations
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: station_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_complaints_stations_users
+                    referencedTableName: stations
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false

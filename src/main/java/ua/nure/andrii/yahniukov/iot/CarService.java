@@ -45,6 +45,8 @@ public class CarService {
                 .name(car.getName())
                 .model(car.getModel())
                 .mileage(car.getMileage())
+                .latitude(car.getLatitude())
+                .longitude(car.getLongitude())
                 .typeConnector(car.getTypeConnector())
                 .percentageOfCharge(car.getPercentageOfCharge())
                 .build());

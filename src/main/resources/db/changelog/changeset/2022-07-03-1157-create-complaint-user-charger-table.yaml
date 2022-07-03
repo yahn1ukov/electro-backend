@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-complaint-user-charger-table
+      author: Andrii Yahniukov
+      changes:
+        - createTable:
+            tableName: complaints_users_chargers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_complaints_users_chargers
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: charger_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_complaints_chargers_users
+                    referencedTableName: chargers
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false

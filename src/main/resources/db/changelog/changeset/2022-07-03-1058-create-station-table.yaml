@@ -1,0 +1,100 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-station-table
+      author: Andrii Yahniukov
+      changes:
+        - createTable:
+            tableName: stations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: street
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: zip_code
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: latitude
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: longitude
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_station_user_stations
+                    referencedTableName: station_users
+                    referencedColumnNames: id
+                    deleteCascade: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: car_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: car_model
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: all_place
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: free_place
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: middle_price_for_per_hour
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_from
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_to
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false

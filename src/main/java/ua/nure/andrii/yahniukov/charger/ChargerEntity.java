@@ -46,7 +46,7 @@ public class ChargerEntity {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private ChargerUserEntity owner;
 
-    @Column(name = "code", unique = true)
+    @Column(name = "code")
     private String code;
 
     @Column(name = "is_charging")

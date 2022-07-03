@@ -5,3 +5,13 @@ databaseChangeLog:
       file: db/changelog/changeset/2022-07-02-2304-create-charger-user-table.yaml
   - include:
       file: db/changelog/changeset/2022-07-02-2312-create-station-user-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-03-0837-create-car-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-03-1025-create-charger-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-03-1058-create-station-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-03-1157-create-complaint-user-charger-table.yaml
+  - include:
+      file: db/changelog/changeset/2022-07-03-1218-create-complaint-user-station-table.yaml
