@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.dto.station.FormFreePlaceDto;
 import ua.nure.andrii.yahniukov.dto.station.FormStationDto;
 import ua.nure.andrii.yahniukov.dto.station.StationDto;
@@ -49,9 +50,9 @@ public class StationController {
         stationService.delete(userId, stationId);
     }
 
-    @PatchMapping("/{id}/free-place")
+    @PatchMapping("/{name}/free-place")
     @ApiOperation(value = "Change a free places for station by id")
-    public void changeFreePlace(@PathVariable Long id, @RequestBody FormFreePlaceDto freePlace) {
-        stationService.changeFreePlace(id, freePlace);
+    public SuccessMessageDto changeFreePlace(@PathVariable String name, @RequestBody FormFreePlaceDto freePlace) {
+        return stationService.changeFreePlace(name, freePlace);
     }
 }

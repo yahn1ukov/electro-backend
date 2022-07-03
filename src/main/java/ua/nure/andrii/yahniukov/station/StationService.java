@@ -31,6 +31,12 @@ public class StationService {
                 .orElseThrow(StationNotFoundException::new);
     }
 
+    public StationEntity findByName(String name) {
+        return stationRepository
+                .findByName(name)
+                .orElseThrow(StationNotFoundException::new);
+    }
+
     public SuccessMessageDto create(Long userId, FormStationDto station) {
         if (stationRepository.existsByName(station.getName())) {
             throw new StationAlreadyExistsException();
@@ -76,13 +82,14 @@ public class StationService {
                 .toList();
     }
 
-    public void changeFreePlace(Long id, FormFreePlaceDto freePlace) {
-        StationEntity station = findById(id);
+    public SuccessMessageDto changeFreePlace(String name, FormFreePlaceDto freePlace) {
+        StationEntity station = findByName(name);
         if (freePlace.getFreePlace() > station.getAllPlace()) {
             throw new StationFreePlaceMoreThanAllPlaceException();
         }
         station.setFreePlace(freePlace.getFreePlace());
         stationRepository.save(station);
+        return SuccessMessageDto.builder().message("Count of free places changed").build();
     }
 
     public StationDto get(Long id) {
