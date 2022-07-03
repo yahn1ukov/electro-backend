@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.chargerUser.ChargerUserService;
 import ua.nure.andrii.yahniukov.dto.chargerUser.ChargerUserDto;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.dto.stationUser.StationUserDto;
 import ua.nure.andrii.yahniukov.dto.user.FormRoleDto;
 import ua.nure.andrii.yahniukov.dto.user.UserDto;
@@ -55,10 +56,10 @@ public class AdminController {
         return stationUserService.getAllNoVerification();
     }
 
-    @PatchMapping("/users/{id}/role")
+    @PatchMapping("/users/{email}/role")
     @ApiOperation(value = "Change a user's role by id")
-    public void changeRole(@PathVariable Long id, @RequestBody FormRoleDto role) {
-        userService.changeRole(id, role);
+    public SuccessMessageDto changeRole(@PathVariable String email, @RequestBody FormRoleDto role) {
+        return userService.changeRole(email, role);
     }
 
     @PatchMapping("/users/chargers/{id}/verification")

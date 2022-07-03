@@ -82,9 +82,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void changeRole(Long id, FormRoleDto role) {
-        UserEntity user = findById(id);
+    public SuccessMessageDto changeRole(String email, FormRoleDto role) {
+        UserEntity user = findByEmail(email);
         user.setRole(role.getRole());
         userRepository.save(user);
+        return SuccessMessageDto.builder().message("Role successfully changed").build();
     }
 }
