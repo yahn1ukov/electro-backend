@@ -14,6 +14,7 @@ import ua.nure.andrii.yahniukov.exception.complaint.ComplaintNotFoundException;
 import ua.nure.andrii.yahniukov.exception.iot.CarAlreadyExistsException;
 import ua.nure.andrii.yahniukov.exception.iot.CarNotFoundException;
 import ua.nure.andrii.yahniukov.exception.station.StationAlreadyExistsException;
+import ua.nure.andrii.yahniukov.exception.station.StationFreePlaceMoreThanAllPlaceException;
 import ua.nure.andrii.yahniukov.exception.station.StationNotFoundException;
 import ua.nure.andrii.yahniukov.exception.user.ForbiddenException;
 import ua.nure.andrii.yahniukov.exception.user.UnauthorizedException;
@@ -53,6 +54,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(StationAlreadyExistsException.class)
     protected ResponseEntity<ErrorMessage> handleStationAlreadyExistsException() {
         return new ResponseEntity<>(new ErrorMessage(HttpStatus.CONFLICT.value(), "Station already exists", new Date().getTime()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(StationFreePlaceMoreThanAllPlaceException.class)
+    protected ResponseEntity<ErrorMessage> handleStationFreePlaceMoreThanAllPlaceException() {
+        return new ResponseEntity<>(new ErrorMessage(HttpStatus.CONFLICT.value(), "Free places can't be more than all places", new Date().getTime()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(CarNotFoundException.class)

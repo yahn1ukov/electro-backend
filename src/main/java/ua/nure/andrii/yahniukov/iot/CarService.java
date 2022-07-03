@@ -6,6 +6,7 @@ import ua.nure.andrii.yahniukov.dto.iot.CarDto;
 import ua.nure.andrii.yahniukov.dto.iot.FormAddCarDto;
 import ua.nure.andrii.yahniukov.dto.iot.FormUpdateCarDto;
 import ua.nure.andrii.yahniukov.dto.iot.FormVinCodeDto;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.exception.iot.CarAlreadyExistsException;
 import ua.nure.andrii.yahniukov.exception.iot.CarNotFoundException;
 import ua.nure.andrii.yahniukov.user.UserEntity;
@@ -36,7 +37,7 @@ public class CarService {
                 .orElseThrow(CarNotFoundException::new);
     }
 
-    public void create(FormAddCarDto car) {
+    public SuccessMessageDto create(FormAddCarDto car) {
         if (carRepository.existsByVinCode(car.getVinCode())) {
             throw new CarAlreadyExistsException();
         }
@@ -50,6 +51,7 @@ public class CarService {
                 .typeConnector(car.getTypeConnector())
                 .percentageOfCharge(car.getPercentageOfCharge())
                 .build());
+        return SuccessMessageDto.builder().message("Car successfully created").build();
     }
 
     public CarDto getById(Long id) {
@@ -69,13 +71,14 @@ public class CarService {
                 .toList();
     }
 
-    public void addByVinCode(Long userId, FormVinCodeDto vinCode) {
+    public SuccessMessageDto addByVinCode(Long userId, FormVinCodeDto vinCode) {
         UserEntity user = userService.findById(userId);
         CarEntity car = findByVinCode(vinCode.getVinCode());
         car.setOwner(user);
         user.getCars().add(car);
         userRepository.save(user);
         carRepository.save(car);
+        return SuccessMessageDto.builder().message("Car successfully added").build();
     }
 
     public void updateByVinCode(String vinCode, FormUpdateCarDto car) {

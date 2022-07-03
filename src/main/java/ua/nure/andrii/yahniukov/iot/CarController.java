@@ -9,6 +9,7 @@ import ua.nure.andrii.yahniukov.dto.charger.ChargerDto;
 import ua.nure.andrii.yahniukov.dto.iot.CarDto;
 import ua.nure.andrii.yahniukov.dto.iot.FormAddCarDto;
 import ua.nure.andrii.yahniukov.dto.iot.FormUpdateCarDto;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.dto.station.StationDto;
 import ua.nure.andrii.yahniukov.station.StationService;
 
@@ -24,8 +25,8 @@ public class CarController {
 
     @PostMapping("/create")
     @ApiOperation(value = "Create a car by IoT")
-    public void createCar(@RequestBody FormAddCarDto car) {
-        carService.create(car);
+    public SuccessMessageDto create(@RequestBody FormAddCarDto car) {
+        return carService.create(car);
     }
 
     @GetMapping("/{id}")
@@ -35,25 +36,25 @@ public class CarController {
         return carService.getById(id);
     }
 
-    @GetMapping("/{vinCode}")
+    @GetMapping("/vin-codes/{vinCode}")
     @ApiOperation(value = "View a car by VIN code")
     public CarDto getByVinCode(@PathVariable String vinCode) {
         return carService.getByVinCode(vinCode);
     }
 
-    @PatchMapping("/{vinCode}/update")
-    @ApiOperation(value = "")
+    @PatchMapping("/vin-codes/{vinCode}/update")
+    @ApiOperation(value = "Update a car by VIN code")
     public void updateByVinCode(@PathVariable String vinCode, @RequestBody FormUpdateCarDto car) {
         carService.updateByVinCode(vinCode, car);
     }
 
-    @GetMapping("/{vinCode}/chargers")
+    @GetMapping("/vin-codes/{vinCode}/chargers")
     @ApiOperation(value = "Get a list of chargers by car's geolocation and some data")
     public List<ChargerDto> getAllChargersForCar(@PathVariable String vinCode) {
         return chargerService.getAllForCar(vinCode);
     }
 
-    @GetMapping("/{vinCode}/stations")
+    @GetMapping("/vin-codes/{vinCode}/stations")
     @ApiOperation(value = "Get a list of stations by car's geolocation and some data")
     public List<StationDto> getAllStationsForCar(@PathVariable String vinCode) {
         return stationService.getAllForCar(vinCode);

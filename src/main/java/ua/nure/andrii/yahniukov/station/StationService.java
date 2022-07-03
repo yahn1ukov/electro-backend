@@ -7,6 +7,7 @@ import ua.nure.andrii.yahniukov.dto.station.FormFreePlaceDto;
 import ua.nure.andrii.yahniukov.dto.station.FormStationDto;
 import ua.nure.andrii.yahniukov.dto.station.StationDto;
 import ua.nure.andrii.yahniukov.exception.station.StationAlreadyExistsException;
+import ua.nure.andrii.yahniukov.exception.station.StationFreePlaceMoreThanAllPlaceException;
 import ua.nure.andrii.yahniukov.exception.station.StationNotFoundException;
 import ua.nure.andrii.yahniukov.iot.CarEntity;
 import ua.nure.andrii.yahniukov.iot.CarService;
@@ -77,6 +78,9 @@ public class StationService {
 
     public void changeFreePlace(Long id, FormFreePlaceDto freePlace) {
         StationEntity station = findById(id);
+        if (freePlace.getFreePlace() > station.getAllPlace()) {
+            throw new StationFreePlaceMoreThanAllPlaceException();
+        }
         station.setFreePlace(freePlace.getFreePlace());
         stationRepository.save(station);
     }
@@ -97,7 +101,7 @@ public class StationService {
         return stationRepository
                 .findAll()
                 .stream()
-                .filter(station -> !station.getAllPlace().equals(station.getFreePlace()))
+                .filter(station -> station.getFreePlace() > 0 && station.getFreePlace() <= station.getAllPlace())
                 .filter(station -> station.getCarName().equals(car.getName()))
                 .filter(station -> station.getCarModel().equals(car.getModel()))
                 .filter(station -> carService.calculateRadius(

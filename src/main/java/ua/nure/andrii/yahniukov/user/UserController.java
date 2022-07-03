@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.nure.andrii.yahniukov.dto.iot.CarDto;
 import ua.nure.andrii.yahniukov.dto.iot.FormVinCodeDto;
+import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 import ua.nure.andrii.yahniukov.dto.user.UserDto;
 import ua.nure.andrii.yahniukov.iot.CarService;
 
@@ -28,8 +29,8 @@ public class UserController {
 
     @PatchMapping("/{id}/car/add")
     @ApiOperation(value = "Add a car to user by user's id and car's VIN code")
-    public void addCarToUserByVinCode(@PathVariable Long id, @RequestBody FormVinCodeDto vinCode) {
-        carService.addByVinCode(id, vinCode);
+    public SuccessMessageDto addCarToUserByVinCode(@PathVariable Long id, @RequestBody FormVinCodeDto vinCode) {
+        return carService.addByVinCode(id, vinCode);
     }
 
     @DeleteMapping("/{id}/cars/{carId}/delete")

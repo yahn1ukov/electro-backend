@@ -28,7 +28,7 @@ public class ChargerController {
         return chargerService.getAllForChargerUser(userId);
     }
 
-    @GetMapping("/get/all")
+    @GetMapping()
     @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a list of chargers")
     public List<ChargerDto> getAll() {

@@ -29,10 +29,10 @@ public class AuthWhiteListConfiguration {
                 "/api/v1/authentication/registration/users/chargers",
                 "/api/v1/authentication/registration/users/stations",
                 "/api/v1/cars/create",
-                "/api/v1/cars/{vinCode}",
-                "/api/v1/cars/{vinCode}/update",
-                "/api/v1/cars/{vinCode}/chargers",
-                "/api/v1/cars/{vinCode}/stations"
+                "/api/v1/cars/vin-codes/{vinCode}",
+                "/api/v1/cars/vin-codes/{vinCode}/update",
+                "/api/v1/cars/vin-codes/{vinCode}/chargers",
+                "/api/v1/cars/vin-codes/{vinCode}/stations"
         };
     }
 }

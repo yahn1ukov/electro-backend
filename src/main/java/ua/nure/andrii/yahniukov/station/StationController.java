@@ -29,7 +29,7 @@ public class StationController {
         return stationService.getAllForStationUser(userId);
     }
 
-    @GetMapping("/get/all")
+    @GetMapping()
     @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a list of stations")
     public List<StationDto> getAllStations() {
