@@ -19,6 +19,10 @@ public class ChargerUserService {
     private final ChargerUserRepository chargerUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    public boolean existsByEmail(String email) {
+        return chargerUserRepository.existsByEmail(email);
+    }
+
     public ChargerUserEntity findById(Long id) {
         return chargerUserRepository
                 .findById(id)

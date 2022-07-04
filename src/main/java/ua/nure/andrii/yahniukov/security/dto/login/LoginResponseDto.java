@@ -7,7 +7,6 @@ import ua.nure.andrii.yahniukov.enums.UserRole;
 @Data
 @Builder
 public class LoginResponseDto {
-    private Long id;
     private String token;
     private UserRole role;
 }

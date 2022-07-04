@@ -36,7 +36,6 @@ public class AuthService {
             UserEntity user = userService.findByEmail(loginUser.getEmail());
             String token = jwtTokenProvider.createToken(user.getId(), user.getEmail());
             return LoginResponseDto.builder()
-                    .id(user.getId())
                     .token(token)
                     .role(user.getRole())
                     .build();
@@ -44,7 +43,6 @@ public class AuthService {
             ChargerUserEntity chargerUser = chargerUserService.findByEmail(loginUser.getEmail());
             String token = jwtTokenProvider.createToken(chargerUser.getId(), chargerUser.getEmail());
             return LoginResponseDto.builder()
-                    .id(chargerUser.getId())
                     .token(token)
                     .role(chargerUser.getRole())
                     .build();
@@ -52,7 +50,6 @@ public class AuthService {
             StationUserEntity stationUser = stationUserService.findByEmail(loginUser.getEmail());
             String token = jwtTokenProvider.createToken(stationUser.getId(), stationUser.getEmail());
             return LoginResponseDto.builder()
-                    .id(stationUser.getId())
                     .token(token)
                     .role(stationUser.getRole())
                     .build();

@@ -38,23 +38,19 @@ public class JwtTokenProvider {
         tokenSecretKey = Base64.getEncoder().encodeToString(tokenSecretKey.getBytes());
     }
 
-    public String createToken(Long id, String email) {
+    public String createToken(Long userId, String email) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.setId(String.valueOf(id));
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + tokenValidityInMilliseconds * 1000);
 
-        return String.format("%s %s",
-                tokenPrefix,
-                Jwts.builder()
-                        .signWith(SignatureAlgorithm.HS256, tokenSecretKey)
-                        .setHeaderParam("type", tokenType)
-                        .setClaims(claims)
-                        .setIssuedAt(now)
-                        .setExpiration(validity)
-                        .compact()
-        );
+        return Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, tokenSecretKey)
+                .setHeaderParam("type", tokenType)
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .compact();
     }
 
     public boolean validateToken(String token) {
@@ -77,7 +73,7 @@ public class JwtTokenProvider {
         return Jwts
                 .parser()
                 .setSigningKey(tokenSecretKey)
-                .parseClaimsJws(token.replace(String.format("%s ", tokenPrefix), ""))
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }

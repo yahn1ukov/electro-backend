@@ -1,6 +1,7 @@
 package ua.nure.andrii.yahniukov.complaint;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +15,20 @@ import ua.nure.andrii.yahniukov.dto.message.SuccessMessageDto;
 public class ComplaintController {
     private final ComplaintService complaintService;
 
-    @PostMapping("/users/{userId}/chargers/{chargerId}")
+    @PostMapping("/users/current/chargers/{chargerId}")
     @ApiOperation(value = "Create a complaint about charger by user id")
     public SuccessMessageDto createComplaintUserCharger(
-            @PathVariable Long userId,
+            @ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId,
             @PathVariable Long chargerId,
             @RequestBody FormDescriptionDto description
     ) {
         return complaintService.createComplaintUserCharger(userId, chargerId, description);
     }
 
-    @PostMapping("/users/{userId}/stations/{stationId}")
+    @PostMapping("/users/current/stations/{stationId}")
     @ApiOperation(value = "Create a complaint about station by user id")
     public SuccessMessageDto createComplaintUserStation(
-            @PathVariable Long userId,
+            @ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId,
             @PathVariable Long stationId,
             @RequestBody FormDescriptionDto description
     ) {

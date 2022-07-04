@@ -29,34 +29,34 @@ public class CarController {
         return carService.create(car);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{carId}")
     @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a car by id")
-    public CarDto getById(@PathVariable Long id) {
-        return carService.getById(id);
+    public CarDto getById(@PathVariable Long carId) {
+        return carService.getById(carId);
     }
 
-    @GetMapping("/vin-codes/{vinCode}")
+    @GetMapping("/vin-codes/{carVinCode}")
     @ApiOperation(value = "View a car by VIN code")
-    public CarDto getByVinCode(@PathVariable String vinCode) {
-        return carService.getByVinCode(vinCode);
+    public CarDto getByVinCode(@PathVariable String carVinCode) {
+        return carService.getByVinCode(carVinCode);
     }
 
-    @PatchMapping("/vin-codes/{vinCode}/update")
+    @PatchMapping("/vin-codes/{carVinCode}/update")
     @ApiOperation(value = "Update a car by VIN code")
-    public void updateByVinCode(@PathVariable String vinCode, @RequestBody FormUpdateCarDto car) {
-        carService.updateByVinCode(vinCode, car);
+    public void updateByVinCode(@PathVariable String carVinCode, @RequestBody FormUpdateCarDto car) {
+        carService.updateByVinCode(carVinCode, car);
     }
 
-    @GetMapping("/vin-codes/{vinCode}/chargers")
+    @GetMapping("/vin-codes/{carVinCode}/chargers")
     @ApiOperation(value = "Get a list of chargers by car's geolocation and some data")
-    public List<ChargerDto> getAllChargersForCar(@PathVariable String vinCode) {
-        return chargerService.getAllForCar(vinCode);
+    public List<ChargerDto> getAllChargersForCar(@PathVariable String carVinCode) {
+        return chargerService.getAllForCar(carVinCode);
     }
 
-    @GetMapping("/vin-codes/{vinCode}/stations")
+    @GetMapping("/vin-codes/{carVinCode}/stations")
     @ApiOperation(value = "Get a list of stations by car's geolocation and some data")
-    public List<StationDto> getAllStationsForCar(@PathVariable String vinCode) {
-        return stationService.getAllForCar(vinCode);
+    public List<StationDto> getAllStationsForCar(@PathVariable String carVinCode) {
+        return stationService.getAllForCar(carVinCode);
     }
 }

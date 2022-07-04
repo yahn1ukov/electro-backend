@@ -29,6 +29,12 @@ public class ChargerService {
                 .orElseThrow(ChargerNotFoundException::new);
     }
 
+    public ChargerEntity findByCode(String code) {
+        return chargerRepository
+                .findByCode(code)
+                .orElseThrow(ChargerNotFoundException::new);
+    }
+
     public SuccessMessageDto create(Long userId, FormChargerDto charger) {
         if (chargerRepository.existsByCode(charger.getCode())) {
             throw new ChargerAlreadyExistsException();
@@ -73,14 +79,14 @@ public class ChargerService {
                 .toList();
     }
 
-    public void changeIsCharging(Long id) {
-        ChargerEntity charger = findById(id);
+    public void changeIsCharging(String code) {
+        ChargerEntity charger = findByCode(code);
         charger.setIsCharging(!charger.getIsCharging());
         chargerRepository.save(charger);
     }
 
-    public void changeIsBroken(Long id) {
-        ChargerEntity charger = findById(id);
+    public void changeIsBroken(String code) {
+        ChargerEntity charger = findByCode(code);
         charger.setIsBroken(!charger.getIsBroken());
         chargerRepository.save(charger);
     }

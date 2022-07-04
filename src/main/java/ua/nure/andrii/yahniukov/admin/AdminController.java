@@ -56,58 +56,58 @@ public class AdminController {
         return stationUserService.getAllNoVerification();
     }
 
-    @PatchMapping("/users/{email}/role")
+    @PatchMapping("/users/{userEmail}/role")
     @ApiOperation(value = "Change a user's role by id")
-    public SuccessMessageDto changeRole(@PathVariable String email, @RequestBody FormRoleDto role) {
-        return userService.changeRole(email, role);
+    public SuccessMessageDto changeRole(@PathVariable String userEmail, @RequestBody FormRoleDto role) {
+        return userService.changeRole(userEmail, role);
     }
 
-    @PatchMapping("/users/chargers/{id}/verification")
+    @PatchMapping("/users/chargers/{chargerUserId}/verification")
     @ApiOperation(value = "Accept charger user by id")
-    public void acceptChargerUser(@PathVariable Long id) {
-        chargerUserService.accept(id);
+    public void acceptChargerUser(@PathVariable Long chargerUserId) {
+        chargerUserService.accept(chargerUserId);
     }
 
-    @PatchMapping("/users/stations/{id}/verification")
+    @PatchMapping("/users/stations/{stationUserId}/verification")
     @ApiOperation(value = "Accept station user by id")
-    public void acceptStationUser(@PathVariable Long id) {
-        stationUserService.accept(id);
+    public void acceptStationUser(@PathVariable Long stationUserId) {
+        stationUserService.accept(stationUserId);
     }
 
-    @PatchMapping("/users/{id}/block")
+    @PatchMapping("/users/{userId}/block")
     @ApiOperation(value = "Block a user by id")
-    public void blockUser(@PathVariable Long id) {
-        userService.block(id);
+    public void blockUser(@PathVariable Long userId) {
+        userService.block(userId);
     }
 
-    @PatchMapping("/users/chargers/{id}/block")
+    @PatchMapping("/users/chargers/{chargerUserId}/block")
     @ApiOperation(value = "Block a charger user by id")
-    public void blockChargerUser(@PathVariable Long id) {
-        chargerUserService.block(id);
+    public void blockChargerUser(@PathVariable Long chargerUserId) {
+        chargerUserService.block(chargerUserId);
     }
 
-    @PatchMapping("/users/stations/{id}/block")
+    @PatchMapping("/users/stations/{stationUserId}/block")
     @ApiOperation(value = "Block a station user by id")
-    public void blockStationUser(@PathVariable Long id) {
-        stationUserService.block(id);
+    public void blockStationUser(@PathVariable Long stationUserId) {
+        stationUserService.block(stationUserId);
     }
 
-    @DeleteMapping("/users/{id}/delete")
+    @DeleteMapping("/users/{userId}/delete")
     @ApiOperation(value = "Delete a user by id")
-    public void deleteUser(@PathVariable Long id) {
-        userService.delete(id);
+    public void deleteUser(@PathVariable Long userId) {
+        userService.delete(userId);
     }
 
-    @DeleteMapping("/users/chargers/{id}/delete")
+    @DeleteMapping("/users/chargers/{chargerUserId}/delete")
     @ApiOperation(value = "Delete a charger user by id")
-    public void deleteChargerUser(@PathVariable Long id) {
-        chargerUserService.delete(id);
+    public void deleteChargerUser(@PathVariable Long chargerUserId) {
+        chargerUserService.delete(chargerUserId);
     }
 
-    @DeleteMapping("/users/stations/{id}/delete")
+    @DeleteMapping("/users/stations/{stationUserId}/delete")
     @ApiOperation(value = "Delete a station user by id")
-    public void deleteStationUser(@PathVariable Long id) {
-        stationUserService.delete(id);
+    public void deleteStationUser(@PathVariable Long stationUserId) {
+        stationUserService.delete(stationUserId);
     }
 
     @PostMapping("/db/backup")

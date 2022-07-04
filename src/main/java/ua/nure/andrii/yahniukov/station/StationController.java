@@ -1,6 +1,7 @@
 package ua.nure.andrii.yahniukov.station;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,41 +19,41 @@ import java.util.List;
 public class StationController {
     private final StationService stationService;
 
-    @PostMapping("/users/{userId}/create")
+    @PostMapping("/users/current/create")
     @ApiOperation(value = "Create a station by station user's id")
-    public void create(@PathVariable Long userId, @RequestBody FormStationDto station) {
-        stationService.create(userId, station);
+    public SuccessMessageDto create(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId, @RequestBody FormStationDto station) {
+        return stationService.create(userId, station);
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/users/current")
     @ApiOperation(value = "View a list of station user's chargers")
-    public List<StationDto> getAllForStationUser(@PathVariable Long userId) {
+    public List<StationDto> getAllForStationUser(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId) {
         return stationService.getAllForStationUser(userId);
     }
 
-    @GetMapping()
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a list of stations")
     public List<StationDto> getAllStations() {
         return stationService.getAll();
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('station:read', 'station:write', 'user:read', 'user:write')")
+    @GetMapping("/{stationId}")
+    @PreAuthorize("hasAnyAuthority('user:read', 'user:write')")
     @ApiOperation(value = "View a station by id")
-    public StationDto getByName(@PathVariable Long id) {
-        return stationService.get(id);
+    public StationDto getByName(@PathVariable Long stationId) {
+        return stationService.get(stationId);
     }
 
-    @DeleteMapping("/{stationId}/users/{userId}/delete")
+    @DeleteMapping("/{stationId}/users/current/delete")
     @ApiOperation(value = "Delete a station by station user's id")
-    public void delete(@PathVariable Long userId, @PathVariable Long stationId) {
+    public void delete(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId, @PathVariable Long stationId) {
         stationService.delete(userId, stationId);
     }
 
-    @PatchMapping("/{name}/free-place")
+    @PatchMapping("/{stationName}/free-place")
     @ApiOperation(value = "Change a free places for station by id")
-    public SuccessMessageDto changeFreePlace(@PathVariable String name, @RequestBody FormFreePlaceDto freePlace) {
-        return stationService.changeFreePlace(name, freePlace);
+    public SuccessMessageDto changeFreePlace(@PathVariable String stationName, @RequestBody FormFreePlaceDto freePlace) {
+        return stationService.changeFreePlace(stationName, freePlace);
     }
 }

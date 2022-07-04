@@ -29,10 +29,12 @@ public class AuthWhiteListConfiguration {
                 "/api/v1/authentication/registration/users/chargers",
                 "/api/v1/authentication/registration/users/stations",
                 "/api/v1/cars/create",
-                "/api/v1/cars/vin-codes/{vinCode}",
-                "/api/v1/cars/vin-codes/{vinCode}/update",
-                "/api/v1/cars/vin-codes/{vinCode}/chargers",
-                "/api/v1/cars/vin-codes/{vinCode}/stations"
+                "/api/v1/cars/vin-codes/{carVinCode}",
+                "/api/v1/cars/vin-codes/{carVinCode}/update",
+                "/api/v1/cars/vin-codes/{carVinCode}/chargers",
+                "/api/v1/cars/vin-codes/{carVinCode}/stations",
+                "/api/v1/chargers/codes/{chargerCode}/charge",
+                "/api/v1/chargers/codes/{chargerCode}/broke"
         };
     }
 }

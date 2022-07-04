@@ -1,6 +1,7 @@
 package ua.nure.andrii.yahniukov.user;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +21,28 @@ public class UserController {
     private final UserService userService;
     private final CarService carService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/current")
     @PreAuthorize("hasAnyAuthority('admin:read', 'admin:write', 'user:read', 'user:write', 'moderator:read', 'moderator:write')")
     @ApiOperation(value = "View a user by id")
-    public UserDto get(@PathVariable Long id) {
-        return userService.get(id);
+    public UserDto get(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId) {
+        return userService.get(userId);
     }
 
-    @PatchMapping("/{id}/car/add")
+    @PatchMapping("/current/car/add")
     @ApiOperation(value = "Add a car to user by user's id and car's VIN code")
-    public SuccessMessageDto addCarToUserByVinCode(@PathVariable Long id, @RequestBody FormVinCodeDto vinCode) {
-        return carService.addByVinCode(id, vinCode);
+    public SuccessMessageDto addCarToUserByVinCode(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId, @RequestBody FormVinCodeDto vinCode) {
+        return carService.addByVinCode(userId, vinCode);
     }
 
-    @DeleteMapping("/{id}/cars/{carId}/delete")
+    @DeleteMapping("/current/cars/{carId}/delete")
     @ApiOperation(value = "Delete a user's car by user's id and car's id")
-    public void deleteCarFromUserByVinCode(@PathVariable Long id, @PathVariable Long carId) {
-        carService.delete(id, carId);
+    public void deleteCarFromUserByVinCode(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId, @PathVariable Long carId) {
+        carService.delete(userId, carId);
     }
 
-    @GetMapping("/{id}/cars")
+    @GetMapping("/current/cars")
     @ApiOperation(value = "View list of user's cars by user id")
-    public List<CarDto> getAllCars(@PathVariable Long id) {
-        return carService.getAll(id);
+    public List<CarDto> getAllCars(@ApiParam(hidden = true) @RequestAttribute(value = "userId") Long userId) {
+        return carService.getAll(userId);
     }
 }

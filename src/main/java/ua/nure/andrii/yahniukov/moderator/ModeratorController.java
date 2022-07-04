@@ -28,15 +28,15 @@ public class ModeratorController {
         return complaintService.getAllComplaintsUserStation();
     }
 
-    @DeleteMapping("/complaints/chargers/{id}/delete")
+    @DeleteMapping("/complaints/chargers/{complaintId}/delete")
     @ApiOperation(value = "Delete a charger's complaint by id")
-    public void deleteComplaintUserCharger(@PathVariable Long id) {
-        complaintService.deleteComplaintUserCharger(id);
+    public void deleteComplaintUserCharger(@PathVariable Long complaintId) {
+        complaintService.deleteComplaintUserCharger(complaintId);
     }
 
-    @DeleteMapping("/complaints/stations/{id}/delete")
+    @DeleteMapping("/complaints/stations/{complaintId}/delete")
     @ApiOperation(value = "Delete a station's complaint by id")
-    public void deleteComplaintUserStation(@PathVariable Long id) {
-        complaintService.deleteComplaintUserStation(id);
+    public void deleteComplaintUserStation(@PathVariable Long complaintId) {
+        complaintService.deleteComplaintUserStation(complaintId);
     }
 }

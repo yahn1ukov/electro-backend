@@ -19,6 +19,10 @@ public class StationUserService {
     private final StationUserRepository stationUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    public boolean existsByEmail(String email) {
+        return stationUserRepository.existsByEmail(email);
+    }
+
     public StationUserEntity findById(Long id) {
         return stationUserRepository
                 .findById(id)
